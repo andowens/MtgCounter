@@ -1,5 +1,5 @@
 package com.firerocks.mtgcounter.counter
 
-class CounterModel {
+class CounterModel: CounterMVP.Model {
 
 }

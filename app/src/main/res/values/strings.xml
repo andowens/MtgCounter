@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">MTG Counter</string>
+    <string name="player_one_default_name">Jace</string>
+    <string name="default_player_health">20</string>
 </resources>

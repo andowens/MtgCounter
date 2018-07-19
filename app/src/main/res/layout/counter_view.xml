@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".counter.CounterActivity">
+
+    <android.support.v7.widget.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/player_one_name"
+        android:text="@string/player_one_default_name"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/player_one_up_arrow"
+        app:layout_constraintVertical_chainStyle="packed"
+        android:textSize="@dimen/default_player_text_size"/>
+
+    <android.support.v7.widget.AppCompatImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:id="@+id/player_one_up_arrow"
+        android:src="@drawable/up_arrow"
+        app:layout_constraintTop_toBottomOf="@+id/player_one_name"
+        app:layout_constraintStart_toStartOf="@id/player_one_name"
+        app:layout_constraintEnd_toEndOf="@id/player_one_name"
+        app:layout_constraintBottom_toTopOf="@id/player_one_health"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/player_one_health"
+        android:text="@string/default_player_health"
+        android:textSize="@dimen/default_player_text_size"
+        app:layout_constraintTop_toBottomOf="@+id/player_one_up_arrow"
+        app:layout_constraintStart_toStartOf="@id/player_one_name"
+        app:layout_constraintEnd_toEndOf="@id/player_one_name"
+        app:layout_constraintBottom_toTopOf="@id/player_one_down_arrow"/>
+
+    <android.support.v7.widget.AppCompatImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:id="@+id/player_one_down_arrow"
+        android:src="@drawable/down_arrow"
+        app:layout_constraintTop_toBottomOf="@+id/player_one_health"
+        app:layout_constraintStart_toStartOf="@id/player_one_name"
+        app:layout_constraintEnd_toEndOf="@id/player_one_name"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+</android.support.constraint.ConstraintLayout>
