@@ -1,5 +1,12 @@
 package com.firerocks.mtgcounter.counter
 
-class CounterModel: CounterMVP.Model {
+import android.util.Log
+
+class CounterModel : CounterMVP.Model {
+
+    init {
+        Log.i("TAG", "Test")
+    }
 
 }
+

@@ -16,7 +16,8 @@
         app:layout_constraintBottom_toTopOf="@id/player_one_up_arrow"
         app:layout_constraintVertical_chainStyle="packed"
         app:layout_constraintEnd_toStartOf="@id/player_two_name"
-        android:textSize="@dimen/default_player_text_size"/>
+        android:textSize="@dimen/default_player_text_size"
+        android:onClick="changeName"/>
 
     <android.support.v7.widget.AppCompatImageView
         android:layout_width="50dp"
@@ -59,7 +60,8 @@
         app:layout_constraintBottom_toTopOf="@id/player_two_up_arrow"
         app:layout_constraintStart_toEndOf="@id/player_one_name"
         app:layout_constraintVertical_chainStyle="packed"
-        android:textSize="@dimen/default_player_text_size"/>
+        android:textSize="@dimen/default_player_text_size"
+        android:onClick="changeName"/>
 
     <android.support.v7.widget.AppCompatImageView
         android:layout_width="50dp"

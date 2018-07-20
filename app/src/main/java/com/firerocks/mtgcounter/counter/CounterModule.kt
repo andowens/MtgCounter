@@ -8,5 +8,9 @@ import javax.inject.Singleton
 class CounterModule {
     @Provides
     @Singleton
-    fun provideCounterPresenter(): CounterMVP.Presenter = CounterPresenter()
+    fun provideCounterPresenter(model: CounterMVP.Model): CounterMVP.Presenter = CounterPresenter(model)
+
+    @Provides
+    @Singleton
+    fun providesCounterModel(): CounterMVP.Model = CounterModel()
 }
