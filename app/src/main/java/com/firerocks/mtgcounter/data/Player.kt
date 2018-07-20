@@ -1,5 +1,7 @@
 package com.firerocks.mtgcounter.data
 
-data class Player (private var name: String, private var health: String)
+data class Player (var name: String, var health: Int)
 
-fun Player.validName(name: String) = name.length < 2
+fun Player.isValid() = name.isNotEmpty()
+
+fun Player.isDead() = health <= 0

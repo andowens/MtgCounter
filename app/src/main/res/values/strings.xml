@@ -3,4 +3,6 @@
     <string name="player_one_default_name">Jace</string>
     <string name="default_player_health">20</string>
     <string name="player_two_default_name">Chandra</string>
+    <string name="player_three_default_name">Garruk</string>
+    <string name="player_four_default_name">Liliana</string>
 </resources>
