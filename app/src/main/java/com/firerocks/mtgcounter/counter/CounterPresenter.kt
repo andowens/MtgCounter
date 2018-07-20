@@ -10,7 +10,7 @@ class CounterPresenter @Inject constructor(val mModel: CounterMVP.Model) : Count
         mCounterView = counterView
     }
 
-    override fun onChangeName(view: View) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun onChangeName(name: String) {
+
     }
 }

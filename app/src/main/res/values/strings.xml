@@ -5,4 +5,7 @@
     <string name="player_two_default_name">Chandra</string>
     <string name="player_three_default_name">Garruk</string>
     <string name="player_four_default_name">Liliana</string>
+    <string name="change_name">Change your name</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
 </resources>

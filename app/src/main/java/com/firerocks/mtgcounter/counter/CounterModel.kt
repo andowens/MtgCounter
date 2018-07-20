@@ -6,10 +6,10 @@ import com.firerocks.mtgcounter.R
 import com.firerocks.mtgcounter.data.Player
 import javax.inject.Inject
 
-class CounterModel: CounterMVP.Model {
+class CounterModel @Inject constructor(private var mContext: Context): CounterMVP.Model {
 
-    private lateinit var playerList: MutableList<Player>
-    @Inject lateinit var mContext: Context
+    private var playerList: MutableList<Player> = ArrayList()
+
 
     init {
         playerList.add(Player(mContext.getString(R.string.player_one_default_name),
@@ -19,16 +19,21 @@ class CounterModel: CounterMVP.Model {
                 mContext.resources.getInteger(R.integer.default_player_health)))
     }
 
-    override fun addPlayer() {
+    override fun addPlayer(onResult: (Player) -> Unit) {
         when (playerList.size) {
-            2 -> playerList
-                    .add(Player(mContext.getString(R.string.player_three_default_name),
-                            mContext.resources.getInteger(R.integer.default_player_health)))
+            2 -> {
+                playerList
+                        .add(Player(mContext.getString(R.string.player_three_default_name),
+                                mContext.resources.getInteger(R.integer.default_player_health)))
+                onResult(playerList[3])
+            }
 
-            3 -> playerList
-                    .add(Player(mContext.getString(R.string.player_four_default_name),
-                            mContext.resources.getInteger(R.integer.default_player_health)))
-
+            3 -> {
+                playerList
+                        .add(Player(mContext.getString(R.string.player_four_default_name),
+                                mContext.resources.getInteger(R.integer.default_player_health)))
+                onResult(playerList[4])
+            }
         }
     }
 
@@ -38,23 +43,27 @@ class CounterModel: CounterMVP.Model {
         }
     }
 
-    override fun resetPlayerHealth() {
+    override fun resetPlayerHealth(onResult: (Int) -> Int) {
         for (player in playerList) {
             player.health = mContext.resources.getInteger(R.integer.default_player_health)
         }
+        onResult(mContext.resources.getInteger(R.integer.default_player_health))
     }
 
-    override fun updatePlayerHealth(player: Int, update: String) {
+    override fun updatePlayerHealth(player: Int, update: String, onResult: (Int) -> Int) {
         val playerObj = playerList[player]
 
         when (update) {
             "plus" -> playerObj.health = playerObj.health + 1
             "minus" -> playerObj.health = playerObj.health - 1
         }
+
+        onResult(playerObj.health)
     }
 
-    override fun getPlayerHealth(player: Int) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun updatePlayerName(player: Int, name: String, onResult: (String) -> String) {
+        playerList[player].name = name
+        onResult(name)
     }
 }
 
