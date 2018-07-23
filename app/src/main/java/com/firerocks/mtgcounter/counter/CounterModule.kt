@@ -1,5 +1,6 @@
 package com.firerocks.mtgcounter.counter
 
+import android.content.Context
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -12,5 +13,5 @@ class CounterModule {
 
     @Provides
     @Singleton
-    fun providesCounterModel(): CounterMVP.Model = CounterModel()
+    fun providesCounterModel(context: Context): CounterMVP.Model = CounterModel(context)
 }

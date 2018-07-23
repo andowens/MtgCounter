@@ -17,7 +17,8 @@
         app:layout_constraintVertical_chainStyle="packed"
         app:layout_constraintEnd_toStartOf="@id/player_two_name"
         android:textSize="@dimen/default_player_text_size"
-        android:onClick="changeName"/>
+        android:onClick="changeName"
+        android:tag="1"/>
 
     <android.support.v7.widget.AppCompatImageView
         android:layout_width="50dp"
@@ -61,7 +62,8 @@
         app:layout_constraintStart_toEndOf="@id/player_one_name"
         app:layout_constraintVertical_chainStyle="packed"
         android:textSize="@dimen/default_player_text_size"
-        android:onClick="changeName"/>
+        android:onClick="changeName"
+        android:tag="2"/>
 
     <android.support.v7.widget.AppCompatImageView
         android:layout_width="50dp"
