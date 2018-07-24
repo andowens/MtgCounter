@@ -9,6 +9,8 @@ import android.support.v7.widget.AppCompatEditText
 import android.support.v7.widget.AppCompatTextView
 import android.text.InputType
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import com.firerocks.mtgcounter.R
 import com.firerocks.mtgcounter.root.App
@@ -98,5 +100,28 @@ class CounterActivity : AppCompatActivity(), CounterMVP.View {
                         player_two_health.text = it.toString()
                     }
                 }.show()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        super.onCreateOptionsMenu(menu)
+        menuInflater.inflate(R.menu.main_menu, menu)
+        window.addFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        super.onOptionsItemSelected(item)
+
+        when (item?.itemId) {
+            R.id.menu_new_game -> {
+                presenter.resetPlayerHealth {
+                    player_one_health.text = it.toString()
+                    player_two_health.text = it.toString()
+                }
+            }
+        }
+
+        return false
     }
 }

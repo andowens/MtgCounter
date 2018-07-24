@@ -10,4 +10,9 @@
     <string name="cancel">Cancel</string>
     <string name="player_dead">%s is dead.</string>
     <string name="new_game">New Game</string>
+    <string name="two_players">Two Players</string>
+    <string name="three_players">Three Players</string>
+    <string name="four_players">Four Players</string>
+    <string name="bluetooth_game">Bluetooth Game</string>
+    <string name="two_headed_giant">Two Headed Giant</string>
 </resources>

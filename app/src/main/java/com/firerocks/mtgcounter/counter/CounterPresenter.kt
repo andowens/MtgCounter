@@ -65,7 +65,6 @@ class CounterPresenter: CounterMVP.Presenter {
                                 mCounterView.getDefaultHealth()))
                 onResult(mPlayerList[2])
             }
-
             3 -> {
                 mPlayerList
                         .add(Player(mCounterView.getPlayerDefaultName(4),
