@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/main_view"
     tools:context=".counter.CounterActivity">
 
     <android.support.v7.widget.AppCompatTextView
@@ -28,7 +29,9 @@
         app:layout_constraintTop_toBottomOf="@+id/player_one_name"
         app:layout_constraintStart_toStartOf="@id/player_one_name"
         app:layout_constraintEnd_toEndOf="@id/player_one_name"
-        app:layout_constraintBottom_toTopOf="@id/player_one_health"/>
+        app:layout_constraintBottom_toTopOf="@id/player_one_health"
+        android:tag="1_plus"
+        android:onClick="updatePlayerHealth"/>
 
     <android.support.v7.widget.AppCompatTextView
         android:layout_width="wrap_content"
@@ -49,7 +52,9 @@
         app:layout_constraintTop_toBottomOf="@+id/player_one_health"
         app:layout_constraintStart_toStartOf="@id/player_one_name"
         app:layout_constraintEnd_toEndOf="@id/player_one_name"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:tag="1_minus"
+        android:onClick="updatePlayerHealth"/>
 
     <android.support.v7.widget.AppCompatTextView
         android:layout_width="wrap_content"
@@ -73,7 +78,9 @@
         app:layout_constraintTop_toBottomOf="@+id/player_two_name"
         app:layout_constraintStart_toStartOf="@id/player_two_name"
         app:layout_constraintEnd_toEndOf="@id/player_two_name"
-        app:layout_constraintBottom_toTopOf="@id/player_two_health"/>
+        app:layout_constraintBottom_toTopOf="@id/player_two_health"
+        android:tag="2_plus"
+        android:onClick="updatePlayerHealth"/>
 
     <android.support.v7.widget.AppCompatTextView
         android:layout_width="wrap_content"
@@ -94,6 +101,8 @@
         app:layout_constraintTop_toBottomOf="@+id/player_two_health"
         app:layout_constraintStart_toStartOf="@id/player_two_name"
         app:layout_constraintEnd_toEndOf="@id/player_two_name"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:tag="2_minus"
+        android:onClick="updatePlayerHealth"/>
 
 </android.support.constraint.ConstraintLayout>

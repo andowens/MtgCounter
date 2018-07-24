@@ -2,23 +2,28 @@ package com.firerocks.mtgcounter.counter
 
 import android.view.View
 import com.firerocks.mtgcounter.R
-import com.firerocks.mtgcounter.data.Player
 import javax.inject.Inject
 
 class CounterPresenter: CounterMVP.Presenter {
     private lateinit var mCounterView: CounterMVP.View
-    private var mPlayerList: MutableList<Player> = ArrayList
+    private var mPlayerList: MutableList<Player> = ArrayList()
 
     override fun setView(counterView: CounterMVP.View) {
         mCounterView = counterView
     }
 
-    override fun updatePlayerHealth(player: Int, update: String, onResult: (Int) -> Int) {
-        val playerObj = mPlayerList[player]
+    override fun updatePlayerHealth(player: Int, update: String, onResult: (Int) -> Unit) {
+        val playerObj = mPlayerList[player - 1]
 
         when (update) {
             "plus" -> playerObj.health = playerObj.health + 1
-            "minus" -> playerObj.health = playerObj.health - 1
+            "minus" -> {
+                playerObj.health = playerObj.health - 1
+
+                if (playerObj.isDead()) {
+                    mCounterView.launchPlayerDeadSnackBar(playerObj.name)
+                }
+            }
         }
 
         onResult(playerObj.health)
@@ -35,27 +40,37 @@ class CounterPresenter: CounterMVP.Presenter {
         }
     }
 
-    override fun resetPlayerHealth(onResult: (Int) -> Int) {
+    override fun resetPlayerHealth(onResult: (Int) -> Unit) {
         for (player in mPlayerList) {
-            player.health = mContext.resources.getInteger(R.integer.default_player_health)
+            player.health = mCounterView.getDefaultHealth()
         }
-        onResult(mContext.resources.getInteger(R.integer.default_player_health))
+        onResult(mCounterView.getDefaultHealth())
     }
 
     override fun addPlayer(onResult: (Player) -> Unit) {
         when (mPlayerList.size) {
+            0 -> {
+                mPlayerList.add(Player(mCounterView.getPlayerDefaultName(1),
+                        mCounterView.getDefaultHealth()))
+                onResult(mPlayerList[0])
+            }
+            1 -> {
+                mPlayerList.add(Player(mCounterView.getPlayerDefaultName(2),
+                        mCounterView.getDefaultHealth()))
+                onResult(mPlayerList[1])
+            }
             2 -> {
                 mPlayerList
-                        .add(Player(mContext.getString(R.string.player_three_default_name),
-                                mContext.resources.getInteger(R.integer.default_player_health)))
-                onResult(mPlayerList[3])
+                        .add(Player(mCounterView.getPlayerDefaultName(3),
+                                mCounterView.getDefaultHealth()))
+                onResult(mPlayerList[2])
             }
 
             3 -> {
                 mPlayerList
-                        .add(Player(mContext.getString(R.string.player_four_default_name),
-                                mContext.resources.getInteger(R.integer.default_player_health)))
-                onResult(mPlayerList[4])
+                        .add(Player(mCounterView.getPlayerDefaultName(4),
+                                mCounterView.getDefaultHealth()))
+                onResult(mPlayerList[3])
             }
         }
     }

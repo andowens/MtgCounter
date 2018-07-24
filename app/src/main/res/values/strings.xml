@@ -8,4 +8,6 @@
     <string name="change_name">Change your name</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
+    <string name="player_dead">%s is dead.</string>
+    <string name="new_game">New Game</string>
 </resources>

@@ -8,14 +8,18 @@ interface CounterMVP {
 
         fun removePlayer()
 
-        fun resetPlayerHealth(onResult: (Int) -> Int)
+        fun resetPlayerHealth(onResult: (Int) -> Unit)
 
-        fun updatePlayerHealth(player: Int, update: String, onResult: (Int) -> Int)
+        fun updatePlayerHealth(player: Int, update: String, onResult: (Int) -> Unit)
 
         fun updatePlayerName(player: Int, name: String, onResult: (String) -> Unit)
     }
 
     interface View {
-        fun changePlayerName(name: String)
+        fun getDefaultHealth() : Int
+
+        fun getPlayerDefaultName(playerNum: Int): String
+
+        fun launchPlayerDeadSnackBar(deadPlayer: String)
     }
 }
