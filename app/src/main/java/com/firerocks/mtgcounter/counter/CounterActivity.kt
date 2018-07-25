@@ -1,6 +1,5 @@
 package com.firerocks.mtgcounter.counter
 
-import android.content.DialogInterface
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.Snackbar
@@ -8,7 +7,6 @@ import android.support.v7.app.AlertDialog
 import android.support.v7.widget.AppCompatEditText
 import android.support.v7.widget.AppCompatTextView
 import android.text.InputType
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -70,8 +68,9 @@ class CounterActivity : AppCompatActivity(), CounterMVP.View {
                 1 -> {
                     player_one_health.text = it.toString()
                 }
-                2 -> player_two_health.text = it.toString()
-
+                2 -> {
+                    player_two_health.text = it.toString()
+                }
             }
         }
     }
