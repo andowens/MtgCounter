@@ -73,4 +73,16 @@ class CounterPresenter: CounterMVP.Presenter {
             }
         }
     }
+
+    override fun threePlayerGame() {
+
+    }
+
+    override fun fourPlayerGame() {
+
+    }
+
+    override fun twoHeadedGiantGame() {
+
+    }
 }

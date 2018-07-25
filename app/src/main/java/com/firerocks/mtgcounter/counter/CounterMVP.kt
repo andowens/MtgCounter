@@ -13,6 +13,12 @@ interface CounterMVP {
         fun updatePlayerHealth(player: Int, update: String, onResult: (Int) -> Unit)
 
         fun updatePlayerName(player: Int, name: String, onResult: (String) -> Unit)
+
+        fun threePlayerGame()
+
+        fun fourPlayerGame()
+
+        fun twoHeadedGiantGame()
     }
 
     interface View {

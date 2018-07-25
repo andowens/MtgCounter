@@ -118,6 +118,19 @@ class CounterActivity : AppCompatActivity(), CounterMVP.View {
                     player_one_health.text = it.toString()
                     player_two_health.text = it.toString()
                 }
+                return true
+            }
+            R.id.menu_three_players -> {
+                presenter.threePlayerGame()
+            }
+            R.id.menu_four_players -> {
+                presenter.fourPlayerGame()
+            }
+            R.id.menu_two_headed_giant -> {
+                presenter.twoHeadedGiantGame()
+            }
+            R.id.menu_bluetooth -> {
+
             }
         }
 
