@@ -16,4 +16,5 @@
     <string name="bluetooth_game">Bluetooth Game</string>
     <string name="two_headed_giant">Two Headed Giant</string>
     <string name="unable_to_connect">Unable to connect device</string>
+    <string name="discover_device">Discover Device</string>
 </resources>

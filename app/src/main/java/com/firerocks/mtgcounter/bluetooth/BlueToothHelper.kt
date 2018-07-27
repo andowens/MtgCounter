@@ -2,19 +2,19 @@ package com.firerocks.mtgcounter.bluetooth
 
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
-import android.bluetooth.BluetoothServerSocket
 import android.bluetooth.BluetoothSocket
-import android.content.Context
 import android.os.Bundle
-import android.os.Handler
 import android.util.Log
-import com.firerocks.mtgcounter.R
+import io.reactivex.Observable
+import io.reactivex.Observer
+import io.reactivex.Scheduler
+import io.reactivex.schedulers.Schedulers
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
 import java.util.*
 
-class BlueToothHelper constructor(private val mContext: Context, private val mHandler: Handler) {
+class BlueToothHelper constructor(private val observer: Observer<Pair<Int, Any>>) {
 
     private val TAG = " BluetoothChatService"
 
@@ -44,8 +44,10 @@ class BlueToothHelper constructor(private val mContext: Context, private val mHa
         synchronized(mLock) {
             mState = state
 
-            mHandler.obtainMessage(BluetoothActivity.MESSAGE_STATE_CHANGE, state, -1)
-                    .sendToTarget()
+            Observable.just(Pair(BluetoothActivity.MESSAGE_DEVICE_NAME, mState))
+                    .subscribeOn(Schedulers.newThread())
+                    .observeOn(Schedulers.newThread())
+                    .subscribe(observer)
         }
     }
 
@@ -75,11 +77,12 @@ class BlueToothHelper constructor(private val mContext: Context, private val mHa
         mConnectedThread = ConnectedThread(socket)
         mConnectedThread?.start()
         // Send the name of the connected device back to the UI Activity
-        val msg = mHandler.obtainMessage(BluetoothActivity.MESSAGE_DEVICE_NAME)
-        val bundle = Bundle()
-        bundle.putString(BluetoothActivity.DEVICE_NAME, device.name)
-        msg.data = bundle
-        mHandler.sendMessage(msg)
+
+        Observable.just(Pair(BluetoothActivity.MESSAGE_DEVICE_NAME, device.name))
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(Schedulers.newThread())
+                .subscribe(observer)
+
         setState(STATE_CONNECTED)
 
     }
@@ -166,12 +169,11 @@ class BlueToothHelper constructor(private val mContext: Context, private val mHa
      */
     private fun connectionFailed() {
         setState(STATE_LISTEN)
-        // Send a failure message back to the Activity
-        val msg = mHandler.obtainMessage(BluetoothActivity.MESSAGE_TOAST)
-        val bundle = Bundle()
-        bundle.putString(BluetoothActivity.TOAST, "Unable to connect device")
-        msg.data = bundle
-        mHandler.sendMessage(msg)
+
+        Observable.just(Pair(BluetoothActivity.MESSAGE_TOAST, "Unable to connect to device"))
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(Schedulers.newThread())
+                .subscribe(observer)
     }
 
     /**
@@ -179,12 +181,11 @@ class BlueToothHelper constructor(private val mContext: Context, private val mHa
      */
     private fun connectionLost() {
         setState(STATE_LISTEN)
-        // Send a failure message back to the Activity
-        val msg = mHandler.obtainMessage(BluetoothActivity.MESSAGE_TOAST)
-        val bundle = Bundle()
-        bundle.putString(BluetoothActivity.TOAST, "Device connection was lost")
-        msg.data = bundle
-        mHandler.sendMessage(msg)
+
+        Observable.just(Pair(BluetoothActivity.MESSAGE_TOAST, "Device connection was lost"))
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(Schedulers.newThread())
+                .subscribe(observer)
     }
 
     inner class AcceptThread: Thread() {
