@@ -1,31 +1,47 @@
 package com.firerocks.mtgcounter.counter
 
+import com.firerocks.mtgcounter.helpers.GameType
+import com.firerocks.mtgcounter.helpers.Operator
+import com.firerocks.mtgcounter.helpers.PlayerID
+
 interface CounterMVP {
     interface Presenter {
         fun setView(counterView: CounterMVP.View)
 
-        fun addPlayer(onResult: (Player) -> Unit)
+        fun addPlayer()
 
         fun removePlayer()
 
-        fun resetPlayerHealth(onResult: (Int) -> Unit)
+        fun resetAllPlayersHealth(onResult: (Int, Int) -> Unit)
 
-        fun updatePlayerHealth(player: Int, update: String, onResult: (Int) -> Unit)
+        fun resetPlayerHealth(playerID: PlayerID, onResult: (PlayerID, Int) -> Unit)
 
-        fun updatePlayerName(player: Int, name: String, onResult: (String) -> Unit)
+        fun updatePlayerHealth(playerID: PlayerID, operator: Operator, onResult: (PlayerID, Int) -> Unit)
+
+        fun updatePlayerName(playerID: PlayerID, name: String, onResult: (String) -> Unit)
 
         fun threePlayerGame()
 
         fun fourPlayerGame()
 
+        fun twoPlayerGame()
+
         fun twoHeadedGiantGame()
     }
 
     interface View {
-        fun getDefaultHealth() : Int
+        fun getDefaultHealth(gameType: GameType) : Int
 
         fun getPlayerDefaultName(playerNum: Int): String
 
         fun launchPlayerDeadSnackBar(deadPlayer: String)
+
+        fun threePlayerGame()
+
+        fun fourPlayerGame()
+
+        fun twoPlayerGame()
+
+        fun twoHeadedGiantGame(health: Int)
     }
 }

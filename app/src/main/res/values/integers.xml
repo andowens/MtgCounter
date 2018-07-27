@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <integer name="default_player_health">20</integer>
+    <integer name="two_headed_giant">30</integer>
 </resources>

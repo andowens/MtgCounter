@@ -25,6 +25,7 @@ class BluetoothActivity: AppCompatActivity(), BluetoothMVP.View {
         super.onCreate(savedInstanceState)
 
         (application as App).appComponent.inject(this)
+        window.addFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
         mPresenter.setView(this)
     }

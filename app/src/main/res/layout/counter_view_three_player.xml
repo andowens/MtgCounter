@@ -2,7 +2,8 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_view">
 
     <com.firerocks.mtgcounter.views.CustomFontTextView
         android:layout_width="wrap_content"
@@ -16,7 +17,7 @@
         app:layout_constraintEnd_toStartOf="@id/player_two_name"
         android:textSize="@dimen/default_three_player_text_size"
         android:onClick="changeName"
-        android:tag="1"/>
+        android:tag="ONE"/>
 
     <android.support.v7.widget.AppCompatImageView
         android:layout_width="50dp"
@@ -27,7 +28,7 @@
         app:layout_constraintStart_toStartOf="@id/player_one_name"
         app:layout_constraintEnd_toEndOf="@id/player_one_name"
         app:layout_constraintBottom_toTopOf="@id/player_one_health"
-        android:tag="1_plus"
+        android:tag="ONE_ADD"
         android:onClick="updatePlayerHealth"/>
 
     <com.firerocks.mtgcounter.views.CustomFontTextView
@@ -50,7 +51,7 @@
         app:layout_constraintStart_toStartOf="@id/player_one_name"
         app:layout_constraintEnd_toEndOf="@id/player_one_name"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:tag="1_minus"
+        android:tag="ONE_SUBTRACT"
         android:onClick="updatePlayerHealth"/>
 
     <com.firerocks.mtgcounter.views.CustomFontTextView
@@ -65,7 +66,7 @@
         app:layout_constraintVertical_chainStyle="packed"
         android:textSize="@dimen/default_three_player_text_size"
         android:onClick="changeName"
-        android:tag="2"/>
+        android:tag="TWO"/>
 
     <android.support.v7.widget.AppCompatImageView
         android:layout_width="50dp"
@@ -76,7 +77,7 @@
         app:layout_constraintStart_toStartOf="@id/player_two_name"
         app:layout_constraintEnd_toEndOf="@id/player_two_name"
         app:layout_constraintBottom_toTopOf="@id/player_two_health"
-        android:tag="2_plus"
+        android:tag="TWO_ADD"
         android:onClick="updatePlayerHealth"/>
 
     <com.firerocks.mtgcounter.views.CustomFontTextView
@@ -99,7 +100,7 @@
         app:layout_constraintStart_toStartOf="@id/player_two_name"
         app:layout_constraintEnd_toEndOf="@id/player_two_name"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:tag="2_minus"
+        android:tag="TWO_SUBTRACT"
         android:onClick="updatePlayerHealth"/>
 
     <com.firerocks.mtgcounter.views.CustomFontTextView
@@ -114,7 +115,7 @@
         app:layout_constraintStart_toEndOf="@id/player_two_name"
         android:textSize="@dimen/default_three_player_text_size"
         android:onClick="changeName"
-        android:tag="3"/>
+        android:tag="THREE"/>
 
     <android.support.v7.widget.AppCompatImageView
         android:layout_width="50dp"
@@ -125,7 +126,7 @@
         app:layout_constraintStart_toStartOf="@id/player_three_name"
         app:layout_constraintEnd_toEndOf="@id/player_three_name"
         app:layout_constraintBottom_toTopOf="@id/player_three_health"
-        android:tag="3_plus"
+        android:tag="THREE_ADD"
         android:onClick="updatePlayerHealth"/>
 
     <com.firerocks.mtgcounter.views.CustomFontTextView
@@ -148,7 +149,7 @@
         app:layout_constraintStart_toStartOf="@id/player_three_name"
         app:layout_constraintEnd_toEndOf="@id/player_three_name"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:tag="3_minus"
+        android:tag="THREE_SUBTRACT"
         android:onClick="updatePlayerHealth"/>
 
 

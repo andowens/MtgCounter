@@ -8,5 +8,9 @@ import javax.inject.Singleton
 class BluetoothModule {
     @Provides
     @Singleton
-    fun provideBluetoothPresenter(): BluetoothMVP.Presenter = BluetoothPresenter()
+    fun provideBluetoothPresenter(model: BluetoothMVP.Model): BluetoothMVP.Presenter = BluetoothPresenter(model)
+
+    @Provides
+    @Singleton
+    fun providesBluetoothModel(): BluetoothMVP.Model = BluetoothModel()
 }

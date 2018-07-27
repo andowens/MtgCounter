@@ -2,39 +2,43 @@ package com.firerocks.mtgcounter.counter
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.constraint.ConstraintLayout
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.AppCompatEditText
 import android.support.v7.widget.AppCompatTextView
 import android.text.InputType
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import com.firerocks.mtgcounter.R
+import com.firerocks.mtgcounter.helpers.GameType
+import com.firerocks.mtgcounter.helpers.Operator
+import com.firerocks.mtgcounter.helpers.PlayerID
 import com.firerocks.mtgcounter.root.App
-import kotlinx.android.synthetic.main.counter_view.*
+import com.firerocks.mtgcounter.views.CustomFontTextView
 import javax.inject.Inject
 
 class CounterActivity : AppCompatActivity(), CounterMVP.View {
 
+    private val TAG = "CounterActivity"
+
     @Inject lateinit var presenter: CounterMVP.Presenter
+    private lateinit var mMainView: ConstraintLayout
+
+    private val mPlayerLifeIDs = listOf(R.id.player_one_health,
+            R.id.player_two_health,
+            R.id.player_three_health,
+            R.id.player_four_health)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.counter_view)
 
         (application as App).appComponent.inject(this)
         presenter.setView(this)
 
-        presenter.addPlayer {
-            player_one_health.text = it.health.toString()
-            player_one_name.text = it.name
-        }
-
-        presenter.addPlayer {
-            player_two_health.text = it.health.toString()
-            player_two_name.text = it.name
-        }
+        presenter.twoPlayerGame()
     }
 
     fun changeName(view: View) {
@@ -48,8 +52,8 @@ class CounterActivity : AppCompatActivity(), CounterMVP.View {
         // Set up the buttons
         builder.setPositiveButton(getString(R.string.ok)) { dialog, which ->
             val name = editText.text.toString()
-
-            presenter.updatePlayerName(view.tag.toString().toInt(), name) {
+            val playerID = PlayerID.valueOf(view.tag.toString())
+            presenter.updatePlayerName(playerID, name) {
                 (view as AppCompatTextView).text = it
             }
         }
@@ -63,20 +67,37 @@ class CounterActivity : AppCompatActivity(), CounterMVP.View {
     fun updatePlayerHealth(view: View) {
         val tag = view.tag.toString()
         val splitTag = tag.split("_")
-        presenter.updatePlayerHealth(splitTag[0].toInt(), splitTag[1]) {
-            when (splitTag[0].toInt()) {
-                1 -> {
-                    player_one_health.text = it.toString()
+        val playerId: PlayerID = PlayerID.valueOf(splitTag[0])
+        val operator: Operator = Operator.valueOf(splitTag[1])
+        presenter.updatePlayerHealth(playerId, operator) { playerID, health ->
+            val healthView: CustomFontTextView
+            when (playerID) {
+                PlayerID.ONE -> {
+                    healthView = findViewById(R.id.player_one_health)
+                    healthView.text = health.toString()
                 }
-                2 -> {
-                    player_two_health.text = it.toString()
+                PlayerID.TWO -> {
+                    healthView = findViewById(R.id.player_two_health)
+                    healthView.text = health.toString()
+                }
+                PlayerID.THREE -> {
+                    healthView = findViewById(R.id.player_three_health)
+                    healthView.text = health.toString()
+                }
+                PlayerID.FOUR -> {
+                    healthView = findViewById(R.id.player_four_health)
+                    healthView.text = health.toString()
                 }
             }
         }
     }
 
-    override fun getDefaultHealth() : Int {
-        return resources.getInteger(R.integer.default_player_health)
+    override fun getDefaultHealth(gameType: GameType) : Int {
+        return if (gameType == GameType.NORMAL) {
+            resources.getInteger(R.integer.default_player_health)
+        } else {
+            resources.getInteger(R.integer.two_headed_giant)
+        }
     }
 
     override fun getPlayerDefaultName(playerNum: Int): String {
@@ -90,13 +111,12 @@ class CounterActivity : AppCompatActivity(), CounterMVP.View {
     }
 
     override fun launchPlayerDeadSnackBar(deadPlayer: String) {
-        Snackbar.make(main_view
+        Snackbar.make(mMainView
                 , resources.getString(R.string.player_dead, deadPlayer)
                 , Snackbar.LENGTH_INDEFINITE)
                 .setAction(resources.getString(R.string.new_game)) {
-                    presenter.resetPlayerHealth {
-                        player_one_health.text = it.toString()
-                        player_two_health.text = it.toString()
+                    presenter.resetAllPlayersHealth { health, size ->
+                        resetAllPlayersHealth(health, size)
                     }
                 }.show()
     }
@@ -114,11 +134,13 @@ class CounterActivity : AppCompatActivity(), CounterMVP.View {
 
         when (item?.itemId) {
             R.id.menu_new_game -> {
-                presenter.resetPlayerHealth {
-                    player_one_health.text = it.toString()
-                    player_two_health.text = it.toString()
+                presenter.resetAllPlayersHealth { health, size ->
+                    resetAllPlayersHealth(health, size)
                 }
                 return true
+            }
+            R.id.menu_two_players -> {
+                presenter.twoPlayerGame()
             }
             R.id.menu_three_players -> {
                 presenter.threePlayerGame()
@@ -135,5 +157,32 @@ class CounterActivity : AppCompatActivity(), CounterMVP.View {
         }
 
         return false
+    }
+
+    override fun threePlayerGame() {
+        setContentView(R.layout.counter_view_three_player)
+        mMainView = findViewById(R.id.main_view)
+    }
+
+    override fun fourPlayerGame() {
+        setContentView(R.layout.counter_view_four_player)
+        mMainView = findViewById(R.id.main_view)
+    }
+
+    override fun twoPlayerGame() {
+        setContentView(R.layout.counter_view)
+        mMainView = findViewById(R.id.main_view)
+    }
+
+    private fun resetAllPlayersHealth(healthValue: Int, numPlayers: Int) {
+        for (i in 0..(numPlayers -1)) {
+            findViewById<CustomFontTextView>(mPlayerLifeIDs[i]).text = healthValue.toString()
+        }
+    }
+
+    override fun twoHeadedGiantGame(health: Int) {
+        setContentView(R.layout.counter_view)
+        mMainView = findViewById(R.id.main_view)
+        resetAllPlayersHealth(health, 2)
     }
 }
