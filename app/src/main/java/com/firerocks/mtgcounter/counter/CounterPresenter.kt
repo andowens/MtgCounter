@@ -46,7 +46,7 @@ class CounterPresenter: CounterMVP.Presenter {
             }
         }
 
-        if (player.health <= 0) {
+        if (player.isDead()) {
             mCounterView.launchPlayerDeadSnackBar(player.name)
         }
 

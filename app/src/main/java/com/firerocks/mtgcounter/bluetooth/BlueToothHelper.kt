@@ -5,6 +5,8 @@ import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothSocket
 import android.os.Bundle
 import android.util.Log
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.Scheduler
@@ -43,6 +45,9 @@ class BlueToothHelper constructor(private val observer: Observer<Pair<Int, Any>>
     private fun setState(state: Int) {
         synchronized(mLock) {
             mState = state
+
+            val gson = Gson()
+            gson.toJson
 
             Observable.just(Pair(BluetoothActivity.MESSAGE_DEVICE_NAME, mState))
                     .subscribeOn(Schedulers.newThread())
