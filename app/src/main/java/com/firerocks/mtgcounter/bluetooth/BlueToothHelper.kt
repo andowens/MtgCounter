@@ -313,7 +313,6 @@ class BlueToothHelper constructor(private val observer: Observer<Pair<Int, Any>>
         }
 
         override fun run() {
-            Log.i(TAG, "BEGIN mConnectedThread")
             val buffer = ByteArray(1024)
             var bytes: Int
             // Keep listening to the InputStream while connected

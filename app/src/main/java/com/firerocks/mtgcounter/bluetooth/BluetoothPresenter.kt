@@ -1,14 +1,19 @@
 package com.firerocks.mtgcounter.bluetooth
 
+import android.bluetooth.BluetoothAdapter
 import android.util.Log
 import java.util.*
+import javax.inject.Inject
 
-class BluetoothPresenter constructor(private val mModel: BluetoothMVP.Model): BluetoothMVP.Presenter, Observer {
+class BluetoothPresenter @Inject constructor(private val mModel: BluetoothMVP.Model,
+                                             var mBluetoothAdapter: BluetoothAdapter?):
+        BluetoothMVP.Presenter, Observer {
 
     private val TAG = "mtg.BluetoothPresenter"
 
     init {
         mModel.addObserver(this)
+
     }
 
     override fun menuNewGame(onResult: (Int) -> Unit) {
@@ -41,5 +46,15 @@ class BluetoothPresenter constructor(private val mModel: BluetoothMVP.Model): Bl
         mModel.setStartPlayerName(mView.getRandomPlayerName())
         mModel.setStartPlayerHealth(mView.getDefaultHealth())
         onResult(mModel.getPlayersName(), mModel.getPlayersHealth())
+
+        // If no bluetooth on the device inform the user and go back to the single phone activity
+        if (mBluetoothAdapter == null) {
+            mView.showNoBluetoothDialog()
+        } else {
+            // If bluetooth is off request to turn it on
+            if (!mBluetoothAdapter?.isEnabled!!) {
+                mView.requestBluetoothOn()
+            }
+        }
     }
 }

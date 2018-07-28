@@ -1,11 +1,15 @@
 package com.firerocks.mtgcounter.bluetooth
 
+import android.bluetooth.BluetoothAdapter
+import android.content.Intent
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import com.firerocks.mtgcounter.R
+import com.firerocks.mtgcounter.counter.CounterActivity
 import com.firerocks.mtgcounter.helpers.changeNameDialog
 import com.firerocks.mtgcounter.root.App
 import kotlinx.android.synthetic.main.bluetooth_view.*
@@ -13,6 +17,10 @@ import java.util.*
 import javax.inject.Inject
 
 class BluetoothActivity: AppCompatActivity(), BluetoothMVP.View {
+
+    // Intent request codes
+    private val REQUEST_CONNECT_DEVICE = 1
+    private val REQUEST_BLUETOOTH_ON = 2
 
 
     @Inject lateinit var mPresenter: BluetoothMVP.Presenter
@@ -85,5 +93,22 @@ class BluetoothActivity: AppCompatActivity(), BluetoothMVP.View {
                 player_name.text = name
             }
         }
+    }
+
+    override fun showNoBluetoothDialog() {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle(getString(R.string.bluetooth_dialog_title))
+                .setMessage(getString(R.string.no_bluetooth_on_device))
+                .setIcon(android.R.drawable.stat_sys_data_bluetooth)
+                .setPositiveButton("Ok") { dialog, which ->
+                    val intent = Intent(this, CounterActivity::class.java)
+                    startActivity(intent)
+                }.show()
+    }
+
+    override fun requestBluetoothOn() {
+        val discoverableIntent = Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE)
+        discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 1000)
+        startActivityForResult(discoverableIntent, REQUEST_BLUETOOTH_ON)
     }
 }

@@ -1,10 +1,15 @@
 package com.firerocks.mtgcounter.bluetooth
 
+import android.bluetooth.BluetoothAdapter
+import android.util.Log
 import com.firerocks.mtgcounter.data.Player
 import io.reactivex.disposables.Disposable
 import java.util.*
+import javax.inject.Inject
 
-class BluetoothModel(private val mPlayer: Player): BluetoothMVP.Model, Observable() {
+class BluetoothModel @Inject constructor(private val mPlayer: Player): BluetoothMVP.Model, Observable() {
+
+    private val TAG = "mtg.BluetoothModel"
 
     companion object {
         // Message types sent from the BluetoothChatService Handler

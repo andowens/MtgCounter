@@ -22,6 +22,10 @@ interface BluetoothMVP {
         fun getDefaultHealth(): Int
 
         fun getRandomPlayerName(): String
+
+        fun showNoBluetoothDialog()
+
+        fun requestBluetoothOn()
     }
 
     interface Model {
