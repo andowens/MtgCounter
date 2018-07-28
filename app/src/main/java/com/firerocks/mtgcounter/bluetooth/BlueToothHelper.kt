@@ -46,7 +46,7 @@ class BlueToothHelper constructor(private val observer: Observer<Pair<Int, Any>>
         synchronized(mLock) {
             mState = state
 
-            Observable.just(Pair(BluetoothActivity.MESSAGE_DEVICE_NAME, mState))
+            Observable.just(Pair(BluetoothModel.MESSAGE_DEVICE_NAME, mState))
                     .subscribeOn(Schedulers.newThread())
                     .observeOn(Schedulers.newThread())
                     .subscribe(observer)
@@ -80,7 +80,7 @@ class BlueToothHelper constructor(private val observer: Observer<Pair<Int, Any>>
         mConnectedThread?.start()
         // Send the name of the connected device back to the UI Activity
 
-        Observable.just(Pair(BluetoothActivity.MESSAGE_DEVICE_NAME, device.name))
+        Observable.just(Pair(BluetoothModel.MESSAGE_DEVICE_NAME, device.name))
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(Schedulers.newThread())
                 .subscribe(observer)
@@ -172,7 +172,7 @@ class BlueToothHelper constructor(private val observer: Observer<Pair<Int, Any>>
     private fun connectionFailed() {
         setState(STATE_LISTEN)
 
-        Observable.just(Pair(BluetoothActivity.MESSAGE_TOAST, "Unable to connect to device"))
+        Observable.just(Pair(BluetoothModel.MESSAGE_TOAST, "Unable to connect to device"))
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(Schedulers.newThread())
                 .subscribe(observer)
@@ -184,7 +184,7 @@ class BlueToothHelper constructor(private val observer: Observer<Pair<Int, Any>>
     private fun connectionLost() {
         setState(STATE_LISTEN)
 
-        Observable.just(Pair(BluetoothActivity.MESSAGE_TOAST, "Device connection was lost"))
+        Observable.just(Pair(BluetoothModel.MESSAGE_TOAST, "Device connection was lost"))
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(Schedulers.newThread())
                 .subscribe(observer)

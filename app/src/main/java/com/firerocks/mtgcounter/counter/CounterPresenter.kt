@@ -3,6 +3,8 @@ package com.firerocks.mtgcounter.counter
 import android.util.Log
 import android.view.View
 import com.firerocks.mtgcounter.R
+import com.firerocks.mtgcounter.data.Player
+import com.firerocks.mtgcounter.data.isDead
 import com.firerocks.mtgcounter.helpers.GameType
 import com.firerocks.mtgcounter.helpers.Operator
 import com.firerocks.mtgcounter.helpers.PlayerID

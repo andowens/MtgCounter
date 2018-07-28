@@ -5,7 +5,7 @@ import java.util.*
 interface BluetoothMVP {
 
     interface Presenter{
-        fun setView(view: BluetoothMVP.View)
+        fun setView(view: BluetoothMVP.View, onResult: (String, Int) -> Unit)
 
         fun menuNewGame(onResult: (Int) -> Unit)
 
@@ -15,14 +15,26 @@ interface BluetoothMVP {
 
         fun downClicked()
 
-        fun nameClicked()
+        fun nameClicked(name: String, onResult: (String) -> Unit)
     }
 
     interface View {
         fun getDefaultHealth(): Int
+
+        fun getRandomPlayerName(): String
     }
 
     interface Model {
         fun addObserver(observer: Observer)
+
+        fun getPlayersName(): String
+
+        fun getPlayersHealth(): Int
+
+        fun setStartPlayerHealth(health: Int)
+
+        fun setStartPlayerName(name: String)
+
+        fun changeNameNotifyOpponent(name: String)
     }
 }

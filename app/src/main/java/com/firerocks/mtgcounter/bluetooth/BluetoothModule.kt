@@ -1,5 +1,6 @@
 package com.firerocks.mtgcounter.bluetooth
 
+import com.firerocks.mtgcounter.data.Player
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -12,5 +13,5 @@ class BluetoothModule {
 
     @Provides
     @Singleton
-    fun providesBluetoothModel(): BluetoothMVP.Model = BluetoothModel()
+    fun providesBluetoothModel(): BluetoothMVP.Model = BluetoothModel(Player("", 0))
 }

@@ -6,20 +6,14 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import com.firerocks.mtgcounter.R
+import com.firerocks.mtgcounter.helpers.changeNameDialog
 import com.firerocks.mtgcounter.root.App
+import kotlinx.android.synthetic.main.bluetooth_view.*
+import java.util.*
 import javax.inject.Inject
 
 class BluetoothActivity: AppCompatActivity(), BluetoothMVP.View {
 
-    companion object {
-        // Message types sent from the BluetoothChatService Handler
-        const val MESSAGE_STATE_CHANGE = 1
-        const val MESSAGE_READ = 2
-        const val MESSAGE_WRITE = 3
-        const val MESSAGE_DEVICE_NAME = 4
-        const val MESSAGE_TOAST = 5
-        const val TOAST = 6
-    }
 
     @Inject lateinit var mPresenter: BluetoothMVP.Presenter
 
@@ -30,11 +24,25 @@ class BluetoothActivity: AppCompatActivity(), BluetoothMVP.View {
         (application as App).appComponent.inject(this)
         window.addFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
-        mPresenter.setView(this)
+        mPresenter.setView(this) { name, health ->
+            player_health.text = health.toString()
+            player_name.text = name
+        }
     }
 
     override fun getDefaultHealth(): Int {
         return resources.getInteger(R.integer.default_player_health)
+    }
+
+    override fun getRandomPlayerName(): String {
+        val nameList = listOf<String>(getString(R.string.player_four_default_name),
+                getString(R.string.player_three_default_name),
+                getString(R.string.player_two_default_name),
+                getString(R.string.player_one_default_name))
+
+        val nameListSize = nameList.size - 1
+
+        return nameList[Random().nextInt(nameListSize)]
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -71,6 +79,11 @@ class BluetoothActivity: AppCompatActivity(), BluetoothMVP.View {
     }
 
     fun nameClicked(view: View) {
-        mPresenter.nameClicked()
+
+        changeNameDialog(this) { name ->
+            mPresenter.nameClicked(name) {
+                player_name.text = name
+            }
+        }
     }
 }
