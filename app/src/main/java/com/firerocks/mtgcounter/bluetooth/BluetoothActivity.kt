@@ -3,6 +3,8 @@ package com.firerocks.mtgcounter.bluetooth
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
+import android.view.MenuItem
+import android.view.View
 import com.firerocks.mtgcounter.R
 import com.firerocks.mtgcounter.root.App
 import javax.inject.Inject
@@ -23,6 +25,7 @@ class BluetoothActivity: AppCompatActivity(), BluetoothMVP.View {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.bluetooth_view)
 
         (application as App).appComponent.inject(this)
         window.addFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
@@ -39,5 +42,35 @@ class BluetoothActivity: AppCompatActivity(), BluetoothMVP.View {
 
         menuInflater.inflate(R.menu.bluetooth_menu, menu)
         return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        super.onOptionsItemSelected(item)
+
+        when (item?.itemId) {
+            R.id.menu_new_game -> {
+                mPresenter.menuNewGame {
+                }
+                return true
+            }
+            R.id.menu_bluetooth -> {
+                mPresenter.discoverBluetooth()
+                return true
+            }
+        }
+
+        return false
+    }
+
+    fun upClicked(view: View) {
+        mPresenter.upClicked()
+    }
+
+    fun downClicked(view: View) {
+        mPresenter.downClicked()
+    }
+
+    fun nameClicked(view: View) {
+        mPresenter.nameClicked()
     }
 }

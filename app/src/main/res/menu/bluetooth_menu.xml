@@ -7,7 +7,7 @@
         android:title="@string/new_game" />
 
     <item
-        android:id="@+id/discover"
+        android:id="@+id/menu_discover"
         android:title="@string/discover_device" />
 
 </menu>

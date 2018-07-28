@@ -46,9 +46,6 @@ class BlueToothHelper constructor(private val observer: Observer<Pair<Int, Any>>
         synchronized(mLock) {
             mState = state
 
-            val gson = Gson()
-            gson.toJson
-
             Observable.just(Pair(BluetoothActivity.MESSAGE_DEVICE_NAME, mState))
                     .subscribeOn(Schedulers.newThread())
                     .observeOn(Schedulers.newThread())
@@ -325,8 +322,8 @@ class BlueToothHelper constructor(private val observer: Observer<Pair<Int, Any>>
                     // Read from the InputStream
                     bytes = mmInStream!!.read(buffer)
                     // Send the obtained bytes to the UI Activity
-                    mHandler.obtainMessage(BluetoothActivity.MESSAGE_READ, bytes, -1, buffer)
-                            .sendToTarget()
+//                    mHandler.obtainMessage(BluetoothActivity.MESSAGE_READ, bytes, -1, buffer)
+//                            .sendToTarget()
                 } catch (e: IOException) {
                     Log.e(TAG, "disconnected", e)
                     connectionLost()
@@ -344,8 +341,8 @@ class BlueToothHelper constructor(private val observer: Observer<Pair<Int, Any>>
             try {
                 mmOutStream!!.write(buffer)
                 // Share the sent message back to the UI Activity
-                mHandler.obtainMessage(BluetoothActivity.MESSAGE_WRITE, -1, -1, buffer)
-                        .sendToTarget()
+//                mHandler.obtainMessage(BluetoothActivity.MESSAGE_WRITE, -1, -1, buffer)
+//                        .sendToTarget()
             } catch (e: IOException) {
                 Log.e(TAG, "Exception during write", e)
             }

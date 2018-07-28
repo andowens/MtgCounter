@@ -1,5 +1,6 @@
 package com.firerocks.mtgcounter.counter
 
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.constraint.ConstraintLayout
@@ -13,6 +14,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import com.firerocks.mtgcounter.R
+import com.firerocks.mtgcounter.bluetooth.BluetoothActivity
 import com.firerocks.mtgcounter.helpers.GameType
 import com.firerocks.mtgcounter.helpers.Operator
 import com.firerocks.mtgcounter.helpers.PlayerID
@@ -141,18 +143,24 @@ class CounterActivity : AppCompatActivity(), CounterMVP.View {
             }
             R.id.menu_two_players -> {
                 presenter.twoPlayerGame()
+                return true
             }
             R.id.menu_three_players -> {
                 presenter.threePlayerGame()
+                return true
             }
             R.id.menu_four_players -> {
                 presenter.fourPlayerGame()
+                return true
             }
             R.id.menu_two_headed_giant -> {
                 presenter.twoHeadedGiantGame()
+                return true
             }
             R.id.menu_bluetooth -> {
-
+                val intent = Intent(this, BluetoothActivity::class.java)
+                startActivity(intent)
+                return true
             }
         }
 

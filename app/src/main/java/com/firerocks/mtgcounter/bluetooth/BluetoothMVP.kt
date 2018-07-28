@@ -6,6 +6,16 @@ interface BluetoothMVP {
 
     interface Presenter{
         fun setView(view: BluetoothMVP.View)
+
+        fun menuNewGame(onResult: (Int) -> Unit)
+
+        fun discoverBluetooth()
+
+        fun upClicked()
+
+        fun downClicked()
+
+        fun nameClicked()
     }
 
     interface View {
