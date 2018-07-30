@@ -3,20 +3,25 @@ package com.firerocks.mtgcounter.bluetooth
 import android.bluetooth.BluetoothAdapter
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.app.DialogFragment
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import com.firerocks.mtgcounter.R
 import com.firerocks.mtgcounter.counter.CounterActivity
+import com.firerocks.mtgcounter.helpers.DiscoverDeviceDialog
 import com.firerocks.mtgcounter.helpers.changeNameDialog
 import com.firerocks.mtgcounter.root.App
 import kotlinx.android.synthetic.main.bluetooth_view.*
 import java.util.*
 import javax.inject.Inject
 
-class BluetoothActivity: AppCompatActivity(), BluetoothMVP.View {
+class BluetoothActivity: AppCompatActivity(), BluetoothMVP.View, DiscoverDeviceDialog.DiscoverDeviceDialogListener {
+
+    private val TAG = "mtg.BlueTActivity"
 
     // Intent request codes
     private val REQUEST_CONNECT_DEVICE = 1
@@ -69,8 +74,11 @@ class BluetoothActivity: AppCompatActivity(), BluetoothMVP.View {
                 }
                 return true
             }
-            R.id.menu_bluetooth -> {
+            R.id.menu_discover -> {
                 mPresenter.discoverBluetooth()
+                val dialog = DiscoverDeviceDialog()
+                dialog.show(supportFragmentManager, "DiscoverDeviceDialog")
+
                 return true
             }
         }
@@ -110,5 +118,9 @@ class BluetoothActivity: AppCompatActivity(), BluetoothMVP.View {
         val discoverableIntent = Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE)
         discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 1000)
         startActivityForResult(discoverableIntent, REQUEST_BLUETOOTH_ON)
+    }
+
+    override fun onDeviceItemClicked(dialogFragment: DialogFragment, address: String) {
+        Log.i(TAG, "TEST")
     }
 }
