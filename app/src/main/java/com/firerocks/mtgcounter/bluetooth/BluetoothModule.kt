@@ -20,4 +20,8 @@ class BluetoothModule {
     @Provides
     @Singleton
     fun provideBluetoothAdapter(): BluetoothAdapter? = BluetoothAdapter.getDefaultAdapter()
+
+    @Provides
+    @Singleton
+    fun providesBluetoothHelper(): BlueToothHelper = BlueToothHelper()
 }

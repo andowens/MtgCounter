@@ -110,6 +110,7 @@ class DiscoverDeviceDialog : DialogFragment() {
 
         val alertDialog = builder.create()
 
+        // Need to override the on click for the neutral button so it doesn't close the dialog
         alertDialog.setOnShowListener {
             val neutralButton = (it as AlertDialog).getButton(AlertDialog.BUTTON_NEUTRAL)
             neutralButton.setOnClickListener {

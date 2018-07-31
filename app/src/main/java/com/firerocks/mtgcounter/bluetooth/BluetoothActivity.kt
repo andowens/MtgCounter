@@ -121,6 +121,8 @@ class BluetoothActivity: AppCompatActivity(), BluetoothMVP.View, DiscoverDeviceD
     }
 
     override fun onDeviceItemClicked(dialogFragment: DialogFragment, address: String) {
-        Log.i(TAG, "TEST")
+        Log.i(TAG, "Address: $address")
+
+        mPresenter.bluetoothDeviceSelected(address)
     }
 }

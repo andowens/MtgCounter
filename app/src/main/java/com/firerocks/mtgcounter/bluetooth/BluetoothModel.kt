@@ -1,13 +1,16 @@
 package com.firerocks.mtgcounter.bluetooth
 
 import android.bluetooth.BluetoothAdapter
+import android.bluetooth.BluetoothDevice
 import android.util.Log
 import com.firerocks.mtgcounter.data.Player
 import io.reactivex.disposables.Disposable
 import java.util.*
 import javax.inject.Inject
 
-class BluetoothModel @Inject constructor(private val mPlayer: Player): BluetoothMVP.Model, Observable() {
+class BluetoothModel @Inject constructor(private val mPlayer: Player,
+                                         var mBlueToothHelper: BlueToothHelper):
+        BluetoothMVP.Model, Observable() {
 
     private val TAG = "mtg.BluetoothModel"
 
@@ -66,6 +69,10 @@ class BluetoothModel @Inject constructor(private val mPlayer: Player): Bluetooth
 
     override fun changeNameNotifyOpponent(name: String) {
         mPlayer.name = name
+
+    }
+
+    override fun connectDevice(device: BluetoothDevice) {
 
     }
 }

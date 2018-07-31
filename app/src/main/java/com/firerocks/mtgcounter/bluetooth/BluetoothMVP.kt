@@ -1,5 +1,6 @@
 package com.firerocks.mtgcounter.bluetooth
 
+import android.bluetooth.BluetoothDevice
 import java.util.*
 
 interface BluetoothMVP {
@@ -16,6 +17,8 @@ interface BluetoothMVP {
         fun downClicked()
 
         fun nameClicked(name: String, onResult: (String) -> Unit)
+
+        fun bluetoothDeviceSelected(address: String)
     }
 
     interface View {
@@ -40,5 +43,7 @@ interface BluetoothMVP {
         fun setStartPlayerName(name: String)
 
         fun changeNameNotifyOpponent(name: String)
+
+        fun connectDevice(device: BluetoothDevice)
     }
 }
