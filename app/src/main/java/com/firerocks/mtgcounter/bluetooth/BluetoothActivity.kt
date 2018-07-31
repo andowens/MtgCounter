@@ -3,6 +3,7 @@ package com.firerocks.mtgcounter.bluetooth
 import android.bluetooth.BluetoothAdapter
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.app.ActivityCompat
 import android.support.v4.app.DialogFragment
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
@@ -17,6 +18,7 @@ import com.firerocks.mtgcounter.helpers.changeNameDialog
 import com.firerocks.mtgcounter.root.App
 import kotlinx.android.synthetic.main.bluetooth_view.*
 import java.util.*
+import java.util.jar.Manifest
 import javax.inject.Inject
 
 class BluetoothActivity: AppCompatActivity(), BluetoothMVP.View, DiscoverDeviceDialog.DiscoverDeviceDialogListener {
@@ -36,6 +38,11 @@ class BluetoothActivity: AppCompatActivity(), BluetoothMVP.View, DiscoverDeviceD
 
         (application as App).appComponent.inject(this)
         window.addFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+
+        //Have to request location permission
+        val REQUEST_COARSE_PERMISSION = 1
+        ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_COARSE_LOCATION),
+            REQUEST_COARSE_PERMISSION)
 
         mPresenter.setView(this) { name, health ->
             player_health.text = health.toString()

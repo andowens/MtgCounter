@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v4.app.FragmentManager
 import android.support.v7.app.AlertDialog
+import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -83,18 +84,19 @@ class DiscoverDeviceDialog : DialogFragment() {
         mNewDeviceListListView.onItemClickListener = mDeviceClickListener
         mPairedDevicesListView.onItemClickListener = mDeviceClickListener
 
-        // Register for broadcasts when a device is discovered
-        var filter = IntentFilter(BluetoothDevice.ACTION_FOUND)
-        activity?.registerReceiver(mReceiver, filter)
         // Register for broadcasts when discovery is finished
-        filter = IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)
+        val filter = IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)
         activity?.registerReceiver(mReceiver, filter)
+
+        // Register for broadcasts when a device is discovered
+        val filter2 = IntentFilter(BluetoothDevice.ACTION_FOUND)
+        activity?.registerReceiver(mReceiver, filter2)
+
 
         val pairedDevices = mBluetoothAdapter.bondedDevices
 
         // If there are paired devices, add each one to the ArrayAdapter
         if (pairedDevices.size > 0) {
-            view?.findViewById<TextView>(R.id.title_paired_devices)?.visibility = View.VISIBLE
             for (device in pairedDevices) {
                 mPairedDevicesAdapter.add(device.name + "\n" + device.address)
             }
@@ -105,7 +107,7 @@ class DiscoverDeviceDialog : DialogFragment() {
         builder.setNeutralButton(R.string.button_scan, null)
 
         builder.setNegativeButton(R.string.cancel) { dialog, which ->
-            dialog.dismiss()
+            dialog.cancel()
         }
 
         val alertDialog = builder.create()
@@ -127,6 +129,7 @@ class DiscoverDeviceDialog : DialogFragment() {
             val action = intent?.action
             // When discovery finds a device
             if (BluetoothDevice.ACTION_FOUND == action) {
+                Log.i("TAG", "ACTION_FOUND")
                 // Get the BluetoothDevice object from the intent
                 val device = intent.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
                 // If it's already paired skip it because it's been listed already
@@ -146,13 +149,12 @@ class DiscoverDeviceDialog : DialogFragment() {
 
     private fun doDiscovery() {
         dialog.setTitle(R.string.scanning)
-        // Turn on su-title for new devices
-        view?.findViewById<TextView>(R.id.title_new_devices)?.visibility = View.VISIBLE
 
         // If we're already discovering, stop it
         if (mBluetoothAdapter.isDiscovering) {
             mBluetoothAdapter.cancelDiscovery()
         }
+        mNewDevicesAdapter.clear()
 
         // Request discovery from BluetoothAdapter
         mBluetoothAdapter.startDiscovery()

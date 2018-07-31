@@ -8,8 +8,7 @@ import io.reactivex.disposables.Disposable
 import java.util.*
 import javax.inject.Inject
 
-class BluetoothModel @Inject constructor(private val mPlayer: Player,
-                                         var mBlueToothHelper: BlueToothHelper):
+class BluetoothModel @Inject constructor(private val mPlayer: Player):
         BluetoothMVP.Model, Observable() {
 
     private val TAG = "mtg.BluetoothModel"

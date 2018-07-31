@@ -10,7 +10,6 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="@string/title_paired_devices"
-        android:visibility="gone"
         android:background="#666"
         android:textColor="#fff"
         android:paddingLeft="5dp" />
@@ -25,7 +24,6 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="@string/title_other_devices"
-        android:visibility="gone"
         android:background="#666"
         android:textColor="#fff"
         android:paddingLeft="5dp"
