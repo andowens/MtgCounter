@@ -103,7 +103,7 @@ class CounterActivity : AppCompatActivity(), CounterMVP.View {
     override fun launchPlayerDeadSnackBar(deadPlayer: String) {
         Snackbar.make(mMainView
                 , resources.getString(R.string.player_dead, deadPlayer)
-                , Snackbar.LENGTH_INDEFINITE)
+                , Snackbar.LENGTH_LONG)
                 .setAction(resources.getString(R.string.new_game)) {
                     presenter.resetAllPlayersHealth { health, size ->
                         resetAllPlayersHealth(health, size)

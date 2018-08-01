@@ -3,6 +3,7 @@ package com.firerocks.mtgcounter.bluetooth
 import android.bluetooth.BluetoothAdapter
 import android.content.Intent
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.DialogFragment
 import android.support.v7.app.AlertDialog
@@ -26,7 +27,6 @@ class BluetoothActivity: AppCompatActivity(), BluetoothMVP.View, DiscoverDeviceD
     private val TAG = "mtg.BlueTActivity"
 
     // Intent request codes
-    private val REQUEST_CONNECT_DEVICE = 1
     private val REQUEST_BLUETOOTH_ON = 2
 
 
@@ -48,6 +48,16 @@ class BluetoothActivity: AppCompatActivity(), BluetoothMVP.View, DiscoverDeviceD
             player_health.text = health.toString()
             player_name.text = name
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mPresenter.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mPresenter.onPause()
     }
 
     override fun getDefaultHealth(): Int {
@@ -77,8 +87,7 @@ class BluetoothActivity: AppCompatActivity(), BluetoothMVP.View, DiscoverDeviceD
 
         when (item?.itemId) {
             R.id.menu_new_game -> {
-                mPresenter.menuNewGame {
-                }
+                mPresenter.menuNewGame()
                 return true
             }
             R.id.menu_discover -> {
@@ -94,11 +103,17 @@ class BluetoothActivity: AppCompatActivity(), BluetoothMVP.View, DiscoverDeviceD
     }
 
     fun upClicked(view: View) {
-        mPresenter.upClicked()
+        val health = player_health.text.toString()
+        mPresenter.upClicked(health) { newHealth ->
+            player_health.text = newHealth
+        }
     }
 
     fun downClicked(view: View) {
-        mPresenter.downClicked()
+        val health = player_health.text.toString()
+        mPresenter.downClicked(health) { newHealth ->
+            player_health.text = newHealth
+        }
     }
 
     fun nameClicked(view: View) {
@@ -108,6 +123,12 @@ class BluetoothActivity: AppCompatActivity(), BluetoothMVP.View, DiscoverDeviceD
                 player_name.text = name
             }
         }
+    }
+
+    override fun errorSnackbar(error: String) {
+        Snackbar.make(main_view
+                , error
+                , Snackbar.LENGTH_LONG).show()
     }
 
     override fun showNoBluetoothDialog() {
@@ -128,8 +149,28 @@ class BluetoothActivity: AppCompatActivity(), BluetoothMVP.View, DiscoverDeviceD
     }
 
     override fun onDeviceItemClicked(dialogFragment: DialogFragment, address: String) {
-        Log.i(TAG, "Address: $address")
 
         mPresenter.bluetoothDeviceSelected(address)
+    }
+
+    override fun launchPlayerDeadSnackBar(player: String) {
+        Snackbar.make(main_view
+                , resources.getString(R.string.player_dead, player)
+                , Snackbar.LENGTH_LONG)
+                .setAction(resources.getString(R.string.new_game)) {
+
+                }.show()
+    }
+
+    override fun updateOpponentHealth(health: String) {
+        opponent_health.text = health
+    }
+
+    override fun updateOpponentName(name: String) {
+        opponent_name.text = name
+    }
+
+    override fun setPlayerHealth(health: String) {
+        player_health.text = health
     }
 }

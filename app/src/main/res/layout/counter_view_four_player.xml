@@ -17,9 +17,10 @@
         app:layout_constraintEnd_toStartOf="@id/player_two_name"
         android:textSize="@dimen/default_three_player_text_size"
         android:onClick="changeName"
-        android:tag="ONE"/>
+        android:tag="ONE"
+        android:layout_margin="@dimen/main_margins"/>
 
-    <android.support.v7.widget.AppCompatImageView
+    <android.support.v7.widget.AppCompatImageButton
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:id="@+id/player_one_up_arrow"
@@ -29,7 +30,10 @@
         app:layout_constraintEnd_toEndOf="@id/player_one_name"
         app:layout_constraintBottom_toTopOf="@id/player_one_health"
         android:tag="ONE_ADD"
-        android:onClick="updatePlayerHealth"/>
+        android:onClick="updatePlayerHealth"
+        android:elevation="@dimen/button_elevation"
+        android:background="@drawable/button_ripple"
+        android:padding="@dimen/button_padding"/>
 
     <com.firerocks.mtgcounter.views.CustomFontTextView
         android:layout_width="wrap_content"
@@ -40,9 +44,10 @@
         app:layout_constraintTop_toBottomOf="@+id/player_one_up_arrow"
         app:layout_constraintStart_toStartOf="@id/player_one_name"
         app:layout_constraintEnd_toEndOf="@id/player_one_name"
-        app:layout_constraintBottom_toTopOf="@id/player_one_down_arrow"/>
+        app:layout_constraintBottom_toTopOf="@id/player_one_down_arrow"
+        android:layout_margin="@dimen/main_margins"/>
 
-    <android.support.v7.widget.AppCompatImageView
+    <android.support.v7.widget.AppCompatImageButton
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:id="@+id/player_one_down_arrow"
@@ -52,7 +57,10 @@
         app:layout_constraintEnd_toEndOf="@id/player_one_name"
         app:layout_constraintBottom_toBottomOf="parent"
         android:tag="ONE_SUBTRACT"
-        android:onClick="updatePlayerHealth"/>
+        android:onClick="updatePlayerHealth"
+        android:elevation="@dimen/button_elevation"
+        android:background="@drawable/button_ripple"
+        android:padding="@dimen/button_padding"/>
 
     <com.firerocks.mtgcounter.views.CustomFontTextView
         android:layout_width="wrap_content"
@@ -66,9 +74,10 @@
         app:layout_constraintVertical_chainStyle="packed"
         android:textSize="@dimen/default_three_player_text_size"
         android:onClick="changeName"
-        android:tag="TWO"/>
+        android:tag="TWO"
+        android:layout_margin="@dimen/main_margins"/>
 
-    <android.support.v7.widget.AppCompatImageView
+    <android.support.v7.widget.AppCompatImageButton
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:id="@+id/player_two_up_arrow"
@@ -78,7 +87,10 @@
         app:layout_constraintEnd_toEndOf="@id/player_two_name"
         app:layout_constraintBottom_toTopOf="@id/player_two_health"
         android:tag="TWO_ADD"
-        android:onClick="updatePlayerHealth"/>
+        android:onClick="updatePlayerHealth"
+        android:elevation="@dimen/button_elevation"
+        android:background="@drawable/button_ripple"
+        android:padding="@dimen/button_padding"/>
 
     <com.firerocks.mtgcounter.views.CustomFontTextView
         android:layout_width="wrap_content"
@@ -89,9 +101,10 @@
         app:layout_constraintTop_toBottomOf="@+id/player_two_up_arrow"
         app:layout_constraintStart_toStartOf="@id/player_two_name"
         app:layout_constraintEnd_toEndOf="@id/player_two_name"
-        app:layout_constraintBottom_toTopOf="@id/player_two_down_arrow"/>
+        app:layout_constraintBottom_toTopOf="@id/player_two_down_arrow"
+        android:layout_margin="@dimen/main_margins"/>
 
-    <android.support.v7.widget.AppCompatImageView
+    <android.support.v7.widget.AppCompatImageButton
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:id="@+id/player_two_down_arrow"
@@ -101,7 +114,10 @@
         app:layout_constraintEnd_toEndOf="@id/player_two_name"
         app:layout_constraintBottom_toBottomOf="parent"
         android:tag="TWO_SUBTRACT"
-        android:onClick="updatePlayerHealth"/>
+        android:onClick="updatePlayerHealth"
+        android:elevation="@dimen/button_elevation"
+        android:background="@drawable/button_ripple"
+        android:padding="@dimen/button_padding"/>
 
     <com.firerocks.mtgcounter.views.CustomFontTextView
         android:layout_width="wrap_content"
@@ -115,9 +131,10 @@
         app:layout_constraintStart_toEndOf="@id/player_two_name"
         android:textSize="@dimen/default_three_player_text_size"
         android:onClick="changeName"
-        android:tag="THREE"/>
+        android:tag="THREE"
+        android:layout_margin="@dimen/main_margins"/>
 
-    <android.support.v7.widget.AppCompatImageView
+    <android.support.v7.widget.AppCompatImageButton
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:id="@+id/player_three_up_arrow"
@@ -127,7 +144,10 @@
         app:layout_constraintEnd_toEndOf="@id/player_three_name"
         app:layout_constraintBottom_toTopOf="@id/player_three_health"
         android:tag="THREE_ADD"
-        android:onClick="updatePlayerHealth"/>
+        android:onClick="updatePlayerHealth"
+        android:elevation="@dimen/button_elevation"
+        android:background="@drawable/button_ripple"
+        android:padding="@dimen/button_padding"/>
 
     <com.firerocks.mtgcounter.views.CustomFontTextView
         android:layout_width="wrap_content"
@@ -138,9 +158,10 @@
         app:layout_constraintTop_toBottomOf="@+id/player_three_up_arrow"
         app:layout_constraintStart_toStartOf="@id/player_three_name"
         app:layout_constraintEnd_toEndOf="@id/player_three_name"
-        app:layout_constraintBottom_toTopOf="@id/player_three_down_arrow"/>
+        app:layout_constraintBottom_toTopOf="@id/player_three_down_arrow"
+        android:layout_margin="@dimen/main_margins"/>
 
-    <android.support.v7.widget.AppCompatImageView
+    <android.support.v7.widget.AppCompatImageButton
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:id="@+id/player_three_down_arrow"
@@ -150,7 +171,10 @@
         app:layout_constraintEnd_toEndOf="@id/player_three_name"
         app:layout_constraintBottom_toBottomOf="parent"
         android:tag="THREE_SUBTRACT"
-        android:onClick="updatePlayerHealth"/>
+        android:onClick="updatePlayerHealth"
+        android:elevation="@dimen/button_elevation"
+        android:background="@drawable/button_ripple"
+        android:padding="@dimen/button_padding"/>
 
     <com.firerocks.mtgcounter.views.CustomFontTextView
         android:layout_width="wrap_content"
@@ -164,9 +188,10 @@
         app:layout_constraintStart_toEndOf="@id/player_three_name"
         android:textSize="@dimen/default_three_player_text_size"
         android:onClick="changeName"
-        android:tag="FOUR"/>
+        android:tag="FOUR"
+        android:layout_margin="@dimen/main_margins"/>
 
-    <android.support.v7.widget.AppCompatImageView
+    <android.support.v7.widget.AppCompatImageButton
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:id="@+id/player_four_up_arrow"
@@ -176,7 +201,10 @@
         app:layout_constraintEnd_toEndOf="@id/player_four_name"
         app:layout_constraintBottom_toTopOf="@id/player_four_health"
         android:tag="FOUR_ADD"
-        android:onClick="updatePlayerHealth"/>
+        android:onClick="updatePlayerHealth"
+        android:elevation="@dimen/button_elevation"
+        android:background="@drawable/button_ripple"
+        android:padding="@dimen/button_padding"/>
 
     <com.firerocks.mtgcounter.views.CustomFontTextView
         android:layout_width="wrap_content"
@@ -187,9 +215,10 @@
         app:layout_constraintTop_toBottomOf="@+id/player_four_up_arrow"
         app:layout_constraintStart_toStartOf="@id/player_four_name"
         app:layout_constraintEnd_toEndOf="@id/player_four_name"
-        app:layout_constraintBottom_toTopOf="@id/player_four_down_arrow"/>
+        app:layout_constraintBottom_toTopOf="@id/player_four_down_arrow"
+        android:layout_margin="@dimen/main_margins"/>
 
-    <android.support.v7.widget.AppCompatImageView
+    <android.support.v7.widget.AppCompatImageButton
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:id="@+id/player_four_down_arrow"
@@ -199,7 +228,10 @@
         app:layout_constraintEnd_toEndOf="@id/player_four_name"
         app:layout_constraintBottom_toBottomOf="parent"
         android:tag="FOUR_SUBTRACT"
-        android:onClick="updatePlayerHealth"/>
+        android:onClick="updatePlayerHealth"
+        android:background="@drawable/button_ripple"
+        android:elevation="@dimen/button_elevation"
+        android:padding="@dimen/button_padding"/>
 
 
 </android.support.constraint.ConstraintLayout>

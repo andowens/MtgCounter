@@ -4,4 +4,7 @@
     <dimen name="default_three_player_text_size">25sp</dimen>
     <dimen name="bluetooth_player_text_size">50sp</dimen>
     <dimen name="bluetooth_opponent_text_size">20sp</dimen>
+    <dimen name="button_elevation">9dp</dimen>
+    <dimen name="button_padding">5dp</dimen>
+    <dimen name="main_margins">10dp</dimen>
 </resources>

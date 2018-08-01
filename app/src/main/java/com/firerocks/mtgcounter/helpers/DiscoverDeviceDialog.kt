@@ -3,22 +3,15 @@ package com.firerocks.mtgcounter.helpers
 import android.app.Dialog
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
+import android.content.*
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
-import android.support.v4.app.FragmentManager
 import android.support.v7.app.AlertDialog
-import android.util.Log
-import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.TextView
 import com.firerocks.mtgcounter.R
-import javax.inject.Inject
 
 /**
  * Created by Andrew on 7/29/2018.
@@ -129,7 +122,6 @@ class DiscoverDeviceDialog : DialogFragment() {
             val action = intent?.action
             // When discovery finds a device
             if (BluetoothDevice.ACTION_FOUND == action) {
-                Log.i("TAG", "ACTION_FOUND")
                 // Get the BluetoothDevice object from the intent
                 val device = intent.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
                 // If it's already paired skip it because it's been listed already
@@ -138,13 +130,20 @@ class DiscoverDeviceDialog : DialogFragment() {
                     mNewDevicesAdapter.notifyDataSetChanged()
                 }
             } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED == action) {
-                dialog.setTitle(R.string.select_device)
+                dialog?.setTitle(R.string.select_device)
                 if (mNewDevicesAdapter.count == 0) {
                     val noDevices = resources.getText(R.string.none_found).toString()
                     mNewDevicesAdapter.add(noDevices)
                 }
             }
         }
+    }
+
+    override fun onDismiss(dialog: DialogInterface?) {
+        super.onDismiss(dialog)
+
+        // Need to unregister the receiver once the dialog is dismissed
+        activity?.unregisterReceiver(mReceiver)
     }
 
     private fun doDiscovery() {

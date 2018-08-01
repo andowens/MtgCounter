@@ -22,7 +22,7 @@ class BlueToothHelper constructor(private val observer: Observer<Pair<Int, Any>>
 
     private val mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
     // Unique UUID for this application
-    private val MY_UUID = UUID.fromString("fa87c0d0-afac-11de-8a39-0800200c9a66")
+    private val MY_UUID = UUID.fromString("57417e98-15dc-47a2-8c9d-fff04b2f987c")
 
     // Name for the SDP record when creating server socket
     private val NAME =  "BluetoothCounter"
@@ -46,7 +46,7 @@ class BlueToothHelper constructor(private val observer: Observer<Pair<Int, Any>>
         synchronized(mLock) {
             mState = state
 
-            Observable.just(Pair(BluetoothModel.MESSAGE_DEVICE_NAME, mState))
+            Observable.just(Pair(BluetoothModel.MESSAGE_STATE_CHANGE, mState))
                     .subscribeOn(Schedulers.newThread())
                     .observeOn(Schedulers.newThread())
                     .subscribe(observer)
@@ -80,7 +80,7 @@ class BlueToothHelper constructor(private val observer: Observer<Pair<Int, Any>>
         mConnectedThread?.start()
         // Send the name of the connected device back to the UI Activity
 
-        Observable.just(Pair(BluetoothModel.MESSAGE_DEVICE_NAME, device.name))
+        Observable.just(Pair(BluetoothModel.MESSAGE_CONNECTED, device.name))
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(Schedulers.newThread())
                 .subscribe(observer)
@@ -106,8 +106,8 @@ class BlueToothHelper constructor(private val observer: Observer<Pair<Int, Any>>
             // Start the thread to connect with the given device
             mConnectThread = ConnectThread(device)
             mConnectThread?.start()
-            setState(STATE_CONNECTING)
         }
+        setState(STATE_CONNECTING)
     }
 
     fun stop() {
@@ -124,11 +124,11 @@ class BlueToothHelper constructor(private val observer: Observer<Pair<Int, Any>>
                 mAcceptThread?.cancel()
                 mAcceptThread = null
             }
-            setState(STATE_NONE)
         }
+        setState(STATE_NONE)
     }
 
-    private fun start() {
+    fun start() {
         synchronized(mLock) {
             // Cancel any thread attempting to make a connection
             if (mConnectThread != null) {
@@ -172,7 +172,7 @@ class BlueToothHelper constructor(private val observer: Observer<Pair<Int, Any>>
     private fun connectionFailed() {
         setState(STATE_LISTEN)
 
-        Observable.just(Pair(BluetoothModel.MESSAGE_TOAST, "Unable to connect to device"))
+        Observable.just(Pair(BluetoothModel.MESSAGE_SNACKBAR, "Unable to connect to device"))
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(Schedulers.newThread())
                 .subscribe(observer)
@@ -184,7 +184,7 @@ class BlueToothHelper constructor(private val observer: Observer<Pair<Int, Any>>
     private fun connectionLost() {
         setState(STATE_LISTEN)
 
-        Observable.just(Pair(BluetoothModel.MESSAGE_TOAST, "Device connection was lost"))
+        Observable.just(Pair(BluetoothModel.MESSAGE_SNACKBAR, "Device connection was lost"))
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(Schedulers.newThread())
                 .subscribe(observer)
@@ -202,8 +202,12 @@ class BlueToothHelper constructor(private val observer: Observer<Pair<Int, Any>>
             while (mState != STATE_CONNECTED) {
                 // This is a blocking call and will only return on a
                 // successful connection or an exception
-                socket = mServerSocket.accept()
-
+                try {
+                    socket = mServerSocket.accept()
+                } catch (e: IOException) {
+                    Log.e(TAG, "accept()failed", e)
+                    break
+                }
                 synchronized(mLock) {
                     when (mState) {
                         STATE_LISTEN, STATE_CONNECTING -> {
@@ -320,9 +324,12 @@ class BlueToothHelper constructor(private val observer: Observer<Pair<Int, Any>>
                 try {
                     // Read from the InputStream
                     bytes = mmInStream!!.read(buffer)
-                    // Send the obtained bytes to the UI Activity
-//                    mHandler.obtainMessage(BluetoothActivity.MESSAGE_READ, bytes, -1, buffer)
-//                            .sendToTarget()
+
+                    Observable.just(Pair(BluetoothModel.MESSAGE_READ, String(buffer, 0, bytes)))
+                            .subscribeOn(Schedulers.newThread())
+                            .observeOn(Schedulers.newThread())
+                            .subscribe(observer)
+
                 } catch (e: IOException) {
                     Log.e(TAG, "disconnected", e)
                     connectionLost()
@@ -339,9 +346,7 @@ class BlueToothHelper constructor(private val observer: Observer<Pair<Int, Any>>
         fun write(buffer: ByteArray) {
             try {
                 mmOutStream!!.write(buffer)
-                // Share the sent message back to the UI Activity
-//                mHandler.obtainMessage(BluetoothActivity.MESSAGE_WRITE, -1, -1, buffer)
-//                        .sendToTarget()
+
             } catch (e: IOException) {
                 Log.e(TAG, "Exception during write", e)
             }

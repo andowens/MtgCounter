@@ -2,6 +2,7 @@ package com.firerocks.mtgcounter.bluetooth
 
 import android.bluetooth.BluetoothAdapter
 import android.util.Log
+import com.firerocks.mtgcounter.helpers.Operator
 import java.util.*
 import javax.inject.Inject
 
@@ -18,22 +19,34 @@ class BluetoothPresenter @Inject constructor(private val mModel: BluetoothMVP.Mo
 
     init {
         mModel.addObserver(this)
-
     }
 
-    override fun menuNewGame(onResult: (Int) -> Unit) {
+    override fun onResume() {
+         if (mModel.getServiceState() == BlueToothHelper.STATE_NONE) {
+            mModel.startService()
+         }
+    }
 
+    override fun onPause() {
+        mModel.stopService()
+    }
+
+    override fun menuNewGame() {
+        mModel.sendNewGame()
     }
 
     override fun discoverBluetooth() {
 
     }
 
-    override fun upClicked() {
-
+    override fun upClicked(health: String, onResult: (String) -> Unit) {
+        val newHealth = mModel.updatePlayerHealth(health.toInt(), Operator.ADD)
+        onResult(newHealth.toString())
     }
 
-    override fun downClicked() {
+    override fun downClicked(health: String, onResult: (String) -> Unit) {
+        val newHealth = mModel.updatePlayerHealth(health.toInt(), Operator.SUBTRACT)
+        onResult(newHealth.toString())
     }
 
     override fun nameClicked(name: String, onResult: (String) -> Unit) {
@@ -42,6 +55,25 @@ class BluetoothPresenter @Inject constructor(private val mModel: BluetoothMVP.Mo
     }
 
     override fun update(o: Observable?, arg: Any?) {
+        val data = arg as Pair<*, *>
+        when (data.first) {
+            BluetoothModel.PLAYER_DEAD -> {
+                mView.launchPlayerDeadSnackBar(mModel.getPlayersName())
+            }
+            BluetoothModel.MESSAGE_SNACKBAR -> {
+                mView.errorSnackbar(data.second as String)
+            }
+            BluetoothModel.UPDATE_OPPONENT_HEALTH -> {
+                mView.updateOpponentHealth(data.second as String)
+            }
+            BluetoothModel.UPDATE_OPPONENT_NAME -> {
+                mView.updateOpponentName(data.second as String)
+            }
+            BluetoothModel.START_NEW_GAME -> {
+                mModel.setStartPlayerHealth(mView.getDefaultHealth())
+                mView.setPlayerHealth(mModel.getPlayersHealth().toString())
+            }
+        }
     }
 
     private lateinit var mView: BluetoothMVP.View
