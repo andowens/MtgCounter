@@ -49,7 +49,7 @@ fun rollDiceDialog(context: Context) {
     alertDialog.setOnShowListener {
         val neutralButton = (it as AlertDialog).getButton(AlertDialog.BUTTON_NEUTRAL)
         neutralButton.setOnClickListener {
-            textView.text = Random().nextInt(20).toString()
+            textView.text = (Random().nextInt(20 - 1) + 1).toString()
         }
     }
 
