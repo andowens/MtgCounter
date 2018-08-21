@@ -16,6 +16,7 @@ import com.firerocks.mtgcounter.R
 import com.firerocks.mtgcounter.counter.CounterActivity
 import com.firerocks.mtgcounter.helpers.DiscoverDeviceDialog
 import com.firerocks.mtgcounter.helpers.changeNameDialog
+import com.firerocks.mtgcounter.helpers.rollDiceDialog
 import com.firerocks.mtgcounter.root.App
 import kotlinx.android.synthetic.main.bluetooth_view.*
 import java.util.*
@@ -88,6 +89,10 @@ class BluetoothActivity: AppCompatActivity(), BluetoothMVP.View, DiscoverDeviceD
         when (item?.itemId) {
             R.id.menu_new_game -> {
                 mPresenter.menuNewGame()
+                return true
+            }
+            R.id.menu_roll -> {
+                rollDiceDialog(this)
                 return true
             }
             R.id.menu_discover -> {

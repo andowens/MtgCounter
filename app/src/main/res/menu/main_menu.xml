@@ -6,6 +6,9 @@
         app:showAsAction="always"
         android:title="@string/new_game" />
     <item
+        android:id="@+id/menu_roll"
+        android:title="@string/roll_dice" />
+    <item
         android:id="@+id/menu_two_players"
         android:title="@string/two_players" />
     <item

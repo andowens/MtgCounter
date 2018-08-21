@@ -15,10 +15,7 @@ import android.view.MenuItem
 import android.view.View
 import com.firerocks.mtgcounter.R
 import com.firerocks.mtgcounter.bluetooth.BluetoothActivity
-import com.firerocks.mtgcounter.helpers.GameType
-import com.firerocks.mtgcounter.helpers.Operator
-import com.firerocks.mtgcounter.helpers.PlayerID
-import com.firerocks.mtgcounter.helpers.changeNameDialog
+import com.firerocks.mtgcounter.helpers.*
 import com.firerocks.mtgcounter.root.App
 import com.firerocks.mtgcounter.views.CustomFontTextView
 import javax.inject.Inject
@@ -127,6 +124,10 @@ class CounterActivity : AppCompatActivity(), CounterMVP.View {
                 presenter.resetAllPlayersHealth { health, size ->
                     resetAllPlayersHealth(health, size)
                 }
+                return true
+            }
+            R.id.menu_roll -> {
+                rollDiceDialog(this)
                 return true
             }
             R.id.menu_two_players -> {
