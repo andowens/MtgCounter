@@ -7,11 +7,13 @@ import android.content.*
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v7.app.AlertDialog
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.ListView
 import android.widget.TextView
 import com.firerocks.mtgcounter.R
+import com.firerocks.mtgcounter.utils.adapters.DeviceAdapter
 
 /**
  * Created by Andrew on 7/29/2018.
@@ -20,13 +22,15 @@ class DiscoverDeviceDialog : DialogFragment() {
 
     private val mBluetoothAdapter: BluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
 
-    private lateinit var mPairedDevicesAdapter: ArrayAdapter<String>
+    private lateinit var mPairedDevicesAdapter: DeviceAdapter
 
-    private lateinit var mNewDevicesAdapter: ArrayAdapter<String>
+    private lateinit var mNewDevicesAdapter: DeviceAdapter
 
-    private lateinit var mNewDeviceListListView: ListView
-    private lateinit var mPairedDevicesListView: ListView
+    private lateinit var mNewDeviceRecyclerView: RecyclerView
+    private lateinit var mPairedDevicesRecyclerView: RecyclerView
     private lateinit var mListener: DiscoverDeviceDialogListener
+    private val  mNewDeviceList = ArrayList<String>()
+    private val mPairedDeviceList = ArrayList<String>()
 
     // The on-click listener for all devices in the ListViews
     private val mDeviceClickListener = AdapterView.OnItemClickListener {
@@ -61,21 +65,21 @@ class DiscoverDeviceDialog : DialogFragment() {
         val builder = AlertDialog.Builder(context!!)
         val inflater = activity?.layoutInflater
 
-        mPairedDevicesAdapter = ArrayAdapter(context, R.layout.device_name)
-        mNewDevicesAdapter = ArrayAdapter(context, R.layout.device_name)
+        mPairedDevicesAdapter = DeviceAdapter(mPairedDeviceList)
+        mNewDevicesAdapter = DeviceAdapter(mNewDeviceList)
 
         val baseView = inflater?.inflate(R.layout.activity_device_list, null)
 
         builder.setView(baseView)
 
-        mNewDeviceListListView = baseView!!.findViewById(R.id.new_devices)
-        mPairedDevicesListView = baseView.findViewById(R.id.paired_devices)
+        mNewDeviceRecyclerView = baseView!!.findViewById(R.id.new_devices)
+        mPairedDevicesRecyclerView = baseView.findViewById(R.id.paired_devices)
 
-        mNewDeviceListListView.adapter = mNewDevicesAdapter
-        mPairedDevicesListView.adapter = mPairedDevicesAdapter
+        mNewDeviceRecyclerView.adapter = mNewDevicesAdapter
+        mPairedDevicesRecyclerView.adapter = mPairedDevicesAdapter
 
-        mNewDeviceListListView.onItemClickListener = mDeviceClickListener
-        mPairedDevicesListView.onItemClickListener = mDeviceClickListener
+        mNewDeviceRecyclerView.layoutManager = LinearLayoutManager(context)
+        mPairedDevicesRecyclerView.layoutManager = LinearLayoutManager(context)
 
         // Register for broadcasts when discovery is finished
         val filter = IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)
@@ -91,12 +95,14 @@ class DiscoverDeviceDialog : DialogFragment() {
         // If there are paired devices, add each one to the ArrayAdapter
         if (pairedDevices.size > 0) {
             for (device in pairedDevices) {
-                mPairedDevicesAdapter.add(device.name + "\n" + device.address)
+                mPairedDeviceList.add(device.name + "\n" + device.address)
             }
         } else {
             val noDevices = resources.getText(R.string.none_paired).toString()
-            mPairedDevicesAdapter.add(noDevices)
+            mPairedDeviceList.add(noDevices)
         }
+        Log.i("TAG", "Size: ${pairedDevices.size}")
+        mPairedDevicesAdapter.notifyDataSetChanged()
         builder.setNeutralButton(R.string.button_scan, null)
 
         builder.setNegativeButton(R.string.cancel) { dialog, which ->
@@ -126,14 +132,18 @@ class DiscoverDeviceDialog : DialogFragment() {
                 val device = intent.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
                 // If it's already paired skip it because it's been listed already
                 if (device.bondState != BluetoothDevice.BOND_BONDED) {
-                    mNewDevicesAdapter.add(device.name + "\n" + device.address)
-                    mNewDevicesAdapter.notifyDataSetChanged()
+                    val deviceString = device.name + "\n" + device.address
+                    if (!mNewDeviceList.contains(deviceString)) {
+                        mNewDeviceList.add(deviceString)
+                        mNewDevicesAdapter.notifyDataSetChanged()
+                    }
                 }
             } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED == action) {
                 dialog?.setTitle(R.string.select_device)
-                if (mNewDevicesAdapter.count == 0) {
+                if (mNewDeviceList.size == 0) {
                     val noDevices = resources.getText(R.string.none_found).toString()
-                    mNewDevicesAdapter.add(noDevices)
+                    mNewDeviceList.add(noDevices)
+                    mNewDevicesAdapter.notifyDataSetChanged()
                 }
             }
         }
@@ -153,7 +163,8 @@ class DiscoverDeviceDialog : DialogFragment() {
         if (mBluetoothAdapter.isDiscovering) {
             mBluetoothAdapter.cancelDiscovery()
         }
-        mNewDevicesAdapter.clear()
+        mNewDeviceList.clear()
+        mNewDevicesAdapter.notifyDataSetChanged()
 
         // Request discovery from BluetoothAdapter
         mBluetoothAdapter.startDiscovery()
