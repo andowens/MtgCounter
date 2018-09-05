@@ -7,32 +7,51 @@
     android:orientation="vertical">
 
     <TextView android:id="@+id/title_paired_devices"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/title_paired_devices"
-        android:background="#666"
-        android:textColor="#fff"
-        android:paddingLeft="5dp" />
+        android:background="@color/green_gray"
+        android:textColor="@color/white"
+        android:paddingRight="5dp" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/paired_devices"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
         android:stackFromBottom="true"
         android:layout_weight="1"
         />
-    <TextView android:id="@+id/title_new_devices"
-        android:layout_width="fill_parent"
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/title_other_devices"
-        android:background="#666"
-        android:textColor="#fff"
-        android:paddingLeft="5dp"
-        />
+        android:orientation="horizontal"
+        android:background="@color/green_gray"
+        android:weightSum="5">
+
+        <TextView android:id="@+id/title_new_devices"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/title_other_devices"
+            android:textColor="@color/white"
+            android:paddingStart="5dp"
+            android:layout_weight="3"/>
+
+        <ProgressBar
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            style="?android:attr/progressBarStyleSmall"
+            android:id="@+id/bluetooth_searching_progress"
+            android:visibility="invisible"
+            android:layout_weight="2"
+            android:layout_gravity="center_vertical" />
+
+    </LinearLayout>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/new_devices"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
         android:stackFromBottom="true"
         android:layout_weight="2"
         />

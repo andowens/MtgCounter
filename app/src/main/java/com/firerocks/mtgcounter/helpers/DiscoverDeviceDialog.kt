@@ -10,7 +10,9 @@ import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
+import android.view.View
 import android.widget.AdapterView
+import android.widget.ProgressBar
 import android.widget.TextView
 import com.firerocks.mtgcounter.R
 import com.firerocks.mtgcounter.utils.adapters.DeviceAdapter
@@ -28,6 +30,7 @@ class DiscoverDeviceDialog : DialogFragment() {
 
     private lateinit var mNewDeviceRecyclerView: RecyclerView
     private lateinit var mPairedDevicesRecyclerView: RecyclerView
+    private lateinit var mProgressBar: ProgressBar
     private lateinit var mListener: DiscoverDeviceDialogListener
     private val  mNewDeviceList = ArrayList<String>()
     private val mPairedDeviceList = ArrayList<String>()
@@ -74,6 +77,7 @@ class DiscoverDeviceDialog : DialogFragment() {
 
         mNewDeviceRecyclerView = baseView!!.findViewById(R.id.new_devices)
         mPairedDevicesRecyclerView = baseView.findViewById(R.id.paired_devices)
+        mProgressBar = baseView.findViewById(R.id.bluetooth_searching_progress)
 
         mNewDeviceRecyclerView.adapter = mNewDevicesAdapter
         mPairedDevicesRecyclerView.adapter = mPairedDevicesAdapter
@@ -116,6 +120,7 @@ class DiscoverDeviceDialog : DialogFragment() {
             val neutralButton = (it as AlertDialog).getButton(AlertDialog.BUTTON_NEUTRAL)
             neutralButton.setOnClickListener {
                 doDiscovery()
+                mProgressBar.visibility = View.VISIBLE
             }
         }
 
@@ -140,6 +145,7 @@ class DiscoverDeviceDialog : DialogFragment() {
                 }
             } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED == action) {
                 dialog?.setTitle(R.string.select_device)
+                mProgressBar.visibility = View.INVISIBLE
                 if (mNewDeviceList.size == 0) {
                     val noDevices = resources.getText(R.string.none_found).toString()
                     mNewDeviceList.add(noDevices)
@@ -154,6 +160,9 @@ class DiscoverDeviceDialog : DialogFragment() {
 
         // Need to unregister the receiver once the dialog is dismissed
         activity?.unregisterReceiver(mReceiver)
+        if (mBluetoothAdapter.isDiscovering) {
+            mBluetoothAdapter.cancelDiscovery()
+        }
     }
 
     private fun doDiscovery() {
