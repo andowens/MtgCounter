@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import com.firerocks.mtgcounter.R
 import kotlinx.android.synthetic.main.device_name.view.*
 
-class DeviceAdapter(private val devices: ArrayList<String>)
+class DeviceAdapter(private val devices: ArrayList<String>, private val listener: (String) -> Unit)
     : RecyclerView.Adapter<DeviceAdapter.DeviceViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DeviceViewHolder {
@@ -19,9 +19,14 @@ class DeviceAdapter(private val devices: ArrayList<String>)
     override fun getItemCount() = devices.size
 
     override fun onBindViewHolder(holder: DeviceViewHolder, position: Int) {
-        holder.iv.device_text.text = devices[position]
-        Log.i("TAG", "bound: ${devices[position]}")
+        holder.bind(devices[position], listener)
     }
 
-    class DeviceViewHolder(val iv: View) : RecyclerView.ViewHolder(iv)
+    class DeviceViewHolder(val iv: View) : RecyclerView.ViewHolder(iv) {
+
+        fun bind(device: String, listener: (String) -> Unit) = with(iv) {
+            device_text.text = device
+            setOnClickListener { listener(device) }
+        }
+    }
 }

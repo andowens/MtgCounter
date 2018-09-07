@@ -89,9 +89,7 @@ class BluetoothPresenter @Inject constructor(private val mModel: BluetoothMVP.Mo
             mView.showNoBluetoothDialog()
         } else {
             // If bluetooth is off request to turn it on
-            if (!mBluetoothAdapter?.isEnabled!!) {
-                mView.requestBluetoothOn()
-            }
+            mView.requestBluetoothOn()
         }
     }
 }

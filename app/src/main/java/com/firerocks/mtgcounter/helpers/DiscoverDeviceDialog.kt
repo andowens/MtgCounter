@@ -36,15 +36,13 @@ class DiscoverDeviceDialog : DialogFragment() {
     private val mPairedDeviceList = ArrayList<String>()
 
     // The on-click listener for all devices in the ListViews
-    private val mDeviceClickListener = AdapterView.OnItemClickListener {
-        parent, view, position, id ->
+    private fun mDeviceClickListener(device: String) {
 
         // Cancel discovery because it's costly and we're about to connect
         mBluetoothAdapter.cancelDiscovery()
 
-        // Get the device MAC address, which is the last 17 chars in the View
-        val info = (view as TextView).text.toString()
-        val address = info.substring(info.length - 17)
+        // Get the device MAC address, which is the last 17 chars in the string
+        val address = device.substring(device.length - 17)
         dialog.dismiss()
         // Create the result Intent and include the MAC address
         mListener.onDeviceItemClicked(this, address)
@@ -68,8 +66,12 @@ class DiscoverDeviceDialog : DialogFragment() {
         val builder = AlertDialog.Builder(context!!)
         val inflater = activity?.layoutInflater
 
-        mPairedDevicesAdapter = DeviceAdapter(mPairedDeviceList)
-        mNewDevicesAdapter = DeviceAdapter(mNewDeviceList)
+        mPairedDevicesAdapter = DeviceAdapter(mPairedDeviceList) {
+            mDeviceClickListener(it)
+        }
+        mNewDevicesAdapter = DeviceAdapter(mNewDeviceList) {
+            mDeviceClickListener(it)
+        }
 
         val baseView = inflater?.inflate(R.layout.activity_device_list, null)
 
