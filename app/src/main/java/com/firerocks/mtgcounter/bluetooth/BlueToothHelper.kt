@@ -22,7 +22,7 @@ class BlueToothHelper constructor(private val observer: Observer<Pair<Int, Any>>
 
     private val mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
     // Unique UUID for this application
-    private val MY_UUID = UUID.fromString("57417e98-15dc-47a2-8c9d-fff04b2f987c")
+    private val MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805f9b34fb")
 
     // Name for the SDP record when creating server socket
     private val NAME =  "BluetoothCounter"
@@ -199,6 +199,7 @@ class BlueToothHelper constructor(private val observer: Observer<Pair<Int, Any>>
 
         override fun run() {
             name = "AcceptThread"
+
             while (mState != STATE_CONNECTED) {
                 // This is a blocking call and will only return on a
                 // successful connection or an exception
