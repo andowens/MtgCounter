@@ -16,13 +16,14 @@ import java.io.InputStream
 import java.io.OutputStream
 import java.util.*
 
+
 class BlueToothHelper constructor(private val observer: Observer<Pair<Int, Any>>) {
 
     private val TAG = " BluetoothChatService"
 
     private val mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
     // Unique UUID for this application
-    private val MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805f9b34fb")
+    private val MY_UUID = UUID.fromString("57417e98-15dc-47a2-8c9d-fff04b2f987c")
 
     // Name for the SDP record when creating server socket
     private val NAME =  "BluetoothCounter"
@@ -75,6 +76,8 @@ class BlueToothHelper constructor(private val observer: Observer<Pair<Int, Any>>
             mAcceptThread?.cancel()
             mAcceptThread = null
         }
+
+        Log.i(TAG, "Connected")
         // Start the thread to manage the connection and perform transmissions
         mConnectedThread = ConnectedThread(socket)
         mConnectedThread?.start()
@@ -103,6 +106,8 @@ class BlueToothHelper constructor(private val observer: Observer<Pair<Int, Any>>
                 mConnectedThread?.cancel()
                 mConnectedThread = null
             }
+
+            Log.i(TAG, "connect")
             // Start the thread to connect with the given device
             mConnectThread = ConnectThread(device)
             mConnectThread?.start()
@@ -121,6 +126,7 @@ class BlueToothHelper constructor(private val observer: Observer<Pair<Int, Any>>
                 mConnectThread = null
             }
             if (mAcceptThread != null) {
+                Log.i(TAG, "AcceptThread is not null")
                 mAcceptThread?.cancel()
                 mAcceptThread = null
             }
@@ -142,6 +148,7 @@ class BlueToothHelper constructor(private val observer: Observer<Pair<Int, Any>>
             }
             // Start the thread to listen on a BluetoothServerSocket
             if (mAcceptThread == null) {
+                Log.i(TAG, "start()")
                 mAcceptThread = AcceptThread()
                 mAcceptThread?.start()
             }
@@ -204,6 +211,7 @@ class BlueToothHelper constructor(private val observer: Observer<Pair<Int, Any>>
                 // This is a blocking call and will only return on a
                 // successful connection or an exception
                 try {
+                    Log.i(TAG, "AcceptThread run()")
                     socket = mServerSocket.accept()
                 } catch (e: IOException) {
                     Log.e(TAG, "accept()failed", e)
@@ -242,6 +250,7 @@ class BlueToothHelper constructor(private val observer: Observer<Pair<Int, Any>>
             // Get a BluetoothSocket for a connection with the
             // given BluetoothDevice
             try {
+                Log.i(TAG, "connectThread()")
                 tmp = mmDevice.createRfcommSocketToServiceRecord(MY_UUID)
             } catch (e: IOException) {
                 Log.e(TAG, "create() failed", e)
@@ -259,7 +268,9 @@ class BlueToothHelper constructor(private val observer: Observer<Pair<Int, Any>>
             try {
                 // This is a blocking call and will only return on a
                 // successful connection or an exception
+                Log.i(TAG, "Before connect")
                 mmSocket!!.connect()
+                Log.i(TAG, "After connect")
             } catch (e: IOException) {
                 connectionFailed()
                 // Close the socket
@@ -278,6 +289,7 @@ class BlueToothHelper constructor(private val observer: Observer<Pair<Int, Any>>
             synchronized(mLock) {
                 mConnectThread = null
             }
+            Log.i(TAG, "Connecting ||||||||")
             // Start the connected thread
             connected(mmSocket, mmDevice)
         }
@@ -361,6 +373,15 @@ class BlueToothHelper constructor(private val observer: Observer<Pair<Int, Any>>
                 Log.e(TAG, "close() of connect socket failed", e)
             }
 
+        }
+    }
+
+    private fun pairDevice(device: BluetoothDevice) {
+        try {
+            val method = device.javaClass.getMethod("createBond", null as Class<*>?)
+            method.invoke(device, null as Array<Any>?)
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 }

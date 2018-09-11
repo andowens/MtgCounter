@@ -22,12 +22,14 @@ class BluetoothPresenter @Inject constructor(private val mModel: BluetoothMVP.Mo
     }
 
     override fun onResume() {
+        Log.i(TAG, "onResume()")
          if (mModel.getServiceState() == BlueToothHelper.STATE_NONE) {
             mModel.startService()
          }
     }
 
     override fun onPause() {
+        Log.i(TAG, "onPause()")
         mModel.stopService()
     }
 
@@ -64,9 +66,11 @@ class BluetoothPresenter @Inject constructor(private val mModel: BluetoothMVP.Mo
                 mView.errorSnackbar(data.second as String)
             }
             BluetoothModel.UPDATE_OPPONENT_HEALTH -> {
+                Log.i(TAG, "update opponent health")
                 mView.updateOpponentHealth(data.second as String)
             }
             BluetoothModel.UPDATE_OPPONENT_NAME -> {
+                Log.i(TAG, "Update opponent name")
                 mView.updateOpponentName(data.second as String)
             }
             BluetoothModel.START_NEW_GAME -> {

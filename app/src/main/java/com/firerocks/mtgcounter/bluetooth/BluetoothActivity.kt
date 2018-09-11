@@ -18,6 +18,7 @@ import com.firerocks.mtgcounter.helpers.DiscoverDeviceDialog
 import com.firerocks.mtgcounter.helpers.changeNameDialog
 import com.firerocks.mtgcounter.helpers.rollDiceDialog
 import com.firerocks.mtgcounter.root.App
+import com.firerocks.mtgcounter.views.CustomFontTextView
 import kotlinx.android.synthetic.main.bluetooth_view.*
 import java.util.*
 import java.util.jar.Manifest
@@ -30,6 +31,8 @@ class BluetoothActivity: AppCompatActivity(), BluetoothMVP.View, DiscoverDeviceD
     // Intent request codes
     private val REQUEST_BLUETOOTH_ON = 2
 
+    private lateinit var mOpponentHealthTextView: CustomFontTextView
+    private lateinit var mOpponentNameTextView: CustomFontTextView
 
     @Inject lateinit var mPresenter: BluetoothMVP.Presenter
 
@@ -37,6 +40,8 @@ class BluetoothActivity: AppCompatActivity(), BluetoothMVP.View, DiscoverDeviceD
         super.onCreate(savedInstanceState)
         setContentView(R.layout.bluetooth_view)
 
+        mOpponentHealthTextView = findViewById(R.id.opponent_health)
+        mOpponentNameTextView = findViewById(R.id.opponent_name)
         (application as App).appComponent.inject(this)
         window.addFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
@@ -168,11 +173,11 @@ class BluetoothActivity: AppCompatActivity(), BluetoothMVP.View, DiscoverDeviceD
     }
 
     override fun updateOpponentHealth(health: String) {
-        opponent_health.text = health
+        mOpponentHealthTextView.text = health
     }
 
     override fun updateOpponentName(name: String) {
-        opponent_name.text = name
+        mOpponentNameTextView.text = name
     }
 
     override fun setPlayerHealth(health: String) {

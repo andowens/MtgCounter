@@ -29,5 +29,6 @@
     <string name="button_scan">Scan for devices</string>
     <string name="roll_dice">Roll Dice</string>
     <string name="roll">Roll</string>
+    <string name="opponent">Opponent</string>
 
 </resources>
