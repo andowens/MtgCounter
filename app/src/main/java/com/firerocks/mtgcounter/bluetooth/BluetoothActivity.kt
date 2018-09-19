@@ -3,12 +3,12 @@ package com.firerocks.mtgcounter.bluetooth
 import android.bluetooth.BluetoothAdapter
 import android.content.Intent
 import android.os.Bundle
+import android.support.constraint.ConstraintLayout
 import android.support.design.widget.Snackbar
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.DialogFragment
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -21,7 +21,6 @@ import com.firerocks.mtgcounter.root.App
 import com.firerocks.mtgcounter.views.CustomFontTextView
 import kotlinx.android.synthetic.main.bluetooth_view.*
 import java.util.*
-import java.util.jar.Manifest
 import javax.inject.Inject
 
 class BluetoothActivity: AppCompatActivity(), BluetoothMVP.View, DiscoverDeviceDialog.DiscoverDeviceDialogListener {
@@ -33,6 +32,7 @@ class BluetoothActivity: AppCompatActivity(), BluetoothMVP.View, DiscoverDeviceD
 
     private lateinit var mOpponentHealthTextView: CustomFontTextView
     private lateinit var mOpponentNameTextView: CustomFontTextView
+    private lateinit var mNoDeviceSnackBar: Snackbar
 
     @Inject lateinit var mPresenter: BluetoothMVP.Presenter
 
@@ -49,6 +49,10 @@ class BluetoothActivity: AppCompatActivity(), BluetoothMVP.View, DiscoverDeviceD
         val REQUEST_COARSE_PERMISSION = 1
         ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_COARSE_LOCATION),
             REQUEST_COARSE_PERMISSION)
+
+        mNoDeviceSnackBar = Snackbar.make(findViewById<ConstraintLayout>(R.id.main_view),
+                getString(R.string.no_device_connected),
+                Snackbar.LENGTH_INDEFINITE)
 
         mPresenter.setView(this) { name, health ->
             player_health.text = health.toString()
@@ -101,7 +105,6 @@ class BluetoothActivity: AppCompatActivity(), BluetoothMVP.View, DiscoverDeviceD
                 return true
             }
             R.id.menu_discover -> {
-                mPresenter.discoverBluetooth()
                 val dialog = DiscoverDeviceDialog()
                 dialog.show(supportFragmentManager, "DiscoverDeviceDialog")
 
@@ -136,9 +139,9 @@ class BluetoothActivity: AppCompatActivity(), BluetoothMVP.View, DiscoverDeviceD
     }
 
     override fun errorSnackbar(error: String) {
-        Snackbar.make(main_view
-                , error
-                , Snackbar.LENGTH_LONG).show()
+        Snackbar.make(main_view,
+                error,
+                Snackbar.LENGTH_LONG).show()
     }
 
     override fun showNoBluetoothDialog() {
@@ -163,10 +166,21 @@ class BluetoothActivity: AppCompatActivity(), BluetoothMVP.View, DiscoverDeviceD
         mPresenter.bluetoothDeviceSelected(address)
     }
 
+    override fun showNoDeviceConnectedSnackBar() {
+        mNoDeviceSnackBar.setAction(getString(R.string.connect_device)) {
+            val dialog = DiscoverDeviceDialog()
+            dialog.show(supportFragmentManager, "DiscoverDeviceDialog")
+        }.show()
+    }
+
+    override fun dismissNoDeviceConnectedSnackBar() {
+        mNoDeviceSnackBar.dismiss()
+    }
+
     override fun launchPlayerDeadSnackBar(player: String) {
-        Snackbar.make(main_view
-                , resources.getString(R.string.player_dead, player)
-                , Snackbar.LENGTH_LONG)
+        Snackbar.make(main_view,
+                resources.getString(R.string.player_dead, player),
+                Snackbar.LENGTH_LONG)
                 .setAction(resources.getString(R.string.new_game)) {
 
                 }.show()

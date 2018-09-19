@@ -77,7 +77,6 @@ class BlueToothHelper constructor(private val observer: Observer<Pair<Int, Any>>
             mAcceptThread = null
         }
 
-        Log.i(TAG, "Connected")
         // Start the thread to manage the connection and perform transmissions
         mConnectedThread = ConnectedThread(socket)
         mConnectedThread?.start()
@@ -107,7 +106,6 @@ class BlueToothHelper constructor(private val observer: Observer<Pair<Int, Any>>
                 mConnectedThread = null
             }
 
-            Log.i(TAG, "connect")
             // Start the thread to connect with the given device
             mConnectThread = ConnectThread(device)
             mConnectThread?.start()
@@ -211,7 +209,6 @@ class BlueToothHelper constructor(private val observer: Observer<Pair<Int, Any>>
                 // This is a blocking call and will only return on a
                 // successful connection or an exception
                 try {
-                    Log.i(TAG, "AcceptThread run()")
                     socket = mServerSocket.accept()
                 } catch (e: IOException) {
                     Log.e(TAG, "accept()failed", e)
@@ -250,7 +247,6 @@ class BlueToothHelper constructor(private val observer: Observer<Pair<Int, Any>>
             // Get a BluetoothSocket for a connection with the
             // given BluetoothDevice
             try {
-                Log.i(TAG, "connectThread()")
                 tmp = mmDevice.createRfcommSocketToServiceRecord(MY_UUID)
             } catch (e: IOException) {
                 Log.e(TAG, "create() failed", e)
@@ -260,7 +256,6 @@ class BlueToothHelper constructor(private val observer: Observer<Pair<Int, Any>>
         }
 
         override fun run() {
-            Log.i(TAG, "BEGIN mConnectThread")
             name = "ConnectThread"
             // Always cancel discovery because it will slow down a connection
             mBluetoothAdapter.cancelDiscovery()
@@ -268,9 +263,7 @@ class BlueToothHelper constructor(private val observer: Observer<Pair<Int, Any>>
             try {
                 // This is a blocking call and will only return on a
                 // successful connection or an exception
-                Log.i(TAG, "Before connect")
                 mmSocket!!.connect()
-                Log.i(TAG, "After connect")
             } catch (e: IOException) {
                 connectionFailed()
                 // Close the socket
@@ -314,7 +307,6 @@ class BlueToothHelper constructor(private val observer: Observer<Pair<Int, Any>>
         private val mmOutStream: OutputStream?
 
         init {
-            Log.d(TAG, "create ConnectedThread")
             var tmpIn: InputStream? = null
             var tmpOut: OutputStream? = null
             // Get the BluetoothSocket input and output streams
@@ -373,15 +365,6 @@ class BlueToothHelper constructor(private val observer: Observer<Pair<Int, Any>>
                 Log.e(TAG, "close() of connect socket failed", e)
             }
 
-        }
-    }
-
-    private fun pairDevice(device: BluetoothDevice) {
-        try {
-            val method = device.javaClass.getMethod("createBond", null as Class<*>?)
-            method.invoke(device, null as Array<Any>?)
-        } catch (e: Exception) {
-            e.printStackTrace()
         }
     }
 }

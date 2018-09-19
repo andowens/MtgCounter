@@ -22,23 +22,17 @@ class BluetoothPresenter @Inject constructor(private val mModel: BluetoothMVP.Mo
     }
 
     override fun onResume() {
-        Log.i(TAG, "onResume()")
          if (mModel.getServiceState() == BlueToothHelper.STATE_NONE) {
             mModel.startService()
          }
     }
 
     override fun onPause() {
-        Log.i(TAG, "onPause()")
         mModel.stopService()
     }
 
     override fun menuNewGame() {
         mModel.sendNewGame()
-    }
-
-    override fun discoverBluetooth() {
-
     }
 
     override fun upClicked(health: String, onResult: (String) -> Unit) {
@@ -92,8 +86,7 @@ class BluetoothPresenter @Inject constructor(private val mModel: BluetoothMVP.Mo
         if (mBluetoothAdapter == null) {
             mView.showNoBluetoothDialog()
         } else {
-            // If bluetooth is off request to turn it on
-            mView.requestBluetoothOn()
+            mView.showNoDeviceConnectedSnackBar()
         }
     }
 }

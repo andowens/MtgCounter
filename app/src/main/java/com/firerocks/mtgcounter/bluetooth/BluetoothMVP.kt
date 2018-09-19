@@ -11,8 +11,6 @@ interface BluetoothMVP {
 
         fun menuNewGame()
 
-        fun discoverBluetooth()
-
         fun upClicked(health: String, onResult: (String) -> Unit)
 
         fun downClicked(health: String, onResult: (String) -> Unit)
@@ -36,6 +34,10 @@ interface BluetoothMVP {
         fun requestBluetoothOn()
 
         fun launchPlayerDeadSnackBar(player: String)
+
+        fun showNoDeviceConnectedSnackBar()
+
+        fun dismissNoDeviceConnectedSnackBar()
 
         fun errorSnackbar(error: String)
 

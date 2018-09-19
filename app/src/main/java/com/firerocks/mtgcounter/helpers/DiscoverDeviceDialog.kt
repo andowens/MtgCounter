@@ -1,5 +1,6 @@
 package com.firerocks.mtgcounter.helpers
 
+import android.app.Activity
 import android.app.Dialog
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
@@ -15,12 +16,15 @@ import android.widget.AdapterView
 import android.widget.ProgressBar
 import android.widget.TextView
 import com.firerocks.mtgcounter.R
+import com.firerocks.mtgcounter.counter.CounterActivity
 import com.firerocks.mtgcounter.utils.adapters.DeviceAdapter
 
 /**
  * Created by Andrew on 7/29/2018.
  */
 class DiscoverDeviceDialog : DialogFragment() {
+
+    private val REQUEST_BLUETOOTH_ON = 2
 
     private val mBluetoothAdapter: BluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
 
@@ -121,8 +125,10 @@ class DiscoverDeviceDialog : DialogFragment() {
         alertDialog.setOnShowListener {
             val neutralButton = (it as AlertDialog).getButton(AlertDialog.BUTTON_NEUTRAL)
             neutralButton.setOnClickListener {
-                doDiscovery()
                 mProgressBar.visibility = View.VISIBLE
+                val discoverableIntent = Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE)
+                discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 1000)
+                startActivityForResult(discoverableIntent, REQUEST_BLUETOOTH_ON)
             }
         }
 
@@ -179,5 +185,21 @@ class DiscoverDeviceDialog : DialogFragment() {
 
         // Request discovery from BluetoothAdapter
         mBluetoothAdapter.startDiscovery()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        when (requestCode) {
+            REQUEST_BLUETOOTH_ON -> {
+                if (resultCode == Activity.RESULT_CANCELED) {
+                    dismiss()
+                    val intent = Intent(context, CounterActivity::class.java)
+                    startActivity(intent)
+                } else {
+                    doDiscovery()
+                }
+            }
+        }
     }
 }
