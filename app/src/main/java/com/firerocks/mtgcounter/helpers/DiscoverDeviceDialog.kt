@@ -47,7 +47,7 @@ class DiscoverDeviceDialog : DialogFragment() {
 
         // Get the device MAC address, which is the last 17 chars in the string
         val address = device.substring(device.length - 17)
-        dialog.dismiss()
+        //dialog.dismiss()
         // Create the result Intent and include the MAC address
         mListener.onDeviceItemClicked(this, address)
     }
@@ -111,7 +111,7 @@ class DiscoverDeviceDialog : DialogFragment() {
             val noDevices = resources.getText(R.string.none_paired).toString()
             mPairedDeviceList.add(noDevices)
         }
-        Log.i("TAG", "Size: ${pairedDevices.size}")
+
         mPairedDevicesAdapter.notifyDataSetChanged()
         builder.setNeutralButton(R.string.button_scan, null)
 

@@ -11,8 +11,9 @@ class BluetoothPresenter @Inject constructor(private val mModel: BluetoothMVP.Mo
         BluetoothMVP.Presenter, Observer {
 
     override fun bluetoothDeviceSelected(address: String) {
-        val device = mBluetoothAdapter?.getRemoteDevice(address)
-        mModel.connectDevice(device!!)
+        mBluetoothAdapter?.getRemoteDevice(address)?.let { device ->
+            mModel.connectDevice(device)
+        }
     }
 
     private val TAG = "mtg.BluetoothPresenter"
