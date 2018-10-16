@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <TextView android:id="@+id/title_paired_devices"
@@ -12,47 +11,78 @@
         android:text="@string/title_paired_devices"
         android:background="@color/green_gray"
         android:textColor="@color/white"
-        android:paddingRight="5dp" />
+        android:paddingStart="5dp"
+        app:layout_constraintTop_toTopOf="parent"
+        android:elevation="5dp"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/paired_devices"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="0dp"
         android:stackFromBottom="true"
         android:layout_weight="1"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/title_paired_devices"
+        app:layout_constraintHeight_default="percent"
+        app:layout_constraintHeight_percent="0.4"/>
 
-    <LinearLayout
+    <TextView android:id="@+id/title_new_devices"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:text="@string/title_other_devices"
+        android:textColor="@color/white"
+        android:paddingStart="5dp"
+        android:layout_weight="3"
+        app:layout_constraintTop_toBottomOf="@id/paired_devices"
+        app:layout_constraintStart_toStartOf="parent"
         android:background="@color/green_gray"
-        android:weightSum="5">
+        android:elevation="5dp"/>
 
-        <TextView android:id="@+id/title_new_devices"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="@string/title_other_devices"
-            android:textColor="@color/white"
-            android:paddingStart="5dp"
-            android:layout_weight="3"/>
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="?android:attr/progressBarStyleSmall"
+        android:id="@+id/bluetooth_searching_progress"
+        android:visibility="visible"
+        android:paddingEnd="@dimen/padding_5dp"
+        android:paddingStart="@dimen/padding_5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/title_new_devices"
+        android:elevation="5dp"/>
 
-        <ProgressBar
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            style="?android:attr/progressBarStyleSmall"
-            android:id="@+id/bluetooth_searching_progress"
-            android:visibility="invisible"
-            android:layout_weight="2"
-            android:layout_gravity="center_vertical" />
-
-    </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/new_devices"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="0dp"
         android:stackFromBottom="true"
         android:layout_weight="2"
-        />
-</LinearLayout>
+        app:layout_constraintTop_toBottomOf="@+id/title_new_devices"
+        app:layout_constraintHeight_default="percent"
+        app:layout_constraintHeight_percent="0.4"/>
+    
+    <android.support.v7.widget.AppCompatButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/scan_button"
+        app:layout_constraintTop_toBottomOf="@+id/new_devices"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/cancel_button"
+        android:text="@string/button_scan"
+        style="@style/ButtonStyle"
+        android:paddingStart="@dimen/padding_5dp"
+        android:paddingEnd="@dimen/padding_5dp"/>
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/cancel_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/new_devices"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/scan_button"
+        android:text="@string/cancel"
+        style="@style/ButtonStyle"/>
+
+
+</android.support.constraint.ConstraintLayout>

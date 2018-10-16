@@ -25,7 +25,7 @@
     <string name="none_paired">No devices have been paired</string>
     <string name="none_found">No devices found</string>
     <string name="title_paired_devices">Paired Devices</string>
-    <string name="title_other_devices">Other Available Devices</string>
+    <string name="title_other_devices">Nearby Available Devices</string>
     <string name="button_scan">Scan for devices</string>
     <string name="roll_dice">Roll Dice</string>
     <string name="roll">Roll</string>

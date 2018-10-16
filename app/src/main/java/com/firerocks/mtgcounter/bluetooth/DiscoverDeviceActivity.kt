@@ -1,46 +1,46 @@
-package com.firerocks.mtgcounter.helpers
+package com.firerocks.mtgcounter.bluetooth
 
 import android.app.Activity
-import android.app.Dialog
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.content.*
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.support.v4.app.DialogFragment
-import android.support.v7.app.AlertDialog
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.View
-import android.widget.AdapterView
 import android.widget.ProgressBar
-import android.widget.TextView
 import com.firerocks.mtgcounter.R
 import com.firerocks.mtgcounter.counter.CounterActivity
 import com.firerocks.mtgcounter.utils.adapters.DeviceAdapter
+import kotlinx.android.synthetic.main.activity_device_list.*
 
 /**
  * Created by Andrew on 7/29/2018.
  */
-class DiscoverDeviceDialog : DialogFragment() {
+class DiscoverDeviceActivity : AppCompatActivity() {
 
-    private val REQUEST_BLUETOOTH_ON = 2
+    companion object {
+        private const val REQUEST_BLUETOOTH_ON = 2
+        const val ADDRESS = "address_extra"
+    }
 
-    private val mBluetoothAdapter: BluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
+    private val mBluetoothAdapter: BluetoothAdapter by lazy {
+        BluetoothAdapter.getDefaultAdapter()
+    }
 
     private lateinit var mPairedDevicesAdapter: DeviceAdapter
 
     private lateinit var mNewDevicesAdapter: DeviceAdapter
 
-    private lateinit var mNewDeviceRecyclerView: RecyclerView
-    private lateinit var mPairedDevicesRecyclerView: RecyclerView
-    private lateinit var mProgressBar: ProgressBar
-    private lateinit var mListener: DiscoverDeviceDialogListener
     private val  mNewDeviceList = ArrayList<String>()
     private val mPairedDeviceList = ArrayList<String>()
 
     // The on-click listener for all devices in the ListViews
-    private fun mDeviceClickListener(device: String) {
+    private fun deviceClickListener(device: String) {
 
         // Cancel discovery because it's costly and we're about to connect
         mBluetoothAdapter.cancelDiscovery()
@@ -49,55 +49,41 @@ class DiscoverDeviceDialog : DialogFragment() {
         val address = device.substring(device.length - 17)
         //dialog.dismiss()
         // Create the result Intent and include the MAC address
-        mListener.onDeviceItemClicked(this, address)
+        //mListener.onDeviceItemClicked(this, address)
+        val intent = Intent()
+        intent.putExtra(ADDRESS, address)
+        Log.e("ERROR", "Address Disc: ${DiscoverDeviceActivity.ADDRESS}")
+        Log.e("ERROR", intent.getStringExtra("extra_data"))
+        setResult(BluetoothActivity.DEVICE_SELECTED_RESULT, intent)
+        finish()
     }
 
-    interface DiscoverDeviceDialogListener {
-        fun onDeviceItemClicked(dialogFragment: DialogFragment, address: String)
-    }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
-
-        try {
-            mListener = (context as DiscoverDeviceDialogListener)
-        } catch (e: Exception) {
-            throw Exception(context.toString())
-        }
-    }
-
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val builder = AlertDialog.Builder(context!!)
-        val inflater = activity?.layoutInflater
+        setContentView(R.layout.activity_device_list)
 
         mPairedDevicesAdapter = DeviceAdapter(mPairedDeviceList) {
-            mDeviceClickListener(it)
+            deviceClickListener(it)
         }
         mNewDevicesAdapter = DeviceAdapter(mNewDeviceList) {
-            mDeviceClickListener(it)
+            deviceClickListener(it)
         }
 
-        val baseView = inflater?.inflate(R.layout.activity_device_list, null)
 
-        builder.setView(baseView)
+        new_devices.adapter = mNewDevicesAdapter
+        paired_devices.adapter = mPairedDevicesAdapter
 
-        mNewDeviceRecyclerView = baseView!!.findViewById(R.id.new_devices)
-        mPairedDevicesRecyclerView = baseView.findViewById(R.id.paired_devices)
-        mProgressBar = baseView.findViewById(R.id.bluetooth_searching_progress)
-
-        mNewDeviceRecyclerView.adapter = mNewDevicesAdapter
-        mPairedDevicesRecyclerView.adapter = mPairedDevicesAdapter
-
-        mNewDeviceRecyclerView.layoutManager = LinearLayoutManager(context)
-        mPairedDevicesRecyclerView.layoutManager = LinearLayoutManager(context)
+        new_devices.layoutManager = LinearLayoutManager(this)
+        paired_devices.layoutManager = LinearLayoutManager(this)
 
         // Register for broadcasts when discovery is finished
         val filter = IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)
-        activity?.registerReceiver(mReceiver, filter)
+        registerReceiver(mReceiver, filter)
 
         // Register for broadcasts when a device is discovered
         val filter2 = IntentFilter(BluetoothDevice.ACTION_FOUND)
-        activity?.registerReceiver(mReceiver, filter2)
+        registerReceiver(mReceiver, filter2)
 
 
         val pairedDevices = mBluetoothAdapter.bondedDevices
@@ -113,27 +99,17 @@ class DiscoverDeviceDialog : DialogFragment() {
         }
 
         mPairedDevicesAdapter.notifyDataSetChanged()
-        builder.setNeutralButton(R.string.button_scan, null)
 
-        builder.setNegativeButton(R.string.cancel) { dialog, which ->
-            dialog.cancel()
+        cancel_button.setOnClickListener {
+            onBackPressed()
         }
 
-        val alertDialog = builder.create()
-
-        // Need to override the on click for the neutral button so it doesn't close the dialog
-        alertDialog.setOnShowListener {
-            val neutralButton = (it as AlertDialog).getButton(AlertDialog.BUTTON_NEUTRAL)
-            neutralButton.setOnClickListener {
-                mProgressBar.visibility = View.VISIBLE
-                val discoverableIntent = Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE)
-                discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 1000)
-                startActivityForResult(discoverableIntent, REQUEST_BLUETOOTH_ON)
-            }
+        scan_button.setOnClickListener {
+            bluetooth_searching_progress.visibility = View.VISIBLE
+            val discoverableIntent = Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE)
+            discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 1000)
+            startActivityForResult(discoverableIntent, REQUEST_BLUETOOTH_ON)
         }
-
-
-        return alertDialog
     }
 
     private val mReceiver = object :BroadcastReceiver() {
@@ -152,8 +128,7 @@ class DiscoverDeviceDialog : DialogFragment() {
                     }
                 }
             } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED == action) {
-                dialog?.setTitle(R.string.select_device)
-                mProgressBar.visibility = View.INVISIBLE
+                bluetooth_searching_progress.visibility = View.INVISIBLE
                 if (mNewDeviceList.size == 0) {
                     val noDevices = resources.getText(R.string.none_found).toString()
                     mNewDeviceList.add(noDevices)
@@ -163,18 +138,15 @@ class DiscoverDeviceDialog : DialogFragment() {
         }
     }
 
-    override fun onDismiss(dialog: DialogInterface?) {
-        super.onDismiss(dialog)
-
-        // Need to unregister the receiver once the dialog is dismissed
-        activity?.unregisterReceiver(mReceiver)
+    override fun onStop() {
+        super.onStop()
+        unregisterReceiver(mReceiver)
         if (mBluetoothAdapter.isDiscovering) {
             mBluetoothAdapter.cancelDiscovery()
         }
     }
 
     private fun doDiscovery() {
-        dialog.setTitle(R.string.scanning)
 
         // If we're already discovering, stop it
         if (mBluetoothAdapter.isDiscovering) {
@@ -193,8 +165,7 @@ class DiscoverDeviceDialog : DialogFragment() {
         when (requestCode) {
             REQUEST_BLUETOOTH_ON -> {
                 if (resultCode == Activity.RESULT_CANCELED) {
-                    dismiss()
-                    val intent = Intent(context, CounterActivity::class.java)
+                    val intent = Intent(this, CounterActivity::class.java)
                     startActivity(intent)
                 } else {
                     doDiscovery()

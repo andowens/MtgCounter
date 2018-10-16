@@ -9,12 +9,12 @@ import android.support.v4.app.ActivityCompat
 import android.support.v4.app.DialogFragment
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import com.firerocks.mtgcounter.R
 import com.firerocks.mtgcounter.counter.CounterActivity
-import com.firerocks.mtgcounter.helpers.DiscoverDeviceDialog
 import com.firerocks.mtgcounter.helpers.changeNameDialog
 import com.firerocks.mtgcounter.helpers.rollDiceDialog
 import com.firerocks.mtgcounter.root.App
@@ -23,12 +23,15 @@ import kotlinx.android.synthetic.main.bluetooth_view.*
 import java.util.*
 import javax.inject.Inject
 
-class BluetoothActivity: AppCompatActivity(), BluetoothMVP.View, DiscoverDeviceDialog.DiscoverDeviceDialogListener {
+class BluetoothActivity: AppCompatActivity(), BluetoothMVP.View {
 
     private val TAG = "mtg.BlueTActivity"
 
     // Intent request codes
-    private val REQUEST_BLUETOOTH_ON = 2
+    companion object {
+        private const val REQUEST_BLUETOOTH_ON = 2
+        const val DEVICE_SELECTED_RESULT = 1
+    }
 
     private lateinit var mOpponentHealthTextView: CustomFontTextView
     private lateinit var mOpponentNameTextView: CustomFontTextView
@@ -46,9 +49,9 @@ class BluetoothActivity: AppCompatActivity(), BluetoothMVP.View, DiscoverDeviceD
         window.addFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
         //Have to request location permission
-        val REQUEST_COARSE_PERMISSION = 1
+        val requestCoursePermission = 1
         ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_COARSE_LOCATION),
-            REQUEST_COARSE_PERMISSION)
+            requestCoursePermission)
 
         mNoDeviceSnackBar = Snackbar.make(findViewById<ConstraintLayout>(R.id.main_view),
                 getString(R.string.no_device_connected),
@@ -105,8 +108,8 @@ class BluetoothActivity: AppCompatActivity(), BluetoothMVP.View, DiscoverDeviceD
                 return true
             }
             R.id.menu_discover -> {
-                val dialog = DiscoverDeviceDialog()
-                dialog.show(supportFragmentManager, "DiscoverDeviceDialog")
+                val intent = Intent(this, DiscoverDeviceActivity::class.java)
+                startActivityForResult(intent, DEVICE_SELECTED_RESULT)
 
                 return true
             }
@@ -161,15 +164,10 @@ class BluetoothActivity: AppCompatActivity(), BluetoothMVP.View, DiscoverDeviceD
         startActivityForResult(discoverableIntent, REQUEST_BLUETOOTH_ON)
     }
 
-    override fun onDeviceItemClicked(dialogFragment: DialogFragment, address: String) {
-
-        mPresenter.bluetoothDeviceSelected(address)
-    }
-
     override fun showNoDeviceConnectedSnackBar() {
         mNoDeviceSnackBar.setAction(getString(R.string.connect_device)) {
-            val dialog = DiscoverDeviceDialog()
-            dialog.show(supportFragmentManager, "DiscoverDeviceDialog")
+
+
         }.show()
     }
 
@@ -196,5 +194,23 @@ class BluetoothActivity: AppCompatActivity(), BluetoothMVP.View, DiscoverDeviceD
 
     override fun setPlayerHealth(health: String) {
         player_health.text = health
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (resultCode == DEVICE_SELECTED_RESULT) {
+            Log.i(TAG, "Device Selected Result")
+
+
+            data?.let {
+                Log.i(TAG, "Intent not null: ")
+                val address: String? = intent.getStringExtra(DiscoverDeviceActivity.ADDRESS)
+                if (address != null) {
+                    Log.i(TAG, "Address: $address")
+                    mPresenter.bluetoothDeviceSelected(address)
+                }
+            }
+        }
     }
 }

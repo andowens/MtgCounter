@@ -7,4 +7,6 @@
     <dimen name="button_elevation">9dp</dimen>
     <dimen name="button_padding">5dp</dimen>
     <dimen name="main_margins">10dp</dimen>
+    <dimen name="padding_5dp">5dp</dimen>
+    <dimen name="button_corners">18dp</dimen>
 </resources>
