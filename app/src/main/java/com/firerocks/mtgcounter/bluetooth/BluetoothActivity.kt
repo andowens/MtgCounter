@@ -3,12 +3,12 @@ package com.firerocks.mtgcounter.bluetooth
 import android.bluetooth.BluetoothAdapter
 import android.content.Intent
 import android.os.Bundle
-import android.support.constraint.ConstraintLayout
-import android.support.design.widget.Snackbar
-import android.support.v4.app.ActivityCompat
-import android.support.v4.app.DialogFragment
-import android.support.v7.app.AlertDialog
-import android.support.v7.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
+import com.google.android.material.snackbar.Snackbar
+import androidx.core.app.ActivityCompat
+import androidx.fragment.app.DialogFragment
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -35,7 +35,7 @@ class BluetoothActivity: AppCompatActivity(), BluetoothMVP.View {
 
     private lateinit var mOpponentHealthTextView: CustomFontTextView
     private lateinit var mOpponentNameTextView: CustomFontTextView
-    private lateinit var mNoDeviceSnackBar: Snackbar
+    private lateinit var mNoDeviceSnackBar: com.google.android.material.snackbar.Snackbar
 
     @Inject lateinit var mPresenter: BluetoothMVP.Presenter
 
@@ -53,9 +53,9 @@ class BluetoothActivity: AppCompatActivity(), BluetoothMVP.View {
         ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_COARSE_LOCATION),
             requestCoursePermission)
 
-        mNoDeviceSnackBar = Snackbar.make(findViewById<ConstraintLayout>(R.id.main_view),
+        mNoDeviceSnackBar = com.google.android.material.snackbar.Snackbar.make(findViewById<androidx.constraintlayout.widget.ConstraintLayout>(R.id.main_view),
                 getString(R.string.no_device_connected),
-                Snackbar.LENGTH_INDEFINITE)
+                com.google.android.material.snackbar.Snackbar.LENGTH_INDEFINITE)
 
         mPresenter.setView(this) { name, health ->
             player_health.text = health.toString()
@@ -142,9 +142,9 @@ class BluetoothActivity: AppCompatActivity(), BluetoothMVP.View {
     }
 
     override fun errorSnackbar(error: String) {
-        Snackbar.make(main_view,
+        com.google.android.material.snackbar.Snackbar.make(main_view,
                 error,
-                Snackbar.LENGTH_LONG).show()
+                com.google.android.material.snackbar.Snackbar.LENGTH_LONG).show()
     }
 
     override fun showNoBluetoothDialog() {
@@ -176,9 +176,9 @@ class BluetoothActivity: AppCompatActivity(), BluetoothMVP.View {
     }
 
     override fun launchPlayerDeadSnackBar(player: String) {
-        Snackbar.make(main_view,
+        com.google.android.material.snackbar.Snackbar.make(main_view,
                 resources.getString(R.string.player_dead, player),
-                Snackbar.LENGTH_LONG)
+                com.google.android.material.snackbar.Snackbar.LENGTH_LONG)
                 .setAction(resources.getString(R.string.new_game)) {
 
                 }.show()

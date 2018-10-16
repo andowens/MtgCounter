@@ -9,4 +9,8 @@
     <dimen name="main_margins">10dp</dimen>
     <dimen name="padding_5dp">5dp</dimen>
     <dimen name="button_corners">18dp</dimen>
+    <dimen name="card_view_name_margin">5dp</dimen>
+    <dimen name="card_padding">10dp</dimen>
+    <dimen name="card_margin">5dp</dimen>
+    <dimen name="address_padding">10dp</dimen>
 </resources>

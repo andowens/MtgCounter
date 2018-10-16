@@ -1,13 +1,13 @@
 package com.firerocks.mtgcounter.counter
 
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.support.constraint.ConstraintLayout
-import android.support.design.widget.Snackbar
-import android.support.v7.app.AlertDialog
-import android.support.v7.widget.AppCompatEditText
-import android.support.v7.widget.AppCompatTextView
+import androidx.constraintlayout.widget.ConstraintLayout
+import com.google.android.material.snackbar.Snackbar
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.AppCompatEditText
+import androidx.appcompat.widget.AppCompatTextView
 import android.text.InputType
 import android.util.Log
 import android.view.Menu
@@ -25,7 +25,7 @@ class CounterActivity : AppCompatActivity(), CounterMVP.View {
     private val TAG = "CounterActivity"
 
     @Inject lateinit var presenter: CounterMVP.Presenter
-    private lateinit var mMainView: ConstraintLayout
+    private lateinit var mMainView: androidx.constraintlayout.widget.ConstraintLayout
 
     private val mPlayerLifeIDs = listOf(R.id.player_one_health,
             R.id.player_two_health,
@@ -98,9 +98,9 @@ class CounterActivity : AppCompatActivity(), CounterMVP.View {
     }
 
     override fun launchPlayerDeadSnackBar(deadPlayer: String) {
-        Snackbar.make(mMainView
+        com.google.android.material.snackbar.Snackbar.make(mMainView
                 , resources.getString(R.string.player_dead, deadPlayer)
-                , Snackbar.LENGTH_LONG)
+                , com.google.android.material.snackbar.Snackbar.LENGTH_LONG)
                 .setAction(resources.getString(R.string.new_game)) {
                     presenter.resetAllPlayersHealth { health, size ->
                         resetAllPlayersHealth(health, size)

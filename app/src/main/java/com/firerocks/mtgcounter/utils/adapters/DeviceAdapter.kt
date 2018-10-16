@@ -1,18 +1,17 @@
 package com.firerocks.mtgcounter.utils.adapters
 
-import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.firerocks.mtgcounter.R
 import kotlinx.android.synthetic.main.device_name.view.*
+import androidx.recyclerview.widget.RecyclerView
 
 class DeviceAdapter(private val devices: ArrayList<String>, private val listener: (String) -> Unit)
-    : RecyclerView.Adapter<DeviceAdapter.DeviceViewHolder>() {
+    : RecyclerView.ViewHolder<DeviceAdapter.DeviceViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DeviceViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.device_name, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.device_layout, parent, false)
         return DeviceViewHolder(view)
     }
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -22,7 +22,7 @@
         android:tag="ONE"
         android:layout_margin="@dimen/main_margins"/>
 
-    <android.support.v7.widget.AppCompatImageButton
+    <androidx.appcompat.widget.AppCompatImageButton
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:id="@+id/player_one_up_arrow"
@@ -49,7 +49,7 @@
         app:layout_constraintBottom_toTopOf="@id/player_one_down_arrow"
         android:layout_margin="@dimen/main_margins"/>
 
-    <android.support.v7.widget.AppCompatImageButton
+    <androidx.appcompat.widget.AppCompatImageButton
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:id="@+id/player_one_down_arrow"
@@ -79,7 +79,7 @@
         android:tag="TWO"
         android:layout_margin="@dimen/main_margins"/>
 
-    <android.support.v7.widget.AppCompatImageButton
+    <androidx.appcompat.widget.AppCompatImageButton
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:id="@+id/player_two_up_arrow"
@@ -106,7 +106,7 @@
         app:layout_constraintBottom_toTopOf="@id/player_two_down_arrow"
         android:layout_margin="@dimen/main_margins"/>
 
-    <android.support.v7.widget.AppCompatImageButton
+    <androidx.appcompat.widget.AppCompatImageButton
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:id="@+id/player_two_down_arrow"
@@ -121,4 +121,4 @@
         android:background="@drawable/button_ripple"
         android:padding="@dimen/button_padding"/>
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

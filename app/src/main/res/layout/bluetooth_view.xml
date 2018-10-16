@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -41,7 +41,7 @@
         android:onClick="nameClicked"
         android:layout_margin="@dimen/main_margins"/>
 
-    <android.support.v7.widget.AppCompatImageButton
+    <androidx.appcompat.widget.AppCompatImageButton
         android:layout_width="75dp"
         android:layout_height="75dp"
         android:src="@drawable/up_arrow"
@@ -66,7 +66,7 @@
         android:textSize="@dimen/bluetooth_player_text_size"
         android:layout_margin="@dimen/main_margins"/>
 
-    <android.support.v7.widget.AppCompatImageButton
+    <androidx.appcompat.widget.AppCompatImageButton
         android:layout_width="75dp"
         android:layout_height="75dp"
         android:id="@+id/player_down_arrow"
@@ -80,4 +80,4 @@
         android:elevation="@dimen/button_elevation"
         android:padding="@dimen/button_padding"/>
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,10 +6,10 @@ import android.bluetooth.BluetoothDevice
 import android.content.*
 import android.os.Bundle
 import android.os.PersistableBundle
-import android.support.v4.app.DialogFragment
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.fragment.app.DialogFragment
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
@@ -73,8 +73,8 @@ class DiscoverDeviceActivity : AppCompatActivity() {
         new_devices.adapter = mNewDevicesAdapter
         paired_devices.adapter = mPairedDevicesAdapter
 
-        new_devices.layoutManager = LinearLayoutManager(this)
-        paired_devices.layoutManager = LinearLayoutManager(this)
+        new_devices.LayoutManager = LinearLayoutManager()
+        paired_devices.layoutManager = LinearLayoutManager()
 
         // Register for broadcasts when discovery is finished
         val filter = IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)
