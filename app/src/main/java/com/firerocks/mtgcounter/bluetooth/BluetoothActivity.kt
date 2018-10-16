@@ -200,14 +200,10 @@ class BluetoothActivity: AppCompatActivity(), BluetoothMVP.View {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (resultCode == DEVICE_SELECTED_RESULT) {
-            Log.i(TAG, "Device Selected Result")
-
 
             data?.let {
-                Log.i(TAG, "Intent not null: ")
-                val address: String? = intent.getStringExtra(DiscoverDeviceActivity.ADDRESS)
+                val address: String? = it.getStringExtra(DiscoverDeviceActivity.ADDRESS)
                 if (address != null) {
-                    Log.i(TAG, "Address: $address")
                     mPresenter.bluetoothDeviceSelected(address)
                 }
             }

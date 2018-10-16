@@ -52,8 +52,7 @@ class DiscoverDeviceActivity : AppCompatActivity() {
         //mListener.onDeviceItemClicked(this, address)
         val intent = Intent()
         intent.putExtra(ADDRESS, address)
-        Log.e("ERROR", "Address Disc: ${DiscoverDeviceActivity.ADDRESS}")
-        Log.e("ERROR", intent.getStringExtra("extra_data"))
+
         setResult(BluetoothActivity.DEVICE_SELECTED_RESULT, intent)
         finish()
     }
