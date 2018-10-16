@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/card_margin">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/device_name"
+            android:text="@string/lorum_epsum"
+            android:layout_marginStart="@dimen/card_view_name_margin"
+            android:layout_marginBottom="@dimen/card_view_name_margin"
+            android:textStyle="bold"
+            android:fontFamily="@font/medusa_gothic"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/device_address"
+            android:text="@string/lorum_epsum"
+            android:fontFamily="@font/medusa_gothic"
+            android:layout_marginStart="@dimen/address_padding"/>
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>
