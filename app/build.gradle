@@ -42,5 +42,5 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.8.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
     implementation 'io.magicthegathering:kotlinsdk:1.0.2'
-    implementation 'com.robotpajamas.blueteeth:blueteeth:0.2.0'
+    implementation 'com.github.ivbaranov:rxbluetooth2:2.0.1'
 }
