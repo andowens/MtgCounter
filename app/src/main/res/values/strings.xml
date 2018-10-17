@@ -33,5 +33,6 @@
     <string name="no_device_connected">No device connected</string>
     <string name="connect_device">Connect Device</string>
     <string name="lorum_epsum">Lorum Epsum</string>
+    <string name="no_name">No Name</string>
 
 </resources>

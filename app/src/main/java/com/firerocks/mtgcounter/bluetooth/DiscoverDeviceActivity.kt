@@ -15,6 +15,7 @@ import android.view.View
 import android.widget.ProgressBar
 import com.firerocks.mtgcounter.R
 import com.firerocks.mtgcounter.counter.CounterActivity
+import com.firerocks.mtgcounter.data.BTDevice
 import com.firerocks.mtgcounter.utils.adapters.DeviceAdapter
 import kotlinx.android.synthetic.main.activity_device_list.*
 
@@ -36,20 +37,18 @@ class DiscoverDeviceActivity : AppCompatActivity() {
 
     private lateinit var mNewDevicesAdapter: DeviceAdapter
 
-    private val  mNewDeviceList = ArrayList<String>()
-    private val mPairedDeviceList = ArrayList<String>()
+    private val  mNewDeviceList = ArrayList<BTDevice>()
+    private val mPairedDeviceList = ArrayList<BTDevice>()
 
     // The on-click listener for all devices in the ListViews
-    private fun deviceClickListener(device: String) {
+    private fun deviceClickListener(device: BTDevice) {
 
         // Cancel discovery because it's costly and we're about to connect
         mBluetoothAdapter.cancelDiscovery()
 
-        // Get the device MAC address, which is the last 17 chars in the string
-        val address = device.substring(device.length - 17)
-        //dialog.dismiss()
+        val address = device.deviceAddress
+
         // Create the result Intent and include the MAC address
-        //mListener.onDeviceItemClicked(this, address)
         val intent = Intent()
         intent.putExtra(ADDRESS, address)
 
@@ -73,8 +72,8 @@ class DiscoverDeviceActivity : AppCompatActivity() {
         new_devices.adapter = mNewDevicesAdapter
         paired_devices.adapter = mPairedDevicesAdapter
 
-        new_devices.LayoutManager = LinearLayoutManager()
-        paired_devices.layoutManager = LinearLayoutManager()
+        new_devices.layoutManager = LinearLayoutManager(this)
+        paired_devices.layoutManager = LinearLayoutManager(this)
 
         // Register for broadcasts when discovery is finished
         val filter = IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)
@@ -90,14 +89,14 @@ class DiscoverDeviceActivity : AppCompatActivity() {
         // If there are paired devices, add each one to the ArrayAdapter
         if (pairedDevices.size > 0) {
             for (device in pairedDevices) {
-                mPairedDeviceList.add(device.name + "\n" + device.address)
+                mPairedDeviceList.add(BTDevice(device.name, device.address))
+                mPairedDevicesAdapter.notifyItemInserted(mPairedDeviceList.size - 1)
             }
         } else {
             val noDevices = resources.getText(R.string.none_paired).toString()
-            mPairedDeviceList.add(noDevices)
+            mPairedDeviceList.add(BTDevice(noDevices, ""))
+            mPairedDevicesAdapter.notifyItemInserted(mPairedDeviceList.size - 1)
         }
-
-        mPairedDevicesAdapter.notifyDataSetChanged()
 
         cancel_button.setOnClickListener {
             onBackPressed()
@@ -120,18 +119,23 @@ class DiscoverDeviceActivity : AppCompatActivity() {
                 val device = intent.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
                 // If it's already paired skip it because it's been listed already
                 if (device.bondState != BluetoothDevice.BOND_BONDED) {
-                    val deviceString = device.name + "\n" + device.address
-                    if (!mNewDeviceList.contains(deviceString)) {
-                        mNewDeviceList.add(deviceString)
-                        mNewDevicesAdapter.notifyDataSetChanged()
+                    val name = if (device.name == null) {
+                        getString(R.string.no_name)
+                    } else {
+                        device.name
+                    }
+                    val btDevice = BTDevice(name, device.address)
+                    if (!mNewDeviceList.contains(btDevice)) {
+                        mNewDeviceList.add(btDevice)
+                        mNewDevicesAdapter.notifyItemInserted(mNewDeviceList.size - 1)
                     }
                 }
             } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED == action) {
                 bluetooth_searching_progress.visibility = View.INVISIBLE
                 if (mNewDeviceList.size == 0) {
                     val noDevices = resources.getText(R.string.none_found).toString()
-                    mNewDeviceList.add(noDevices)
-                    mNewDevicesAdapter.notifyDataSetChanged()
+                    mNewDeviceList.add(BTDevice(noDevices, ""))
+                    mNewDevicesAdapter.notifyItemInserted(mNewDeviceList.size - 1)
                 }
             }
         }

@@ -2,6 +2,7 @@ package com.firerocks.mtgcounter.bluetooth
 
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
+import android.bluetooth.BluetoothServerSocket
 import android.bluetooth.BluetoothSocket
 import android.os.Bundle
 import android.util.Log
@@ -189,7 +190,7 @@ class BlueToothHelper constructor(private val observer: Observer<Pair<Int, Any>>
     private fun connectionLost() {
         setState(STATE_LISTEN)
 
-        Observable.just(Pair(BluetoothModel.MESSAGE_SNACKBAR, "Device connection was lost"))
+        Observable.just(Pair(BluetoothModel.MESSAGE_SNACKBAR, "BTDevice connection was lost"))
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(Schedulers.newThread())
                 .subscribe(observer)
@@ -198,18 +199,19 @@ class BlueToothHelper constructor(private val observer: Observer<Pair<Int, Any>>
     inner class AcceptThread: Thread() {
 
         // The local server socket
-        private val mServerSocket= mBluetoothAdapter.listenUsingRfcommWithServiceRecord(NAME, MY_UUID)
-
-        private lateinit var socket: BluetoothSocket
+        private val mServerSocket : BluetoothServerSocket? by lazy(LazyThreadSafetyMode.NONE) {
+            mBluetoothAdapter.listenUsingRfcommWithServiceRecord(NAME, MY_UUID)
+        }
 
         override fun run() {
             name = "AcceptThread"
 
+
             while (mState != STATE_CONNECTED) {
                 // This is a blocking call and will only return on a
                 // successful connection or an exception
-                try {
-                    socket = mServerSocket.accept()
+                 val socket: BluetoothSocket? = try {
+                     mServerSocket?.accept()
                 } catch (e: IOException) {
                     Log.e(TAG, "accept()failed", e)
                     break
@@ -218,20 +220,19 @@ class BlueToothHelper constructor(private val observer: Observer<Pair<Int, Any>>
                     when (mState) {
                         STATE_LISTEN, STATE_CONNECTING -> {
                             // Situation normal. Start the connected thread
-                            connected(socket, socket.remoteDevice)
+                            connected(socket!!, socket.remoteDevice)
                         }
                         STATE_NONE, STATE_CONNECTED -> {
-                            socket.close()
+                            socket?.close()
                         }
                         else -> Log.e(TAG, "Invalid state")
                     }
                 }
             }
-            Log.i(TAG, "End Accept")
         }
 
         fun cancel() {
-            mServerSocket.close()
+            mServerSocket?.close()
         }
     }
 
@@ -241,16 +242,9 @@ class BlueToothHelper constructor(private val observer: Observer<Pair<Int, Any>>
      * succeeds or fails.
      */
     private inner class ConnectThread(private val mmDevice: BluetoothDevice) : Thread() {
-        private lateinit var mmSocket: BluetoothSocket
 
-        init {
-            // Get a BluetoothSocket for a connection with the
-            // given BluetoothDevice
-            try {
-                mmSocket = mmDevice.createRfcommSocketToServiceRecord(MY_UUID)
-            } catch (e: IOException) {
-                Log.e(TAG, "create() failed", e)
-            }
+        private val mmSocket: BluetoothSocket? by lazy(LazyThreadSafetyMode.NONE) {
+            mmDevice.createRfcommSocketToServiceRecord(MY_UUID)
         }
 
         override fun run() {
@@ -259,19 +253,18 @@ class BlueToothHelper constructor(private val observer: Observer<Pair<Int, Any>>
             mBluetoothAdapter.cancelDiscovery()
             // Make a connection to the BluetoothSocket
             try {
-                // This is a blocking call and will only return on a
-                // successful connection or an exception
-                mmSocket.connect()
+
+                mmSocket?.use{ socket ->
+                    // Connect to the remote device through the socket. This call blocks
+                    // until it succeeds or throws an exception.
+                    socket.connect()
+                }
             } catch (e: IOException) {
                 Log.e(TAG, "Connection failed: " + Log.getStackTraceString(e))
                 connectionFailed()
                 // Close the socket
-                try {
-                    mmSocket.close()
-                } catch (e2: IOException) {
-                    Log.e(TAG, "unable to close() socket during connection failure", e2)
-                }
-                Log.i(TAG, "Connect Error")
+                cancel()
+
                 // Start the service over to restart listening mode
                 this@BlueToothHelper.start()
                 return
@@ -281,14 +274,17 @@ class BlueToothHelper constructor(private val observer: Observer<Pair<Int, Any>>
             synchronized(mLock) {
                 mConnectThread = null
             }
-            Log.i(TAG, "Connecting ||||||||")
             // Start the connected thread
-            connected(mmSocket, mmDevice)
+            mmSocket?.let { socket ->
+                connected(socket, mmDevice)
+            }
         }
 
         fun cancel() {
             try {
-                mmSocket.close()
+                mmSocket?.use { socket ->
+                    socket.close()
+                }
             } catch (e: IOException) {
                 Log.e(TAG, "close() of connect socket failed", e)
             }
@@ -302,18 +298,9 @@ class BlueToothHelper constructor(private val observer: Observer<Pair<Int, Any>>
      * It handles all incoming and outgoing transmissions.
      */
     private inner class ConnectedThread(private val mmSocket: BluetoothSocket) : Thread() {
-        private lateinit var mmInStream: InputStream
-        private lateinit var mmOutStream: OutputStream
+        private val mmInStream: InputStream = mmSocket.inputStream
+        private val mmOutStream: OutputStream = mmSocket.outputStream
 
-        init {
-            // Get the BluetoothSocket input and output streams
-            try {
-                mmInStream = mmSocket.inputStream
-                mmOutStream = mmSocket.outputStream
-            } catch (e: IOException) {
-                Log.e(TAG, "temp sockets not created", e)
-            }
-        }
 
         override fun run() {
             val buffer = ByteArray(1024)

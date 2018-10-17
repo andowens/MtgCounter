@@ -69,9 +69,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/cancel_button"
         android:text="@string/button_scan"
-        style="@style/ButtonStyle"
         android:paddingStart="@dimen/padding_5dp"
-        android:paddingEnd="@dimen/padding_5dp"/>
+        android:paddingEnd="@dimen/padding_5dp"
+        android:fontFamily="@font/medusa_gothic"/>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/cancel_button"
@@ -82,7 +82,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/scan_button"
         android:text="@string/cancel"
-        style="@style/ButtonStyle"/>
+        android:fontFamily="@font/medusa_gothic"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

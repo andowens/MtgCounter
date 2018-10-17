@@ -1,5 +1,6 @@
 package com.firerocks.mtgcounter.bluetooth
 
+import android.app.Activity
 import android.bluetooth.BluetoothAdapter
 import android.content.Intent
 import android.os.Bundle
@@ -36,6 +37,7 @@ class BluetoothActivity: AppCompatActivity(), BluetoothMVP.View {
     private lateinit var mOpponentHealthTextView: CustomFontTextView
     private lateinit var mOpponentNameTextView: CustomFontTextView
     private lateinit var mNoDeviceSnackBar: com.google.android.material.snackbar.Snackbar
+    private var mBluetoothOn = false
 
     @Inject lateinit var mPresenter: BluetoothMVP.Presenter
 
@@ -57,15 +59,28 @@ class BluetoothActivity: AppCompatActivity(), BluetoothMVP.View {
                 getString(R.string.no_device_connected),
                 com.google.android.material.snackbar.Snackbar.LENGTH_INDEFINITE)
 
-        mPresenter.setView(this) { name, health ->
+        mPresenter.setView(this) { name, health, bluetooth ->
             player_health.text = health.toString()
             player_name.text = name
+            mBluetoothOn = bluetooth
         }
     }
 
     override fun onResume() {
         super.onResume()
-        mPresenter.onResume()
+        if (mBluetoothOn) {
+            mPresenter.onResume()
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.i("OnSTART", "Onstart started")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.i("Onstop", "Onstopped")
     }
 
     override fun onPause() {
@@ -198,7 +213,6 @@ class BluetoothActivity: AppCompatActivity(), BluetoothMVP.View {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
         if (resultCode == DEVICE_SELECTED_RESULT) {
 
             data?.let {
@@ -206,6 +220,11 @@ class BluetoothActivity: AppCompatActivity(), BluetoothMVP.View {
                 if (address != null) {
                     mPresenter.bluetoothDeviceSelected(address)
                 }
+            }
+        }
+        if (requestCode == REQUEST_BLUETOOTH_ON) {
+            if (resultCode != Activity.RESULT_CANCELED) {
+                mPresenter.onPause()
             }
         }
     }

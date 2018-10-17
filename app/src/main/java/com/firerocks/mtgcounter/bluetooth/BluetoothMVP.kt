@@ -7,7 +7,7 @@ import java.util.*
 interface BluetoothMVP {
 
     interface Presenter{
-        fun setView(view: BluetoothMVP.View, onResult: (String, Int) -> Unit)
+        fun setView(view: BluetoothMVP.View, onResult: (String, Int, Boolean) -> Unit)
 
         fun menuNewGame()
 
