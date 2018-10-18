@@ -81,8 +81,8 @@ class BlueToothHelper constructor(private val observer: Observer<Pair<Int, Any>>
         // Start the thread to manage the connection and perform transmissions
         mConnectedThread = ConnectedThread(socket)
         mConnectedThread?.start()
-        // Send the name of the connected device back to the UI Activity
 
+        // Send the name of the connected device back to the UI Activity
         Observable.just(Pair(BluetoothModel.MESSAGE_CONNECTED, device.name))
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(Schedulers.newThread())
@@ -126,7 +126,6 @@ class BlueToothHelper constructor(private val observer: Observer<Pair<Int, Any>>
                 mConnectThread = null
             }
             if (mAcceptThread != null) {
-                Log.i(TAG, "AcceptThread is not null")
                 mAcceptThread?.cancel()
                 mAcceptThread = null
             }
@@ -136,6 +135,7 @@ class BlueToothHelper constructor(private val observer: Observer<Pair<Int, Any>>
 
     fun start() {
         synchronized(mLock) {
+            stop()
             // Cancel any thread attempting to make a connection
             if (mConnectThread != null) {
                 mConnectThread?.cancel()
