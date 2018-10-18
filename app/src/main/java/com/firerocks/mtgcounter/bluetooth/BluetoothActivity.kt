@@ -3,6 +3,7 @@ package com.firerocks.mtgcounter.bluetooth
 import android.app.Activity
 import android.bluetooth.BluetoothAdapter
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.google.android.material.snackbar.Snackbar
@@ -14,6 +15,9 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
+import androidx.core.content.ContextCompat
+import androidx.core.content.PermissionChecker.PERMISSION_DENIED
 import com.firerocks.mtgcounter.R
 import com.firerocks.mtgcounter.counter.CounterActivity
 import com.firerocks.mtgcounter.helpers.changeNameDialog
@@ -30,14 +34,14 @@ class BluetoothActivity: AppCompatActivity(), BluetoothMVP.View {
 
     // Intent request codes
     companion object {
+        private const val REQUEST_COURSE_PERMISSION = 3
         private const val REQUEST_BLUETOOTH_ON = 2
         const val DEVICE_SELECTED_RESULT = 1
     }
 
     private lateinit var mOpponentHealthTextView: CustomFontTextView
     private lateinit var mOpponentNameTextView: CustomFontTextView
-    private lateinit var mNoDeviceSnackBar: com.google.android.material.snackbar.Snackbar
-    private var mBluetoothOn = false
+    private lateinit var mNoDeviceSnackBar: Snackbar
 
     @Inject lateinit var mPresenter: BluetoothMVP.Presenter
 
@@ -51,36 +55,31 @@ class BluetoothActivity: AppCompatActivity(), BluetoothMVP.View {
         window.addFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
         //Have to request location permission
-        val requestCoursePermission = 1
-        ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_COARSE_LOCATION),
-            requestCoursePermission)
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) !=
+                PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_COARSE_LOCATION),
+                    REQUEST_COURSE_PERMISSION)
+        }
 
-        mNoDeviceSnackBar = com.google.android.material.snackbar.Snackbar.make(findViewById<androidx.constraintlayout.widget.ConstraintLayout>(R.id.main_view),
+        mNoDeviceSnackBar = Snackbar.make(findViewById<androidx.constraintlayout.widget.ConstraintLayout>(R.id.main_view),
                 getString(R.string.no_device_connected),
-                com.google.android.material.snackbar.Snackbar.LENGTH_INDEFINITE)
+                Snackbar.LENGTH_INDEFINITE)
 
-        mPresenter.setView(this) { name, health, bluetooth ->
+        mPresenter.setView(this) { name, health ->
             player_health.text = health.toString()
             player_name.text = name
-            mBluetoothOn = bluetooth
         }
     }
 
     override fun onResume() {
         super.onResume()
-        if (mBluetoothOn) {
-            mPresenter.onResume()
+        mPresenter.checkBluetoothEnabled { bluetooth ->
+            if (!bluetooth) {
+                requestBluetoothOn()
+            } else {
+                mPresenter.onResume()
+            }
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        Log.i("OnSTART", "Onstart started")
-    }
-
-    override fun onStop() {
-        super.onStop()
-        Log.i("Onstop", "Onstopped")
     }
 
     override fun onPause() {
@@ -157,9 +156,9 @@ class BluetoothActivity: AppCompatActivity(), BluetoothMVP.View {
     }
 
     override fun errorSnackbar(error: String) {
-        com.google.android.material.snackbar.Snackbar.make(main_view,
+        Snackbar.make(main_view,
                 error,
-                com.google.android.material.snackbar.Snackbar.LENGTH_LONG).show()
+                Snackbar.LENGTH_LONG).show()
     }
 
     override fun showNoBluetoothDialog() {
@@ -191,9 +190,8 @@ class BluetoothActivity: AppCompatActivity(), BluetoothMVP.View {
     }
 
     override fun launchPlayerDeadSnackBar(player: String) {
-        com.google.android.material.snackbar.Snackbar.make(main_view,
-                resources.getString(R.string.player_dead, player),
-                com.google.android.material.snackbar.Snackbar.LENGTH_LONG)
+        Snackbar.make(main_view,
+                resources.getString(R.string.player_dead, player), Snackbar.LENGTH_LONG)
                 .setAction(resources.getString(R.string.new_game)) {
 
                 }.show()
@@ -224,7 +222,22 @@ class BluetoothActivity: AppCompatActivity(), BluetoothMVP.View {
         }
         if (requestCode == REQUEST_BLUETOOTH_ON) {
             if (resultCode != Activity.RESULT_CANCELED) {
-                mPresenter.onPause()
+                mPresenter.onResume()
+            }
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == REQUEST_COURSE_PERMISSION) {
+            for (permission in permissions) {
+                if (android.Manifest.permission.ACCESS_COARSE_LOCATION == permission) {
+                    if (grantResults[0] == PERMISSION_DENIED) {
+                        Toast.makeText(applicationContext, getString(R.string.coarse_access_refused),
+                                Toast.LENGTH_LONG).show()
+                        finish()
+                    }
+                }
             }
         }
     }

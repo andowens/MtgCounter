@@ -34,5 +34,6 @@
     <string name="connect_device">Connect Device</string>
     <string name="lorum_epsum">Lorum Epsum</string>
     <string name="no_name">No Name</string>
+    <string name="coarse_access_refused">Coarse Location Access Refused</string>
 
 </resources>

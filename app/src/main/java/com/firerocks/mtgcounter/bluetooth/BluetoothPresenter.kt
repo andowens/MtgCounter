@@ -16,6 +16,16 @@ class BluetoothPresenter @Inject constructor(private val mModel: BluetoothMVP.Mo
         }
     }
 
+    override fun checkBluetoothEnabled(onResult: (Boolean) -> Unit) {
+        var bluetooth = false
+        mBluetoothAdapter?.let { adapter ->
+            if (adapter.isEnabled) {
+                bluetooth = true
+            }
+        }
+        onResult(bluetooth)
+    }
+
     private val TAG = "mtg.BluetoothPresenter"
 
     init {
@@ -23,6 +33,7 @@ class BluetoothPresenter @Inject constructor(private val mModel: BluetoothMVP.Mo
     }
 
     override fun onResume() {
+        Log.i(TAG, "presenter OnResume")
          if (mModel.getServiceState() == BlueToothHelper.STATE_NONE) {
              mModel.startService()
          }
@@ -77,26 +88,18 @@ class BluetoothPresenter @Inject constructor(private val mModel: BluetoothMVP.Mo
 
     private lateinit var mView: BluetoothMVP.View
 
-    override fun setView(view: BluetoothMVP.View, onResult: (String, Int, Boolean) -> Unit) {
+    override fun setView(view: BluetoothMVP.View, onResult: (String, Int) -> Unit) {
         mView = view
         mModel.setStartPlayerName(mView.getRandomPlayerName())
         mModel.setStartPlayerHealth(mView.getDefaultHealth())
-        var bluetooth = false
         // If no bluetooth on the device inform the user and go back to the single phone activity
         if (mBluetoothAdapter == null) {
             mView.showNoBluetoothDialog()
         } else {
-            mBluetoothAdapter?.let {
-                if (!it.isEnabled) {
-                    bluetooth = false
-                    mView.requestBluetoothOn()
-                } else {
-                    bluetooth = true
-                }
-            }
+
             mView.showNoDeviceConnectedSnackBar()
         }
 
-        onResult(mModel.getPlayersName(), mModel.getPlayersHealth(), bluetooth)
+        onResult(mModel.getPlayersName(), mModel.getPlayersHealth())
     }
 }

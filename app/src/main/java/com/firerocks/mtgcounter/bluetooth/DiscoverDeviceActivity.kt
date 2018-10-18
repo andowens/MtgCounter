@@ -85,15 +85,8 @@ class DiscoverDeviceActivity : AppCompatActivity() {
 
         val pairedDevices = mBluetoothAdapter.bondedDevices
 
-        // If there are paired devices, add each one to the ArrayAdapter
-        if (pairedDevices.size > 0) {
-            for (device in pairedDevices) {
-                mPairedDeviceList.add(BTDevice(device.name, device.address))
-                mPairedDevicesAdapter.notifyItemInserted(mPairedDeviceList.size - 1)
-            }
-        } else {
-            val noDevices = resources.getText(R.string.none_paired).toString()
-            mPairedDeviceList.add(BTDevice(noDevices, ""))
+        pairedDevices.forEach { device ->
+            mPairedDeviceList.add(BTDevice(device.name, device.address))
             mPairedDevicesAdapter.notifyItemInserted(mPairedDeviceList.size - 1)
         }
 
@@ -110,9 +103,25 @@ class DiscoverDeviceActivity : AppCompatActivity() {
     }
 
     private val mReceiver = object :BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
-            val action = intent?.action
+        override fun onReceive(context: Context, intent: Intent) {
+            val action = intent.action
             // When discovery finds a device
+            when (action) {
+                BluetoothDevice.ACTION_FOUND -> {
+                    // Get the BluetoothDevice object from the intent
+                    val device = intent.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
+                    // If it's already paired skip it because it's been listed already
+                    if (device.bondState != BluetoothDevice.BOND_BONDED) {
+                        val name = device.name ?: getString(R.string.no_name)
+
+                        val btDevice = BTDevice(name, device.address)
+                        if (!mNewDeviceList.contains(btDevice)) {
+                            mNewDeviceList.add(btDevice)
+                            mNewDevicesAdapter.notifyItemInserted(mNewDeviceList.size - 1)
+                        }
+                    }
+                }
+            }
             if (BluetoothDevice.ACTION_FOUND == action) {
                 // Get the BluetoothDevice object from the intent
                 val device = intent.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
