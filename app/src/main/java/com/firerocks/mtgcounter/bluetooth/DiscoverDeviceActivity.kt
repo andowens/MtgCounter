@@ -25,6 +25,7 @@ class DiscoverDeviceActivity : AppCompatActivity() {
 
     companion object {
         private const val REQUEST_BLUETOOTH_ON = 2
+        private const val PAIR_REQUEST_CODE = 3
         const val ADDRESS = "address_extra"
     }
 
@@ -45,10 +46,8 @@ class DiscoverDeviceActivity : AppCompatActivity() {
         // Cancel discovery because it's costly and we're about to connect
         mBluetoothAdapter.cancelDiscovery()
 
-        if (device.bondState != BluetoothDevice.BOND_BONDED) {
-            val method = device.javaClass.getMethod("createBond", null)
-            method.invoke(device, null)
-        }
+        //device.createBond()
+
 
         val address = device.address
 
@@ -58,10 +57,6 @@ class DiscoverDeviceActivity : AppCompatActivity() {
 
         setResult(BluetoothActivity.DEVICE_SELECTED_RESULT, intent)
         finish()
-    }
-
-    fun pairDevice(device: BluetoothDevice) {
-        val 
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

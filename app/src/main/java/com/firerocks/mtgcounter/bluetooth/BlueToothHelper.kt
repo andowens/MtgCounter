@@ -135,7 +135,6 @@ class BlueToothHelper constructor(private val observer: Observer<Pair<Int, Any>>
 
     fun start() {
         synchronized(mLock) {
-            stop()
             // Cancel any thread attempting to make a connection
             mConnectThread?.let { connectThread ->
                 connectThread.cancel()
@@ -200,7 +199,7 @@ class BlueToothHelper constructor(private val observer: Observer<Pair<Int, Any>>
 
         // The local server socket
         private val mServerSocket : BluetoothServerSocket? by lazy(LazyThreadSafetyMode.NONE) {
-            mBluetoothAdapter.listenUsingInsecureRfcommWithServiceRecord(NAME, MY_UUID)
+            mBluetoothAdapter.listenUsingRfcommWithServiceRecord(NAME, MY_UUID)
         }
 
         override fun run() {
@@ -244,7 +243,7 @@ class BlueToothHelper constructor(private val observer: Observer<Pair<Int, Any>>
     private inner class ConnectThread(private val mmDevice: BluetoothDevice) : Thread() {
 
         private val mmSocket: BluetoothSocket? by lazy(LazyThreadSafetyMode.NONE) {
-            mmDevice.createInsecureRfcommSocketToServiceRecord(MY_UUID)
+            mmDevice.createRfcommSocketToServiceRecord(MY_UUID)
         }
 
         override fun run() {
@@ -320,6 +319,7 @@ class BlueToothHelper constructor(private val observer: Observer<Pair<Int, Any>>
                 } catch (e: IOException) {
                     Log.e(TAG, "disconnected", e)
                     connectionLost()
+                    this@BlueToothHelper.start()
                     break
                 }
 

@@ -46,7 +46,7 @@ class BluetoothModel @Inject constructor(private val mPlayer: Player):
 
                 }
                 MESSAGE_CONNECTED -> {
-                    mBlueToothHelper.write(GET_ENEMY.toByteArray())
+                    //mBlueToothHelper.write(GET_ENEMY.toByteArray())
                 }
                 MESSAGE_SNACKBAR -> {
                     notifyObservers(t)
