@@ -1,6 +1,7 @@
 package com.firerocks.mtgcounter.utils.adapters
 
 import android.animation.AnimatorInflater
+import android.bluetooth.BluetoothDevice
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -15,7 +16,7 @@ import com.firerocks.mtgcounter.data.BTDevice
 import com.google.android.material.card.MaterialCardView
 import kotlinx.android.synthetic.main.device_layout.view.*
 
-class DeviceAdapter(private val devices: ArrayList<BTDevice>, private val listener: (BTDevice) -> Unit)
+class DeviceAdapter(private val devices: ArrayList<BluetoothDevice>, private val listener: (BluetoothDevice) -> Unit)
     : RecyclerView.Adapter<DeviceAdapter.DeviceViewHolder>() {
 
     private var mLastPosition = -1
@@ -47,10 +48,10 @@ class DeviceAdapter(private val devices: ArrayList<BTDevice>, private val listen
 
     class DeviceViewHolder(val iv: View) : RecyclerView.ViewHolder(iv) {
 
-        fun bind(device: BTDevice, listener: (BTDevice) -> Unit) = with(iv) {
+        fun bind(device: BluetoothDevice, listener: (BluetoothDevice) -> Unit) = with(iv) {
             val card : CardView = iv as CardView
-            device_name.text = device.deviceName
-            device_address.text = device.deviceAddress
+            device_name.text = device.name
+            device_address.text = device.address
             card.setOnClickListener { listener(device) }
 
         }

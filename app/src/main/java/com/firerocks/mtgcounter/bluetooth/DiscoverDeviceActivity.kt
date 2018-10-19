@@ -36,16 +36,21 @@ class DiscoverDeviceActivity : AppCompatActivity() {
 
     private lateinit var mNewDevicesAdapter: DeviceAdapter
 
-    private val  mNewDeviceList = ArrayList<BTDevice>()
-    private val mPairedDeviceList = ArrayList<BTDevice>()
+    private val  mNewDeviceList = ArrayList<BluetoothDevice>()
+    private val mPairedDeviceList = ArrayList<BluetoothDevice>()
 
     // The on-click listener for all devices in the ListViews
-    private fun deviceClickListener(device: BTDevice) {
+    private fun deviceClickListener(device: BluetoothDevice) {
 
         // Cancel discovery because it's costly and we're about to connect
         mBluetoothAdapter.cancelDiscovery()
 
-        val address = device.deviceAddress
+        if (device.bondState != BluetoothDevice.BOND_BONDED) {
+            val method = device.javaClass.getMethod("createBond", null)
+            method.invoke(device, null)
+        }
+
+        val address = device.address
 
         // Create the result Intent and include the MAC address
         val intent = Intent()
@@ -53,6 +58,10 @@ class DiscoverDeviceActivity : AppCompatActivity() {
 
         setResult(BluetoothActivity.DEVICE_SELECTED_RESULT, intent)
         finish()
+    }
+
+    fun pairDevice(device: BluetoothDevice) {
+        val 
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -86,7 +95,7 @@ class DiscoverDeviceActivity : AppCompatActivity() {
         val pairedDevices = mBluetoothAdapter.bondedDevices
 
         pairedDevices.forEach { device ->
-            mPairedDeviceList.add(BTDevice(device.name, device.address))
+            mPairedDeviceList.add(device)
             mPairedDevicesAdapter.notifyItemInserted(mPairedDeviceList.size - 1)
         }
 
@@ -112,38 +121,12 @@ class DiscoverDeviceActivity : AppCompatActivity() {
                     val device = intent.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
                     // If it's already paired skip it because it's been listed already
                     if (device.bondState != BluetoothDevice.BOND_BONDED) {
-                        val name = device.name ?: getString(R.string.no_name)
 
-                        val btDevice = BTDevice(name, device.address)
-                        if (!mNewDeviceList.contains(btDevice)) {
-                            mNewDeviceList.add(btDevice)
+                        if (!mNewDeviceList.contains(device)) {
+                            mNewDeviceList.add(device)
                             mNewDevicesAdapter.notifyItemInserted(mNewDeviceList.size - 1)
                         }
                     }
-                }
-            }
-            if (BluetoothDevice.ACTION_FOUND == action) {
-                // Get the BluetoothDevice object from the intent
-                val device = intent.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
-                // If it's already paired skip it because it's been listed already
-                if (device.bondState != BluetoothDevice.BOND_BONDED) {
-                    val name = if (device.name == null) {
-                        getString(R.string.no_name)
-                    } else {
-                        device.name
-                    }
-                    val btDevice = BTDevice(name, device.address)
-                    if (!mNewDeviceList.contains(btDevice)) {
-                        mNewDeviceList.add(btDevice)
-                        mNewDevicesAdapter.notifyItemInserted(mNewDeviceList.size - 1)
-                    }
-                }
-            } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED == action) {
-                bluetooth_searching_progress.visibility = View.INVISIBLE
-                if (mNewDeviceList.size == 0) {
-                    val noDevices = resources.getText(R.string.none_found).toString()
-                    mNewDeviceList.add(BTDevice(noDevices, ""))
-                    mNewDevicesAdapter.notifyItemInserted(mNewDeviceList.size - 1)
                 }
             }
         }

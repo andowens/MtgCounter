@@ -33,7 +33,6 @@ class BluetoothPresenter @Inject constructor(private val mModel: BluetoothMVP.Mo
     }
 
     override fun onResume() {
-        Log.i(TAG, "presenter OnResume")
          if (mModel.getServiceState() == BlueToothHelper.STATE_NONE) {
              mModel.startService()
          }

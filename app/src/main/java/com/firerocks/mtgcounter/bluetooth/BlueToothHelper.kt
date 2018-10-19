@@ -137,14 +137,14 @@ class BlueToothHelper constructor(private val observer: Observer<Pair<Int, Any>>
         synchronized(mLock) {
             stop()
             // Cancel any thread attempting to make a connection
-            if (mConnectThread != null) {
-                mConnectThread?.cancel()
+            mConnectThread?.let { connectThread ->
+                connectThread.cancel()
                 mConnectThread = null
             }
             // Cancel any thread currently running a connection
-            if (mConnectedThread != null) {
-                mConnectedThread?.cancel()
-                mConnectedThread = null
+            mConnectedThread?.let { connectedThread ->
+                connectedThread.cancel()
+                 mConnectedThread = null
             }
             // Start the thread to listen on a BluetoothServerSocket
             if (mAcceptThread == null) {
@@ -200,7 +200,7 @@ class BlueToothHelper constructor(private val observer: Observer<Pair<Int, Any>>
 
         // The local server socket
         private val mServerSocket : BluetoothServerSocket? by lazy(LazyThreadSafetyMode.NONE) {
-            mBluetoothAdapter.listenUsingRfcommWithServiceRecord(NAME, MY_UUID)
+            mBluetoothAdapter.listenUsingInsecureRfcommWithServiceRecord(NAME, MY_UUID)
         }
 
         override fun run() {
@@ -244,7 +244,7 @@ class BlueToothHelper constructor(private val observer: Observer<Pair<Int, Any>>
     private inner class ConnectThread(private val mmDevice: BluetoothDevice) : Thread() {
 
         private val mmSocket: BluetoothSocket? by lazy(LazyThreadSafetyMode.NONE) {
-            mmDevice.createRfcommSocketToServiceRecord(MY_UUID)
+            mmDevice.createInsecureRfcommSocketToServiceRecord(MY_UUID)
         }
 
         override fun run() {
@@ -300,13 +300,14 @@ class BlueToothHelper constructor(private val observer: Observer<Pair<Int, Any>>
     private inner class ConnectedThread(private val mmSocket: BluetoothSocket) : Thread() {
         private val mmInStream: InputStream = mmSocket.inputStream
         private val mmOutStream: OutputStream = mmSocket.outputStream
+        val buffer = ByteArray(1024)
 
 
         override fun run() {
-            val buffer = ByteArray(1024)
             var bytes: Int
             // Keep listening to the InputStream while connected
             while (true) {
+
                 try {
                     // Read from the InputStream
                     bytes = mmInStream.read(buffer)
