@@ -77,12 +77,11 @@ class BlueToothHelper constructor(private val observer: Observer<Pair<Int, Any>>
             mAcceptThread?.cancel()
             mAcceptThread = null
         }
-
         // Start the thread to manage the connection and perform transmissions
         mConnectedThread = ConnectedThread(socket)
         mConnectedThread?.start()
-
         // Send the name of the connected device back to the UI Activity
+
         Observable.just(Pair(BluetoothModel.MESSAGE_CONNECTED, device.name))
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(Schedulers.newThread())
@@ -106,8 +105,6 @@ class BlueToothHelper constructor(private val observer: Observer<Pair<Int, Any>>
                 mConnectedThread?.cancel()
                 mConnectedThread = null
             }
-
-            Log.i(TAG, "ConnectThread")
             // Start the thread to connect with the given device
             mConnectThread = ConnectThread(device)
             mConnectThread?.start()
@@ -136,14 +133,14 @@ class BlueToothHelper constructor(private val observer: Observer<Pair<Int, Any>>
     fun start() {
         synchronized(mLock) {
             // Cancel any thread attempting to make a connection
-            mConnectThread?.let { connectThread ->
-                connectThread.cancel()
+            if (mConnectThread != null) {
+                mConnectThread?.cancel()
                 mConnectThread = null
             }
             // Cancel any thread currently running a connection
-            mConnectedThread?.let { connectedThread ->
-                connectedThread.cancel()
-                 mConnectedThread = null
+            if (mConnectedThread != null) {
+                mConnectedThread?.cancel()
+                mConnectedThread = null
             }
             // Start the thread to listen on a BluetoothServerSocket
             if (mAcceptThread == null) {
@@ -189,7 +186,7 @@ class BlueToothHelper constructor(private val observer: Observer<Pair<Int, Any>>
     private fun connectionLost() {
         setState(STATE_LISTEN)
 
-        Observable.just(Pair(BluetoothModel.MESSAGE_SNACKBAR, "BTDevice connection was lost"))
+        Observable.just(Pair(BluetoothModel.MESSAGE_SNACKBAR, "Device connection was lost"))
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(Schedulers.newThread())
                 .subscribe(observer)
@@ -198,19 +195,17 @@ class BlueToothHelper constructor(private val observer: Observer<Pair<Int, Any>>
     inner class AcceptThread: Thread() {
 
         // The local server socket
-        private val mServerSocket : BluetoothServerSocket? by lazy(LazyThreadSafetyMode.NONE) {
+        private val mServerSocket : BluetoothServerSocket? by lazy {
             mBluetoothAdapter.listenUsingRfcommWithServiceRecord(NAME, MY_UUID)
         }
 
         override fun run() {
             name = "AcceptThread"
-
-
             while (mState != STATE_CONNECTED) {
                 // This is a blocking call and will only return on a
                 // successful connection or an exception
-                 val socket: BluetoothSocket? = try {
-                     mServerSocket?.accept()
+                val socket : BluetoothSocket? = try {
+                    mServerSocket?.accept()
                 } catch (e: IOException) {
                     Log.e(TAG, "accept()failed", e)
                     break
@@ -246,20 +241,19 @@ class BlueToothHelper constructor(private val observer: Observer<Pair<Int, Any>>
             mmDevice.createRfcommSocketToServiceRecord(MY_UUID)
         }
 
+
         override fun run() {
+            Log.i(TAG, "BEGIN mConnectThread")
             name = "ConnectThread"
             // Always cancel discovery because it will slow down a connection
             mBluetoothAdapter.cancelDiscovery()
             // Make a connection to the BluetoothSocket
             try {
 
-                mmSocket?.use{ socket ->
-                    // Connect to the remote device through the socket. This call blocks
-                    // until it succeeds or throws an exception.
-                    socket.connect()
-                }
+                // Connect to the remote device through the socket. This call blocks
+                // until it succeeds or throws an exception.
+                mmSocket?.connect()
             } catch (e: IOException) {
-                Log.e(TAG, "Connection failed: " + Log.getStackTraceString(e))
                 connectionFailed()
                 // Close the socket
                 cancel()
@@ -306,7 +300,6 @@ class BlueToothHelper constructor(private val observer: Observer<Pair<Int, Any>>
             var bytes: Int
             // Keep listening to the InputStream while connected
             while (true) {
-
                 try {
                     // Read from the InputStream
                     bytes = mmInStream.read(buffer)
