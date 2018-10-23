@@ -21,7 +21,7 @@ import kotlinx.android.synthetic.main.activity_device_list.*
 /**
  * Created by Andrew on 7/29/2018.
  */
-class DiscoverDeviceActivity : AppCompatActivity() {
+class ConnectDeviceActivity : AppCompatActivity() {
 
     companion object {
         private const val REQUEST_BLUETOOTH_ON = 2
@@ -46,9 +46,6 @@ class DiscoverDeviceActivity : AppCompatActivity() {
         // Cancel discovery because it's costly and we're about to connect
         mBluetoothAdapter.cancelDiscovery()
 
-        //device.createBond()
-
-
         val address = device.address
 
         // Create the result Intent and include the MAC address
@@ -72,10 +69,8 @@ class DiscoverDeviceActivity : AppCompatActivity() {
         }
 
 
-        new_devices.adapter = mNewDevicesAdapter
         paired_devices.adapter = mPairedDevicesAdapter
 
-        new_devices.layoutManager = LinearLayoutManager(this)
         paired_devices.layoutManager = LinearLayoutManager(this)
 
         // Register for broadcasts when discovery is finished
@@ -92,17 +87,6 @@ class DiscoverDeviceActivity : AppCompatActivity() {
         pairedDevices.forEach { device ->
             mPairedDeviceList.add(device)
             mPairedDevicesAdapter.notifyItemInserted(mPairedDeviceList.size - 1)
-        }
-
-        cancel_button.setOnClickListener {
-            onBackPressed()
-        }
-
-        scan_button.setOnClickListener {
-            bluetooth_searching_progress.visibility = View.VISIBLE
-            val discoverableIntent = Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE)
-            discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 1000)
-            startActivityForResult(discoverableIntent, REQUEST_BLUETOOTH_ON)
         }
     }
 

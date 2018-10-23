@@ -25,7 +25,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".bluetooth.DiscoverDeviceActivity"
+        <activity android:name=".bluetooth.ConnectDeviceActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".bluetooth.BluetoothActivity"
             android:screenOrientation="portrait"/>

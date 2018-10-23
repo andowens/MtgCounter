@@ -1,6 +1,7 @@
 package com.firerocks.mtgcounter.bluetooth
 
 import android.bluetooth.BluetoothDevice
+import com.firerocks.mtgcounter.data.Player
 import com.firerocks.mtgcounter.helpers.Operator
 import java.util.*
 
@@ -43,9 +44,7 @@ interface BluetoothMVP {
 
         fun errorSnackbar(error: String)
 
-        fun updateOpponentHealth(health: String)
-
-        fun updateOpponentName(name: String)
+        fun updateOpponent(player: Player)
 
         fun setPlayerHealth(health: String)
     }

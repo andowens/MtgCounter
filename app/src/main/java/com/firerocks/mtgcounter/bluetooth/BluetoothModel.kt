@@ -24,8 +24,7 @@ class BluetoothModel @Inject constructor(private val mPlayer: Player):
         const val MESSAGE_CONNECTED = 4
         const val MESSAGE_SNACKBAR = 5
         const val PLAYER_DEAD = 6
-        const val UPDATE_OPPONENT_HEALTH = 7
-        const val UPDATE_OPPONENT_NAME = 8
+        const val UPDATE_OPPONENT = 8
         const val START_NEW_GAME = 9
     }
 
@@ -46,7 +45,8 @@ class BluetoothModel @Inject constructor(private val mPlayer: Player):
 
                 }
                 MESSAGE_CONNECTED -> {
-                    //mBlueToothHelper.write(GET_ENEMY.toByteArray())
+                    mBlueToothHelper.write(GET_ENEMY.toByteArray())
+                    notifyObservers(t)
                 }
                 MESSAGE_SNACKBAR -> {
                     notifyObservers(t)
@@ -54,15 +54,12 @@ class BluetoothModel @Inject constructor(private val mPlayer: Player):
                 MESSAGE_READ -> {
                     val second = t.second as String
                     val gson = Gson()
-                    Log.i(TAG, "MESSAGE_READ: $second")
+                    Log.e(TAG, "MESSAGE_READ: $second")
                     try {
                         mEnemyPlayer = gson.fromJson(second, Player::class.java)
 
-                        var tmp = Pair(UPDATE_OPPONENT_HEALTH, mEnemyPlayer.health.toString())
-                        notifyObservers(tmp)
-
-                        tmp = Pair(UPDATE_OPPONENT_NAME, mEnemyPlayer.name)
-                        notifyObservers(tmp)
+                        val tmpPair = Pair(UPDATE_OPPONENT, mEnemyPlayer)
+                        notifyObservers(tmpPair)
                     } catch (e: Exception) {
                         Log.i(TAG, "Error converting json to class")
                     }

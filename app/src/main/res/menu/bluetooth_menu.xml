@@ -9,7 +9,7 @@
         android:id="@+id/menu_roll"
         android:title="@string/roll_dice" />
     <item
-        android:id="@+id/menu_discover"
-        android:title="@string/discover_device" />
+        android:id="@+id/menu_connect"
+        android:title="@string/connect_device" />
 
 </menu>

@@ -213,6 +213,7 @@ class BlueToothHelper constructor(private val observer: Observer<Pair<Int, Any>>
                 synchronized(mLock) {
                     when (mState) {
                         STATE_LISTEN, STATE_CONNECTING -> {
+                            Log.e(TAG, name)
                             // Situation normal. Start the connected thread
                             connected(socket!!, socket.remoteDevice)
                         }
@@ -269,6 +270,7 @@ class BlueToothHelper constructor(private val observer: Observer<Pair<Int, Any>>
             }
             // Start the connected thread
             mmSocket?.let { socket ->
+                Log.e(TAG, "Connect Thread")
                 connected(socket, mmDevice)
             }
         }

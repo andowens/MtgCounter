@@ -2,6 +2,7 @@ package com.firerocks.mtgcounter.bluetooth
 
 import android.bluetooth.BluetoothAdapter
 import android.util.Log
+import com.firerocks.mtgcounter.data.Player
 import com.firerocks.mtgcounter.helpers.Operator
 import java.util.*
 import javax.inject.Inject
@@ -44,6 +45,8 @@ class BluetoothPresenter @Inject constructor(private val mModel: BluetoothMVP.Mo
 
     override fun menuNewGame() {
         mModel.sendNewGame()
+        mModel.setStartPlayerHealth(mView.getDefaultHealth())
+        mView.setPlayerHealth(mView.getDefaultHealth().toString())
     }
 
     override fun upClicked(health: String, onResult: (String) -> Unit) {
@@ -70,17 +73,19 @@ class BluetoothPresenter @Inject constructor(private val mModel: BluetoothMVP.Mo
             BluetoothModel.MESSAGE_SNACKBAR -> {
                 mView.errorSnackbar(data.second as String)
             }
-            BluetoothModel.UPDATE_OPPONENT_HEALTH -> {
-                Log.i(TAG, "update opponent health")
-                mView.updateOpponentHealth(data.second as String)
-            }
-            BluetoothModel.UPDATE_OPPONENT_NAME -> {
-                Log.i(TAG, "Update opponent name")
-                mView.updateOpponentName(data.second as String)
+            BluetoothModel.UPDATE_OPPONENT -> {
+                Log.i(TAG, "update opponent")
+                val player = data.second as? Player
+                player?.let {
+                    mView.updateOpponent(it)
+                }
             }
             BluetoothModel.START_NEW_GAME -> {
                 mModel.setStartPlayerHealth(mView.getDefaultHealth())
                 mView.setPlayerHealth(mModel.getPlayersHealth().toString())
+            }
+            BluetoothModel.MESSAGE_CONNECTED -> {
+                mView.dismissNoDeviceConnectedSnackBar()
             }
         }
     }

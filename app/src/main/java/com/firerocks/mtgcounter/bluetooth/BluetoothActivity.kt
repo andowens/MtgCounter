@@ -5,13 +5,11 @@ import android.bluetooth.BluetoothAdapter
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import androidx.constraintlayout.widget.ConstraintLayout
+import android.util.Log
 import com.google.android.material.snackbar.Snackbar
 import androidx.core.app.ActivityCompat
-import androidx.fragment.app.DialogFragment
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -20,6 +18,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.PermissionChecker.PERMISSION_DENIED
 import com.firerocks.mtgcounter.R
 import com.firerocks.mtgcounter.counter.CounterActivity
+import com.firerocks.mtgcounter.data.Player
 import com.firerocks.mtgcounter.helpers.changeNameDialog
 import com.firerocks.mtgcounter.helpers.rollDiceDialog
 import com.firerocks.mtgcounter.root.App
@@ -121,15 +120,18 @@ class BluetoothActivity: AppCompatActivity(), BluetoothMVP.View {
                 rollDiceDialog(this)
                 return true
             }
-            R.id.menu_discover -> {
-                val intent = Intent(this, DiscoverDeviceActivity::class.java)
-                startActivityForResult(intent, DEVICE_SELECTED_RESULT)
-
+            R.id.menu_connect -> {
+                launchConnectActivity()
                 return true
             }
         }
 
         return false
+    }
+
+    private fun launchConnectActivity() {
+        val intent = Intent(this, ConnectDeviceActivity::class.java)
+        startActivityForResult(intent, DEVICE_SELECTED_RESULT)
     }
 
     fun upClicked(view: View) {
@@ -180,8 +182,7 @@ class BluetoothActivity: AppCompatActivity(), BluetoothMVP.View {
 
     override fun showNoDeviceConnectedSnackBar() {
         mNoDeviceSnackBar.setAction(getString(R.string.connect_device)) {
-
-
+            launchConnectActivity()
         }.show()
     }
 
@@ -197,16 +198,17 @@ class BluetoothActivity: AppCompatActivity(), BluetoothMVP.View {
                 }.show()
     }
 
-    override fun updateOpponentHealth(health: String) {
-        mOpponentHealthTextView.text = health
-    }
-
-    override fun updateOpponentName(name: String) {
-        mOpponentNameTextView.text = name
+    override fun updateOpponent(player: Player) {
+        runOnUiThread {
+            mOpponentNameTextView.text = player.name
+            mOpponentHealthTextView.text = player.health.toString()
+        }
     }
 
     override fun setPlayerHealth(health: String) {
-        player_health.text = health
+        runOnUiThread {
+            player_health.text = health
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -214,7 +216,7 @@ class BluetoothActivity: AppCompatActivity(), BluetoothMVP.View {
         if (resultCode == DEVICE_SELECTED_RESULT) {
 
             data?.let {
-                val address: String? = it.getStringExtra(DiscoverDeviceActivity.ADDRESS)
+                val address: String? = it.getStringExtra(ConnectDeviceActivity.ADDRESS)
                 if (address != null) {
                     mPresenter.bluetoothDeviceSelected(address)
                 }
