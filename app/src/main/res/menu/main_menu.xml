@@ -7,7 +7,9 @@
         android:title="@string/new_game" />
     <item
         android:id="@+id/menu_roll"
-        android:title="@string/roll_dice" />
+        android:title="@string/roll_dice"
+        android:icon="@drawable/ic_dice_solid"
+        app:showAsAction="ifRoom"/>
     <item
         android:id="@+id/menu_two_players"
         android:title="@string/two_players" />

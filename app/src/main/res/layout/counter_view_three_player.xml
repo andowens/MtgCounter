@@ -20,7 +20,7 @@
         android:tag="ONE"
         android:layout_margin="@dimen/main_margins"/>
 
-    <androidx.appcompat.widget.AppCompatImageView
+    <androidx.appcompat.widget.AppCompatImageButton
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:id="@+id/player_one_up_arrow"
@@ -104,7 +104,7 @@
         app:layout_constraintBottom_toTopOf="@id/player_two_down_arrow"
         android:layout_margin="@dimen/main_margins"/>
 
-    <androidx.appcompat.widget.AppCompatImageView
+    <androidx.appcompat.widget.AppCompatImageButton
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:id="@+id/player_two_down_arrow"
