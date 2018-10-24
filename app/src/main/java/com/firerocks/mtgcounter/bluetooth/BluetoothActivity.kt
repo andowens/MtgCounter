@@ -213,18 +213,21 @@ class BluetoothActivity: AppCompatActivity(), BluetoothMVP.View {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == DEVICE_SELECTED_RESULT) {
 
-            data?.let {
-                val address: String? = it.getStringExtra(ConnectDeviceActivity.ADDRESS)
-                if (address != null) {
-                    mPresenter.bluetoothDeviceSelected(address)
+        when (requestCode) {
+            REQUEST_BLUETOOTH_ON -> {
+                if (resultCode != Activity.RESULT_CANCELED) {
+                    mPresenter.onResume()
                 }
             }
-        }
-        if (requestCode == REQUEST_BLUETOOTH_ON) {
-            if (resultCode != Activity.RESULT_CANCELED) {
-                mPresenter.onResume()
+            DEVICE_SELECTED_RESULT -> {
+
+                data?.let {
+                    val address: String? = it.getStringExtra(ConnectDeviceActivity.ADDRESS)
+                    if (address != null) {
+                        mPresenter.bluetoothDeviceSelected(address)
+                    }
+                }
             }
         }
     }
