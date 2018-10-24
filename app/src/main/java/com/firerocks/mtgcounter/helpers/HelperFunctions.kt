@@ -31,27 +31,3 @@ fun changeNameDialog(context: Context, okClicked: (String) -> Unit) {
     }
     builder.show()
 }
-
-fun rollDiceDialog(context: Context) {
-    val builder = AlertDialog.Builder(context)
-    builder.setTitle(context.getString(R.string.roll_dice))
-
-    val textView = CustomFontTextView(context)
-    textView.gravity = Gravity.CENTER_HORIZONTAL
-    textView.textSize = 30f
-    builder.setView(textView)
-
-    // Set up buttons
-    builder.setNeutralButton(context.getString(R.string.roll), null)
-    builder.setNegativeButton(context.getString(R.string.cancel), null)
-
-    val alertDialog = builder.create()
-    alertDialog.setOnShowListener {
-        val neutralButton = (it as AlertDialog).getButton(AlertDialog.BUTTON_NEUTRAL)
-        neutralButton.setOnClickListener {
-            textView.text = (Random().nextInt(20 - 1) + 1).toString()
-        }
-    }
-
-    alertDialog.show()
-}

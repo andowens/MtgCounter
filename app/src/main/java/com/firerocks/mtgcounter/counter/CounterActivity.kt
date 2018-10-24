@@ -18,6 +18,7 @@ import com.firerocks.mtgcounter.bluetooth.BluetoothActivity
 import com.firerocks.mtgcounter.helpers.*
 import com.firerocks.mtgcounter.root.App
 import com.firerocks.mtgcounter.views.CustomFontTextView
+import kotlinx.android.synthetic.main.bluetooth_view.*
 import javax.inject.Inject
 
 class CounterActivity : AppCompatActivity(), CounterMVP.View {
@@ -127,7 +128,7 @@ class CounterActivity : AppCompatActivity(), CounterMVP.View {
                 return true
             }
             R.id.menu_roll -> {
-                rollDiceDialog(this)
+                presenter.rollDieClicked()
                 return true
             }
             R.id.menu_two_players -> {
@@ -181,5 +182,9 @@ class CounterActivity : AppCompatActivity(), CounterMVP.View {
         setContentView(R.layout.counter_view)
         mMainView = findViewById(R.id.main_view)
         resetAllPlayersHealth(health, 2)
+    }
+
+    override fun showDieRolled(roll: String) {
+        Snackbar.make(mMainView, "Die roll: $roll", Snackbar.LENGTH_LONG).show()
     }
 }

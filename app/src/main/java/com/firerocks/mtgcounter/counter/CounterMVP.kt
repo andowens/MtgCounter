@@ -27,6 +27,8 @@ interface CounterMVP {
         fun twoPlayerGame()
 
         fun twoHeadedGiantGame()
+
+        fun rollDieClicked()
     }
 
     interface View {
@@ -43,5 +45,7 @@ interface CounterMVP {
         fun twoPlayerGame()
 
         fun twoHeadedGiantGame(health: Int)
+
+        fun showDieRolled(roll: String)
     }
 }

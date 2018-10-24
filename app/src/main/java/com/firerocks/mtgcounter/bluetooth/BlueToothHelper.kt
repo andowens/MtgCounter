@@ -174,7 +174,7 @@ class BlueToothHelper constructor(private val observer: Observer<Pair<Int, Any>>
     private fun connectionFailed() {
         setState(STATE_LISTEN)
 
-        Observable.just(Pair(BluetoothModel.MESSAGE_SNACKBAR, "Unable to connect to device"))
+        Observable.just(Pair(BluetoothModel.MESSAGE_ERROR, BluetoothModel.CONNECTION_FAILED))
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(Schedulers.newThread())
                 .subscribe(observer)
@@ -186,7 +186,7 @@ class BlueToothHelper constructor(private val observer: Observer<Pair<Int, Any>>
     private fun connectionLost() {
         setState(STATE_LISTEN)
 
-        Observable.just(Pair(BluetoothModel.MESSAGE_SNACKBAR, "Device connection was lost"))
+        Observable.just(Pair(BluetoothModel.MESSAGE_ERROR, BluetoothModel.CONNECTION_LOST))
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(Schedulers.newThread())
                 .subscribe(observer)

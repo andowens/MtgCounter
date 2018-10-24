@@ -22,10 +22,15 @@ class BluetoothModel @Inject constructor(private val mPlayer: Player):
         const val MESSAGE_READ = 2
         const val MESSAGE_WRITE = 3
         const val MESSAGE_CONNECTED = 4
-        const val MESSAGE_SNACKBAR = 5
+        const val MESSAGE_ERROR = 5
         const val PLAYER_DEAD = 6
         const val UPDATE_OPPONENT = 8
         const val START_NEW_GAME = 9
+        const val ROLL_DIE = 10
+
+        // Error types
+        const val CONNECTION_FAILED = 0
+        const val CONNECTION_LOST = 1
     }
 
     private lateinit var mObserver: Observer
@@ -48,11 +53,12 @@ class BluetoothModel @Inject constructor(private val mPlayer: Player):
                     mBlueToothHelper.write(GET_ENEMY.toByteArray())
                     notifyObservers(t)
                 }
-                MESSAGE_SNACKBAR -> {
+                MESSAGE_ERROR -> {
                     notifyObservers(t)
                 }
                 MESSAGE_READ -> {
                     val second = t.second as String
+                    Log.i(TAG, second)
                     val gson = Gson()
                     Log.e(TAG, "MESSAGE_READ: $second")
                     try {
@@ -69,6 +75,11 @@ class BluetoothModel @Inject constructor(private val mPlayer: Player):
                         mBlueToothHelper.write(playerJson.toByteArray())
                     } else if (second == NEW_GAME) {
                         notifyObservers(Pair(START_NEW_GAME, ""))
+                    } else if (second.split(" ")[0] == "$ROLL_DIE") {
+                        Log.e(TAG, "Second: $second")
+                        if (second.split(" ").size == 2) {
+                            notifyObservers(Pair(ROLL_DIE, second.split(" ")[1]))
+                        }
                     }
                 }
             }
@@ -123,6 +134,10 @@ class BluetoothModel @Inject constructor(private val mPlayer: Player):
         val gson = Gson()
         val playerJson = gson.toJson(mPlayer)
         mBlueToothHelper.write(playerJson.toByteArray())
+    }
+
+    override fun sendDieRollResult(roll: String) {
+        mBlueToothHelper.write("$ROLL_DIE $roll".toByteArray())
     }
 
     override fun connectDevice(device: BluetoothDevice) {

@@ -70,11 +70,20 @@ class BluetoothPresenter @Inject constructor(private val mModel: BluetoothMVP.Mo
             BluetoothModel.PLAYER_DEAD -> {
                 mView.launchPlayerDeadSnackBar(mModel.getPlayersName())
             }
-            BluetoothModel.MESSAGE_SNACKBAR -> {
-                mView.errorSnackbar(data.second as String)
+            BluetoothModel.MESSAGE_ERROR -> {
+
+                when (data.second) {
+                    BluetoothModel.CONNECTION_FAILED -> {
+                        mView.errorSnackbar("Failed connecting to device")
+                    }
+                    BluetoothModel.CONNECTION_LOST -> {
+                        //mView.showNoDeviceConnectedSnackBar()
+                        mView.errorSnackbar("Device disconnected")
+                    }
+
+                }
             }
             BluetoothModel.UPDATE_OPPONENT -> {
-                Log.i(TAG, "update opponent")
                 val player = data.second as? Player
                 player?.let {
                     mView.updateOpponent(it)
@@ -86,6 +95,9 @@ class BluetoothPresenter @Inject constructor(private val mModel: BluetoothMVP.Mo
             }
             BluetoothModel.MESSAGE_CONNECTED -> {
                 mView.dismissNoDeviceConnectedSnackBar()
+            }
+            BluetoothModel.ROLL_DIE -> {
+                mView.showDieRollResult(data.second as String)
             }
         }
     }
@@ -105,5 +117,11 @@ class BluetoothPresenter @Inject constructor(private val mModel: BluetoothMVP.Mo
         }
 
         onResult(mModel.getPlayersName(), mModel.getPlayersHealth())
+    }
+
+    override fun dieRollClicked() {
+        val roll = (Random().nextInt(20 - 1) + 1).toString()
+        mView.showDieRollResult(roll)
+        mModel.sendDieRollResult(roll)
     }
 }

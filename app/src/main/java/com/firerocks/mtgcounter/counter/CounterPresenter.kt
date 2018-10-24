@@ -8,6 +8,7 @@ import com.firerocks.mtgcounter.data.isDead
 import com.firerocks.mtgcounter.helpers.GameType
 import com.firerocks.mtgcounter.helpers.Operator
 import com.firerocks.mtgcounter.helpers.PlayerID
+import java.util.*
 import javax.inject.Inject
 
 class CounterPresenter: CounterMVP.Presenter {
@@ -157,5 +158,10 @@ class CounterPresenter: CounterMVP.Presenter {
         addPlayer()
         addPlayer()
         mCounterView.twoHeadedGiantGame(mPlayerList[0].health)
+    }
+
+    override fun rollDieClicked() {
+        val roll = (Random().nextInt(20 - 1) + 1).toString()
+        mCounterView.showDieRolled(roll)
     }
 }

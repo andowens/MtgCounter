@@ -25,6 +25,8 @@ interface BluetoothMVP {
         fun onPause()
 
         fun checkBluetoothEnabled(onResult: (Boolean) -> Unit)
+
+        fun dieRollClicked()
     }
 
     interface View {
@@ -47,6 +49,8 @@ interface BluetoothMVP {
         fun updateOpponent(player: Player)
 
         fun setPlayerHealth(health: String)
+
+        fun showDieRollResult(result: String)
     }
 
     interface Model {
@@ -73,5 +77,7 @@ interface BluetoothMVP {
         fun updatePlayerHealth(health: Int, operatorType: Operator): Int
 
         fun sendNewGame()
+
+        fun sendDieRollResult(roll: String)
     }
 }

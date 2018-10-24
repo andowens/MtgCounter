@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.content.PermissionChecker.PERMISSION_DENIED
@@ -20,9 +21,9 @@ import com.firerocks.mtgcounter.R
 import com.firerocks.mtgcounter.counter.CounterActivity
 import com.firerocks.mtgcounter.data.Player
 import com.firerocks.mtgcounter.helpers.changeNameDialog
-import com.firerocks.mtgcounter.helpers.rollDiceDialog
 import com.firerocks.mtgcounter.root.App
 import com.firerocks.mtgcounter.views.CustomFontTextView
+import com.google.android.material.snackbar.BaseTransientBottomBar
 import kotlinx.android.synthetic.main.bluetooth_view.*
 import java.util.*
 import javax.inject.Inject
@@ -117,7 +118,7 @@ class BluetoothActivity: AppCompatActivity(), BluetoothMVP.View {
                 return true
             }
             R.id.menu_roll -> {
-                rollDiceDialog(this)
+                mPresenter.dieRollClicked()
                 return true
             }
             R.id.menu_connect -> {
@@ -157,10 +158,18 @@ class BluetoothActivity: AppCompatActivity(), BluetoothMVP.View {
         }
     }
 
+    override fun showDieRollResult(result: String) {
+        Snackbar.make(main_view, "Die roll: $result", Snackbar.LENGTH_LONG).show()
+    }
+
     override fun errorSnackbar(error: String) {
-        Snackbar.make(main_view,
-                error,
-                Snackbar.LENGTH_LONG).show()
+        val snackbar = Snackbar.make(main_view, error, Snackbar.LENGTH_LONG)
+        snackbar.addCallback(object : Snackbar.Callback() {
+            override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+                super.onDismissed(transientBottomBar, event)
+                showNoDeviceConnectedSnackBar()
+            }
+        }).show()
     }
 
     override fun showNoBluetoothDialog() {
