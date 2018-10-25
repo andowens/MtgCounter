@@ -35,5 +35,7 @@
     <string name="lorum_epsum">Lorum Epsum</string>
     <string name="no_name">No Name</string>
     <string name="coarse_access_refused">Coarse Location Access Refused</string>
+    <string name="search">Search</string>
+    <string name="search_for_a_card">Search For a Card</string>
 
 </resources>

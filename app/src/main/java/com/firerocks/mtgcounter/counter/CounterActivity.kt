@@ -17,6 +17,7 @@ import com.firerocks.mtgcounter.R
 import com.firerocks.mtgcounter.bluetooth.BluetoothActivity
 import com.firerocks.mtgcounter.helpers.*
 import com.firerocks.mtgcounter.root.App
+import com.firerocks.mtgcounter.search.CardSearchActivity
 import com.firerocks.mtgcounter.views.CustomFontTextView
 import kotlinx.android.synthetic.main.bluetooth_view.*
 import javax.inject.Inject
@@ -126,6 +127,10 @@ class CounterActivity : AppCompatActivity(), CounterMVP.View {
                     resetAllPlayersHealth(health, size)
                 }
                 return true
+            }
+            R.id.menu_search -> {
+                val intent = Intent(this, CardSearchActivity::class.java)
+                startActivity(intent)
             }
             R.id.menu_roll -> {
                 presenter.rollDieClicked()
