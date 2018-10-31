@@ -21,7 +21,7 @@ class CardSearchActivity : AppCompatActivity() {
                     .subscribeOn(Schedulers.newThread())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe { cards ->
-                        Log.i("TAG", "Card Name: ${cards[0].name}")
+                        Log.i("TAG", "Card Name: ${cards[0].multiverseid}")
                         Picasso.get().load(cards[0].imageUrl).into(image)
                     }
         }
