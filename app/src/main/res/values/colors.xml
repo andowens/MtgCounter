@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#00695c</color>
-    <color name="colorPrimaryDark">#003d33</color>
-    <color name="colorAccent">#5e35b1</color>
+    <color name="colorPrimary">#76b39d</color>
+    <color name="colorPrimaryDark">#155e63</color>
+    <color name="colorAccent">#f9f8eb</color>
+
+    <color name="cardColor">#eae7e7</color>
 
     <color name="rippleColor">#ef9a9a</color>
     <color name="white">#fff</color>
