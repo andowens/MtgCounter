@@ -8,4 +8,9 @@
 
     <color name="rippleColor">#ef9a9a</color>
     <color name="green_gray">#8dcc7d</color>
+    <color name="antiqueWhite">#FAEBD7</color>
+
+    <color name="bloodRed">#990000</color>
+    <color name="healingYellow">#ffff00</color>
+    <color name="recyclerBackground">#FF456183</color>
 </resources>

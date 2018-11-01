@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="@color/healingYellow" >
+
+    <item android:drawable="@drawable/ic_mtg_chevron_up" />
+
+</ripple>
