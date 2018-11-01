@@ -6,6 +6,31 @@
     android:id="@+id/main_view"
     android:background="?attr/colorPrimaryDark">
 
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:id="@+id/dice_roll"
+        android:padding="@dimen/padding_5dp"
+        android:src="@drawable/ic_dice_solid"
+        android:layout_margin="@dimen/main_margins"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:background="@android:color/transparent"
+        android:scaleType="fitCenter"
+        android:adjustViewBounds="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless"/>
+
+    <com.firerocks.mtgcounter.views.CustomFontTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/antiqueWhite"
+        app:layout_constraintTop_toBottomOf="@id/dice_roll"
+        app:layout_constraintStart_toStartOf="@id/dice_roll"
+        app:layout_constraintEnd_toEndOf="@id/dice_roll"
+        android:layout_margin="@dimen/main_margins"
+        android:textSize="@dimen/bluetooth_opponent_text_size"
+        android:id="@+id/roll_result"/>
+
     <com.firerocks.mtgcounter.views.CustomFontTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

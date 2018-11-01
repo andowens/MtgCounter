@@ -1,5 +1,8 @@
 package com.firerocks.mtgcounter.counter
 
+import android.animation.Animator
+import android.animation.AnimatorInflater
+import android.animation.AnimatorSet
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -54,6 +57,8 @@ class CounterActivity : AppCompatActivity(), CounterMVP.View {
     }
 
     fun updatePlayerHealth(view: View) {
+        animateView(applicationContext, view, R.animator.chevron_animation)
+
         val tag = view.tag.toString()
         val splitTag = tag.split("_")
         val playerId: PlayerID = PlayerID.valueOf(splitTag[0])
@@ -78,6 +83,7 @@ class CounterActivity : AppCompatActivity(), CounterMVP.View {
                     healthView.text = health.toString()
                 }
             }
+            animateView(applicationContext, healthView, R.animator.health_animation)
         }
     }
 

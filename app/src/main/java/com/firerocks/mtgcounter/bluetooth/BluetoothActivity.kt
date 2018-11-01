@@ -20,6 +20,7 @@ import androidx.core.content.PermissionChecker.PERMISSION_DENIED
 import com.firerocks.mtgcounter.R
 import com.firerocks.mtgcounter.counter.CounterActivity
 import com.firerocks.mtgcounter.data.Player
+import com.firerocks.mtgcounter.helpers.animateView
 import com.firerocks.mtgcounter.helpers.changeNameDialog
 import com.firerocks.mtgcounter.root.App
 import com.firerocks.mtgcounter.views.CustomFontTextView
@@ -69,6 +70,10 @@ class BluetoothActivity: AppCompatActivity(), BluetoothMVP.View {
             player_health.text = health.toString()
             player_name.text = name
         }
+
+        dice_roll.setOnClickListener {
+            mPresenter.dieRollClicked()
+        }
     }
 
     override fun onResume() {
@@ -117,10 +122,6 @@ class BluetoothActivity: AppCompatActivity(), BluetoothMVP.View {
                 mPresenter.menuNewGame()
                 return true
             }
-            R.id.menu_roll -> {
-                mPresenter.dieRollClicked()
-                return true
-            }
             R.id.menu_connect -> {
                 launchConnectActivity()
                 return true
@@ -136,16 +137,20 @@ class BluetoothActivity: AppCompatActivity(), BluetoothMVP.View {
     }
 
     fun upClicked(view: View) {
+        animateView(applicationContext, view, R.animator.chevron_animation)
         val health = player_health.text.toString()
         mPresenter.upClicked(health) { newHealth ->
+            animateView(applicationContext, player_health, R.animator.health_animation)
             player_health.text = newHealth
         }
     }
 
     fun downClicked(view: View) {
         val health = player_health.text.toString()
+        animateView(this, view, R.animator.chevron_animation)
         mPresenter.downClicked(health) { newHealth ->
             player_health.text = newHealth
+            animateView(applicationContext, player_health, R.animator.health_animation)
         }
     }
 
@@ -159,7 +164,7 @@ class BluetoothActivity: AppCompatActivity(), BluetoothMVP.View {
     }
 
     override fun showDieRollResult(result: String) {
-        Snackbar.make(main_view, "Die roll: $result", Snackbar.LENGTH_LONG).show()
+        roll_result.text = result
     }
 
     override fun errorSnackbar(error: String) {
@@ -211,6 +216,7 @@ class BluetoothActivity: AppCompatActivity(), BluetoothMVP.View {
         runOnUiThread {
             mOpponentNameTextView.text = player.name
             mOpponentHealthTextView.text = player.health.toString()
+            animateView(applicationContext, mOpponentHealthTextView, R.animator.health_animation)
         }
     }
 
