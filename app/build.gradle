@@ -43,5 +43,5 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
     implementation 'io.magicthegathering:kotlinsdk:1.0.2'
     implementation 'com.squareup.picasso:picasso:2.71828'
-
+    implementation 'com.lapism:searchview:27.1.1.0.0'
 }

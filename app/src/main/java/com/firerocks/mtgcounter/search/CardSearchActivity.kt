@@ -16,14 +16,14 @@ class CardSearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_card_search)
 
-        search_view.setOnClickListener {
-            MtgCardApiClient.getCardsByPartialNameObservable(search_id.text.toString(), 2, 1)
-                    .subscribeOn(Schedulers.newThread())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe { cards ->
-                        Log.i("TAG", "Card Name: ${cards[0].multiverseid}")
-                        Picasso.get().load(cards[0].imageUrl).into(image)
-                    }
-        }
+//        search_view.setOnClickListener {
+//            MtgCardApiClient.getCardsByPartialNameObservable(search_id.text.toString(), 2, 1)
+//                    .subscribeOn(Schedulers.newThread())
+//                    .observeOn(AndroidSchedulers.mainThread())
+//                    .subscribe { cards ->
+//                        Log.i("TAG", "Card Name: ${cards[0].multiverseid}")
+//                        Picasso.get().load(cards[0].imageUrl).into(image)
+//                    }
+//        }
     }
 }
