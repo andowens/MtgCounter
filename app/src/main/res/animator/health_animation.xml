@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+    android:ordering="sequentially">
+
+    <set android:ordering="together" >
+        <objectAnimator
+            android:propertyName="rotation"
+            android:repeatMode="reverse"
+            android:repeatCount="6"
+            android:valueFrom="5"
+            android:valueTo="-5"
+            android:valueType="floatType"
+            android:duration="100"
+            android:interpolator="@android:interpolator/accelerate_decelerate" />
+
+        <objectAnimator
+            android:propertyName="textColor"
+            android:valueType="colorType"
+            android:valueFrom="@color/antiqueWhite"
+            android:valueTo="@color/bloodRed"
+            android:duration="300"
+            android:repeatCount="1"
+            android:repeatMode="reverse"
+            android:interpolator="@android:interpolator/linear" />
+
+    </set>
+
+    <objectAnimator
+        android:propertyName="rotation"
+        android:repeatCount="0"
+        android:valueType="floatType"
+        android:valueTo="0"
+        android:valueFrom="5"
+        android:duration="10"
+        android:interpolator="@android:interpolator/linear" />
+
+</set>
