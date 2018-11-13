@@ -10,6 +10,8 @@ import com.firerocks.mtgcounter.R
 import com.squareup.picasso.Picasso
 import io.magicthegathering.kotlinsdk.model.card.MtgCard
 import kotlinx.android.synthetic.main.card_search_view.view.*
+import java.io.Closeable
+import kotlin.coroutines.experimental.suspendCoroutine
 
 class CardAdapter(private val cards: ArrayList<MtgCard>, private val listener: (MtgCard) -> Unit )
     : RecyclerView.Adapter<CardAdapter.CardViewHolder>() {
@@ -37,7 +39,7 @@ class CardAdapter(private val cards: ArrayList<MtgCard>, private val listener: (
             val cardView = (iv as CardView).also { view ->
                 Picasso.get().load(card.imageUrl).into(view.card_image)
                 view.card_name_title.text = card.name
-                view.card_flavor_text.text = card.set
+                view.card_flavor_text.text = card.setName
             }
 
             cardView.setOnClickListener { listener(card) }
