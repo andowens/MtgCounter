@@ -17,11 +17,14 @@ import io.magicthegathering.kotlinsdk.model.card.MtgCard
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_card_search.*
+import kotlinx.coroutines.*
 import retrofit2.Response
 
 class CardSearchActivity : AppCompatActivity() {
 
     lateinit var searchResultAdapter: CardAdapter
+    private val mViewModelJob = Job()
+    private val mUiScope = CoroutineScope(Dispatchers.Main + mViewModelJob)
 
     private val searchResult: ArrayList<MtgCard> by lazy {
         ArrayList<MtgCard>()
@@ -52,13 +55,18 @@ class CardSearchActivity : AppCompatActivity() {
 
                 searchResult.clear()
 
-                MtgCardApiClient.getCardsByPartialNameObservable(query.toString(), 50, 1)
-                        .subscribeOn(Schedulers.newThread())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe { cards ->
-                            searchResult.addAll(cards)
-                            searchResultAdapter.notifyDataSetChanged()
+                mUiScope.launch {
+                    val exactName = getCardByExactName(query.toString())
+                    val partialName = getCardByPartialName(query.toString())
+
+                    if (exactName != null && !exactName.isEmpty()) {
+                        updateUI(exactName)
+                    } else {
+                        partialName?.let {
+                            updateUI(partialName)
                         }
+                    }
+                }
 
                 search_bar.close()
                 return true
@@ -72,12 +80,36 @@ class CardSearchActivity : AppCompatActivity() {
 
     }
 
-    private suspend fun getCard(name: String) : List<MtgCard>? {
+    private fun updateUI(cards: List<MtgCard>) {
+        searchResult.addAll(cards)
+        searchResultAdapter.notifyDataSetChanged()
+    }
 
-        val cardsResponse: Response<List<MtgCard>> = MtgCardApiClient.getCardsByExactName(name,
-                50,
-                1)
 
-        return cardsResponse.body()
+    private suspend fun getCardByExactName(name: String) : List<MtgCard>? = coroutineScope {
+
+        val suspend = async(Dispatchers.Default) {
+            val cardsResponse: Response<List<MtgCard>> = MtgCardApiClient.getCardsByExactName(name,
+                    50,
+                    1)
+
+            cardsResponse.body()
+        }
+
+        suspend.await()
+    }
+
+    private suspend fun getCardByPartialName(partial: String) : List<MtgCard>? = coroutineScope {
+
+        val suspend = async(Dispatchers.Default) {
+            val cardsResponse: Response<List<MtgCard>> = MtgCardApiClient.getCardsByPartialName(
+                    partial,
+                    50,
+                    1)
+
+            cardsResponse.body()
+        }
+
+        suspend.await()
     }
 }
