@@ -10,7 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".search.CardSearchActivity"
+        tools:context=".search.ui.CardSearchActivity"
         app:layout_behavior="@string/search_behavior">
 
         <com.lapism.searchview.widget.SearchView

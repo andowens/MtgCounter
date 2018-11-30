@@ -1,18 +1,10 @@
 package com.firerocks.mtgcounter.counter
 
-import android.animation.Animator
-import android.animation.AnimatorInflater
-import android.animation.AnimatorSet
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.constraintlayout.widget.ConstraintLayout
 import com.google.android.material.snackbar.Snackbar
-import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.widget.AppCompatEditText
 import androidx.appcompat.widget.AppCompatTextView
-import android.text.InputType
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -20,9 +12,8 @@ import com.firerocks.mtgcounter.R
 import com.firerocks.mtgcounter.bluetooth.BluetoothActivity
 import com.firerocks.mtgcounter.helpers.*
 import com.firerocks.mtgcounter.root.App
-import com.firerocks.mtgcounter.search.CardSearchActivity
+import com.firerocks.mtgcounter.search.ui.CardSearchActivity
 import com.firerocks.mtgcounter.views.CustomFontTextView
-import kotlinx.android.synthetic.main.bluetooth_view.*
 import javax.inject.Inject
 
 class CounterActivity : AppCompatActivity(), CounterMVP.View {

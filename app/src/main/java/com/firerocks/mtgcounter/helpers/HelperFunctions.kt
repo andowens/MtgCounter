@@ -5,16 +5,10 @@ import android.animation.AnimatorSet
 import android.content.Context
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatEditText
-import androidx.appcompat.widget.AppCompatTextView
 import android.text.InputType
-import android.view.Gravity
 import android.view.View
-import android.view.ViewGroup
-import android.widget.RelativeLayout
 import androidx.annotation.AnimatorRes
 import com.firerocks.mtgcounter.R
-import com.firerocks.mtgcounter.views.CustomFontTextView
-import java.util.*
 
 fun changeNameDialog(context: Context, okClicked: (String) -> Unit) {
     val builder = AlertDialog.Builder(context)

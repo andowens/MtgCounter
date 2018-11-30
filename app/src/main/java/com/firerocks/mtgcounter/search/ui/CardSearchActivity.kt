@@ -1,4 +1,4 @@
-package com.firerocks.mtgcounter.search
+package com.firerocks.mtgcounter.search.ui
 
 import android.content.Intent
 import android.os.Bundle
@@ -9,6 +9,7 @@ import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityOptionsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.firerocks.mtgcounter.R
+import com.firerocks.mtgcounter.search.model.toParcelableMtgCard
 import com.firerocks.mtgcounter.utils.adapters.CardAdapter
 import com.lapism.searchview.Search
 import com.lapism.searchview.widget.SearchAdapter
@@ -43,15 +44,17 @@ class CardSearchActivity : AppCompatActivity() {
         val imageView = findViewById<AppCompatImageView>(R.id.card_image)
 
         searchResultAdapter = CardAdapter(searchResult) { card ->
+
             val intent = Intent(this, CardDetailActivity::class.java)
             val transitionName = getString(R.string.cardview_transition)
-            val trannyName = "test"
+            val transName = "test"
             val pair1 = UtilPair.create(cardView as View, transitionName)
-            val pair2 = UtilPair.create(card_image as View, trannyName)
+            val pair2 = UtilPair.create(card_image as View, transName)
             val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this,
-                    pair1)
+                    pair1,
+                    pair2)
 
-            intent.putExtra("card", card)
+            intent.putExtra("card", card.toParcelableMtgCard())
             startActivity(intent, options.toBundle())
         }
 

@@ -1,4 +1,4 @@
-package com.firerocks.mtgcounter.search
+package com.firerocks.mtgcounter.search.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
