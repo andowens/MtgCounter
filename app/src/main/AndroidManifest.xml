@@ -35,8 +35,11 @@
         <activity
             android:name=".bluetooth.BluetoothActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".search.CardSearchActivity"
-            android:theme="@style/SearchTheme"></activity>
+        <activity
+            android:name=".search.CardSearchActivity"
+            android:theme="@style/SearchTheme" />
+        <activity android:name=".search.CardDetailActivity"
+            android:theme="@style/SearchTheme"/>
     </application>
 
 </manifest>

@@ -1,24 +1,24 @@
 package com.firerocks.mtgcounter.search
 
-import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import android.view.MenuItem
-import android.view.inputmethod.InputMethodManager
+import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatImageView
+import androidx.cardview.widget.CardView
+import androidx.core.app.ActivityOptionsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.firerocks.mtgcounter.R
 import com.firerocks.mtgcounter.utils.adapters.CardAdapter
 import com.lapism.searchview.Search
 import com.lapism.searchview.widget.SearchAdapter
-import com.squareup.picasso.Picasso
 import io.magicthegathering.kotlinsdk.api.MtgCardApiClient
 import io.magicthegathering.kotlinsdk.model.card.MtgCard
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_card_search.*
+import kotlinx.android.synthetic.main.card_search_view.*
 import kotlinx.coroutines.*
 import retrofit2.Response
+import androidx.core.util.Pair as UtilPair
 
 class CardSearchActivity : AppCompatActivity() {
 
@@ -39,8 +39,20 @@ class CardSearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_card_search)
 
+        val cardView = findViewById<CardView>(R.id.search_cardView)
+        val imageView = findViewById<AppCompatImageView>(R.id.card_image)
+
         searchResultAdapter = CardAdapter(searchResult) { card ->
-            Log.i("TAG", card.name)
+            val intent = Intent(this, CardDetailActivity::class.java)
+            val transitionName = getString(R.string.cardview_transition)
+            val trannyName = "test"
+            val pair1 = UtilPair.create(cardView as View, transitionName)
+            val pair2 = UtilPair.create(card_image as View, trannyName)
+            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this,
+                    pair1)
+
+            intent.putExtra("card", card)
+            startActivity(intent, options.toBundle())
         }
 
         search_list.adapter = searchResultAdapter
