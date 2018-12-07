@@ -8,6 +8,7 @@ import androidx.appcompat.widget.AppCompatTextView
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.fragment.app.Fragment
 import com.firerocks.mtgcounter.R
 import com.firerocks.mtgcounter.bluetooth.BluetoothActivity
 import com.firerocks.mtgcounter.helpers.*
@@ -16,9 +17,9 @@ import com.firerocks.mtgcounter.search.ui.CardSearchActivity
 import com.firerocks.mtgcounter.views.CustomFontTextView
 import javax.inject.Inject
 
-class CounterActivity : AppCompatActivity(), CounterMVP.View {
+class CounterFragment : Fragment(), CounterMVP.View {
 
-    private val TAG = "CounterActivity"
+    private val TAG = "CounterFragment"
 
     @Inject lateinit var presenter: CounterMVP.Presenter
     private lateinit var mMainView: androidx.constraintlayout.widget.ConstraintLayout
@@ -31,7 +32,7 @@ class CounterActivity : AppCompatActivity(), CounterMVP.View {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        (application as App).appComponent.inject(this)
+        (activity?.application as App).appComponent.inject(this)
         presenter.setView(this)
 
         presenter.twoPlayerGame()
@@ -48,7 +49,7 @@ class CounterActivity : AppCompatActivity(), CounterMVP.View {
     }
 
     fun updatePlayerHealth(view: View) {
-        animateView(applicationContext, view, R.animator.chevron_animation)
+        animateView(activity?.applicationContext, view, R.animator.chevron_animation)
 
         val tag = view.tag.toString()
         val splitTag = tag.split("_")

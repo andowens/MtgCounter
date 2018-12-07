@@ -19,4 +19,4 @@
         app:menu="@menu/bottom_navigation_menu"
         style="@style/Widget.MaterialComponents.BottomNavigationView.Colored"/>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>

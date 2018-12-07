@@ -8,13 +8,10 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
-import android.util.Log
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.firerocks.mtgcounter.R
-import com.firerocks.mtgcounter.counter.CounterActivity
-import com.firerocks.mtgcounter.data.BTDevice
+import com.firerocks.mtgcounter.counter.CounterFragment
 import com.firerocks.mtgcounter.utils.adapters.DeviceAdapter
 import kotlinx.android.synthetic.main.activity_device_list.*
 
@@ -138,7 +135,7 @@ class ConnectDeviceActivity : AppCompatActivity() {
         when (requestCode) {
             REQUEST_BLUETOOTH_ON -> {
                 if (resultCode == Activity.RESULT_CANCELED) {
-                    val intent = Intent(this, CounterActivity::class.java)
+                    val intent = Intent(this, CounterFragment::class.java)
                     startActivity(intent)
                 } else {
                     doDiscovery()

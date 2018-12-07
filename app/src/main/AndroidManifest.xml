@@ -20,15 +20,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity
-            android:name=".counter.CounterActivity"
-            android:screenOrientation="landscape">
+        <activity android:name=".main.MtgCounterActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".counter.CounterFragment"
+            android:screenOrientation="landscape"/>
         <activity
             android:name=".bluetooth.ConnectDeviceActivity"
             android:screenOrientation="portrait" />
@@ -41,7 +42,6 @@
         <activity
             android:name=".search.ui.CardDetailActivity"
             android:theme="@style/SearchTheme" />
-        <activity android:name=".main.MtgCounterActivity"></activity>
     </application>
 
 </manifest>
