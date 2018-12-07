@@ -38,5 +38,7 @@
     <string name="search">Search</string>
 
     <string name="cardview_transition">cardview transition string</string>
+    <string name="game_title">Game</string>
+    <string name="card_search">Card Search</string>
 
 </resources>

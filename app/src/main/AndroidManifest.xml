@@ -38,8 +38,10 @@
         <activity
             android:name=".search.ui.CardSearchActivity"
             android:theme="@style/SearchTheme" />
-        <activity android:name=".search.ui.CardDetailActivity"
-            android:theme="@style/SearchTheme"/>
+        <activity
+            android:name=".search.ui.CardDetailActivity"
+            android:theme="@style/SearchTheme" />
+        <activity android:name=".main.MtgCounterActivity"></activity>
     </application>
 
 </manifest>
