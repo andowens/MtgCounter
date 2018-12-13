@@ -1,25 +1,23 @@
-package com.firerocks.mtgcounter.counter
+package com.firerocks.mtgcounter.counter.players
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.*
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.widget.AppCompatTextView
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
 import androidx.fragment.app.Fragment
 import com.firerocks.mtgcounter.R
 import com.firerocks.mtgcounter.bluetooth.BluetoothActivity
+import com.firerocks.mtgcounter.counter.CounterMVP
 import com.firerocks.mtgcounter.helpers.*
 import com.firerocks.mtgcounter.root.App
 import com.firerocks.mtgcounter.search.ui.CardSearchActivity
 import com.firerocks.mtgcounter.views.CustomFontTextView
 import javax.inject.Inject
 
-class CounterFragment : Fragment(), CounterMVP.View {
+class TwoPlayerFragment : BaseCounterFragment(), CounterMVP.View {
 
-    private val TAG = "CounterFragment"
+    private val TAG = "TwoPlayerFragment"
 
     @Inject lateinit var presenter: CounterMVP.Presenter
     private lateinit var mMainView: androidx.constraintlayout.widget.ConstraintLayout
@@ -28,6 +26,15 @@ class CounterFragment : Fragment(), CounterMVP.View {
             R.id.player_two_health,
             R.id.player_three_health,
             R.id.player_four_health)
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        // Inflate the vew
+        val view = inflater.inflate(R.layout.counter_view, container)
+
+
+
+        return view
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -11,7 +11,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.firerocks.mtgcounter.R
-import com.firerocks.mtgcounter.counter.CounterFragment
+import com.firerocks.mtgcounter.counter.players.TwoPlayerFragment
 import com.firerocks.mtgcounter.utils.adapters.DeviceAdapter
 import kotlinx.android.synthetic.main.activity_device_list.*
 
@@ -135,7 +135,7 @@ class ConnectDeviceActivity : AppCompatActivity() {
         when (requestCode) {
             REQUEST_BLUETOOTH_ON -> {
                 if (resultCode == Activity.RESULT_CANCELED) {
-                    val intent = Intent(this, CounterFragment::class.java)
+                    val intent = Intent(this, TwoPlayerFragment::class.java)
                     startActivity(intent)
                 } else {
                     doDiscovery()

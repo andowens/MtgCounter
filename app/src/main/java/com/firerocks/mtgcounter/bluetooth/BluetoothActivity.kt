@@ -16,7 +16,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.content.PermissionChecker.PERMISSION_DENIED
 import com.firerocks.mtgcounter.R
-import com.firerocks.mtgcounter.counter.CounterFragment
+import com.firerocks.mtgcounter.counter.players.TwoPlayerFragment
 import com.firerocks.mtgcounter.data.Player
 import com.firerocks.mtgcounter.helpers.animateView
 import com.firerocks.mtgcounter.helpers.changeNameDialog
@@ -180,7 +180,7 @@ class BluetoothActivity: AppCompatActivity(), BluetoothMVP.View {
                 .setMessage(getString(R.string.no_bluetooth_on_device))
                 .setIcon(android.R.drawable.stat_sys_data_bluetooth)
                 .setPositiveButton("Ok") { dialog, which ->
-                    val intent = Intent(this, CounterFragment::class.java)
+                    val intent = Intent(this, TwoPlayerFragment::class.java)
                     startActivity(intent)
                 }.show()
     }

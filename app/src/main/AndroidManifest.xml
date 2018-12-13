@@ -28,7 +28,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".counter.CounterFragment"
+            android:name=".counter.players.TwoPlayerFragment"
             android:screenOrientation="landscape"/>
         <activity
             android:name=".bluetooth.ConnectDeviceActivity"

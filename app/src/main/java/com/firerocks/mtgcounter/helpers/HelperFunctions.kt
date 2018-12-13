@@ -29,9 +29,3 @@ fun changeNameDialog(context: Context, okClicked: (String) -> Unit) {
     }
     builder.show()
 }
-
-fun animateView(context: Context, view: View, @AnimatorRes animationRes: Int) {
-    val healthAnimator = AnimatorInflater.loadAnimator(context, animationRes) as AnimatorSet
-    healthAnimator.setTarget(view)
-    healthAnimator.start()
-}
