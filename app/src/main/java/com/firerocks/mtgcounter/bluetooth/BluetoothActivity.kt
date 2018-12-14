@@ -49,7 +49,6 @@ class BluetoothActivity: AppCompatActivity(), BluetoothMVP.View {
 
         mOpponentHealthTextView = findViewById(R.id.opponent_health)
         mOpponentNameTextView = findViewById(R.id.opponent_name)
-        (application as App).appComponent.inject(this)
         window.addFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
         //Have to request location permission

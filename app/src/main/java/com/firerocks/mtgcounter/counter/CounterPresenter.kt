@@ -39,14 +39,14 @@ class CounterPresenter: CounterMVP.Presenter {
                 mPlayerList[1].health += add
                 mPlayerList[1]
             }
-            PlayerID.THREE -> {
-                mPlayerList[2].health += add
-                mPlayerList[2]
-            }
-            PlayerID.FOUR -> {
-                mPlayerList[3].health += add
-                mPlayerList[3]
-            }
+//            PlayerID.THREE -> {
+//                mPlayerList[2].health += add
+//                mPlayerList[2]
+//            }
+//            PlayerID.FOUR -> {
+//                mPlayerList[3].health += add
+//                mPlayerList[3]
+//            }
         }
 
         if (player.isDead()) {
@@ -60,8 +60,8 @@ class CounterPresenter: CounterMVP.Presenter {
         when (playerID) {
             PlayerID.ONE -> mPlayerList[0].name = name
             PlayerID.TWO -> mPlayerList[1].name = name
-            PlayerID.THREE -> mPlayerList[2].name = name
-            PlayerID.FOUR -> mPlayerList[3].name = name
+//            PlayerID.THREE -> mPlayerList[2].name = name
+//            PlayerID.FOUR -> mPlayerList[3].name = name
         }
         onResult(name)
     }
@@ -90,12 +90,12 @@ class CounterPresenter: CounterMVP.Presenter {
             PlayerID.TWO -> {
                 mPlayerList[1].health = health
             }
-            PlayerID.THREE -> {
-                mPlayerList[2].health = health
-            }
-            PlayerID.FOUR -> {
-                mPlayerList[3].health = health
-            }
+//            PlayerID.THREE -> {
+//                mPlayerList[2].health = health
+//            }
+//            PlayerID.FOUR -> {
+//                mPlayerList[3].health = health
+//            }
         }
 
         onResult(playerID, health)

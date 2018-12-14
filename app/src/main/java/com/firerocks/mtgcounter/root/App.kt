@@ -1,17 +1,18 @@
 package com.firerocks.mtgcounter.root
 
 import android.app.Application
+import com.firerocks.mtgcounter.di.AppComponent
+import com.firerocks.mtgcounter.di.AppModule
+import com.firerocks.mtgcounter.di.DaggerAppComponent
+import dagger.android.AndroidInjector
+import dagger.android.DaggerApplication
 
-class App : Application() {
-    lateinit var appComponent : AppComponent
+class App : DaggerApplication() {
 
-    override fun onCreate() {
-        super.onCreate()
-        appComponent = initDagger(this)
+    override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
+        val appComponent = DaggerAppComponent.builder().application(this).build()
+        appComponent.inject(this)
+
+        return  appComponent
     }
-
-    private fun initDagger(app: App) : AppComponent =
-            DaggerAppComponent.builder()
-                    .appModule(AppModule(app))
-                    .build()
 }
