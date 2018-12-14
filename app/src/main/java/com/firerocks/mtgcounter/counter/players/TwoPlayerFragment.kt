@@ -2,6 +2,7 @@ package com.firerocks.mtgcounter.counter.players
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.widget.AppCompatTextView
@@ -18,7 +19,6 @@ class TwoPlayerFragment : DaggerFragment(), CounterMVP.View {
     private val TAG = "TwoPlayerFragment"
 
     @Inject lateinit var presenter: CounterMVP.Presenter
-    private lateinit var mMainView: androidx.constraintlayout.widget.ConstraintLayout
 
     companion object {
 
@@ -32,9 +32,39 @@ class TwoPlayerFragment : DaggerFragment(), CounterMVP.View {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the vew
-        val view = inflater.inflate(R.layout.counter_view, container)
+        val view = inflater.inflate(R.layout.counter_view, container, false)
+
+
 
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        player_one_down_arrow.setOnClickListener {
+            updatePlayerHealth(it)
+        }
+
+        player_one_up_arrow.setOnClickListener {
+            updatePlayerHealth(it)
+        }
+
+        player_two_down_arrow.setOnClickListener{
+            updatePlayerHealth(it)
+        }
+
+        player_two_up_arrow.setOnClickListener {
+            updatePlayerHealth(it)
+        }
+
+        player_one_name.setOnClickListener {
+            changeName(it)
+        }
+
+        player_two_name.setOnClickListener {
+            changeName(it)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,8 +77,8 @@ class TwoPlayerFragment : DaggerFragment(), CounterMVP.View {
 
     fun changeName(view: View) {
 
-        activity?.applicationContext?.let { context ->
-            changeNameDialog(context) { name ->
+        activity?.let { activity ->
+            changeNameDialog(activity) { name ->
                 val playerID = PlayerID.valueOf(view.tag.toString())
                 presenter.updatePlayerName(playerID, name) {
                     (view as AppCompatTextView).text = it
@@ -108,9 +138,9 @@ class TwoPlayerFragment : DaggerFragment(), CounterMVP.View {
     }
 
     override fun launchPlayerDeadSnackBar(deadPlayer: String) {
-        com.google.android.material.snackbar.Snackbar.make(mMainView
+        Snackbar.make(main_view
                 , resources.getString(R.string.player_dead, deadPlayer)
-                , com.google.android.material.snackbar.Snackbar.LENGTH_LONG)
+                , Snackbar.LENGTH_LONG)
                 .setAction(resources.getString(R.string.new_game)) {
                     presenter.resetAllPlayersHealth { health, size ->
                         //resetAllPlayersHealth(health, size)
@@ -198,6 +228,6 @@ class TwoPlayerFragment : DaggerFragment(), CounterMVP.View {
     }
 
     override fun showDieRolled(roll: String) {
-        Snackbar.make(mMainView, "Die roll: $roll", Snackbar.LENGTH_LONG).show()
+        Snackbar.make(main_view, "Die roll: $roll", Snackbar.LENGTH_LONG).show()
     }
 }

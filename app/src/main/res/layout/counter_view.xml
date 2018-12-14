@@ -19,7 +19,6 @@
         app:layout_constraintVertical_chainStyle="packed"
         app:layout_constraintEnd_toStartOf="@id/player_two_name"
         android:textSize="@dimen/default_player_text_size"
-        android:onClick="changeName"
         android:textColor="@color/antiqueWhite"
         android:tag="ONE"
         android:layout_margin="@dimen/main_margins"/>
@@ -36,7 +35,6 @@
         app:layout_constraintEnd_toEndOf="@id/player_one_name"
         app:layout_constraintBottom_toTopOf="@id/player_one_health"
         android:tag="ONE_ADD"
-        android:onClick="updatePlayerHealth"
         android:foreground="@drawable/button_ripple_up"
         android:background="@android:color/transparent"/>
 
@@ -63,7 +61,6 @@
         app:layout_constraintEnd_toEndOf="@id/player_one_name"
         app:layout_constraintBottom_toBottomOf="parent"
         android:tag="ONE_SUBTRACT"
-        android:onClick="updatePlayerHealth"
         android:scaleType="fitCenter"
         android:adjustViewBounds="true"
         android:foreground="@drawable/button_ripple_down"
@@ -81,7 +78,6 @@
         app:layout_constraintStart_toEndOf="@id/player_one_name"
         app:layout_constraintVertical_chainStyle="packed"
         android:textSize="@dimen/default_player_text_size"
-        android:onClick="changeName"
         android:tag="TWO"
         android:layout_margin="@dimen/main_margins"/>
 
@@ -97,7 +93,6 @@
         app:layout_constraintEnd_toEndOf="@id/player_two_name"
         app:layout_constraintBottom_toTopOf="@id/player_two_health"
         android:tag="TWO_ADD"
-        android:onClick="updatePlayerHealth"
         android:foreground="@drawable/button_ripple_up"
         android:background="@android:color/transparent"/>
 
@@ -126,7 +121,6 @@
         app:layout_constraintEnd_toEndOf="@id/player_two_name"
         app:layout_constraintBottom_toBottomOf="parent"
         android:tag="TWO_SUBTRACT"
-        android:onClick="updatePlayerHealth"
         android:foreground="@drawable/button_ripple_down"
         android:background="@android:color/transparent"/>
 
