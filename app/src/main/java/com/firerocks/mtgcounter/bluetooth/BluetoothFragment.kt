@@ -2,16 +2,16 @@ package com.firerocks.mtgcounter.bluetooth
 
 import android.app.Activity
 import android.bluetooth.BluetoothAdapter
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
+import android.view.*
 import com.google.android.material.snackbar.Snackbar
 import androidx.core.app.ActivityCompat
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.content.PermissionChecker.PERMISSION_DENIED
@@ -22,19 +22,22 @@ import com.firerocks.mtgcounter.helpers.animateView
 import com.firerocks.mtgcounter.helpers.changeNameDialog
 import com.firerocks.mtgcounter.root.App
 import com.firerocks.mtgcounter.views.CustomFontTextView
+import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.bluetooth_view.*
 import java.util.*
 import javax.inject.Inject
 
-class BluetoothActivity: AppCompatActivity(), BluetoothMVP.View {
+class BluetoothFragment: DaggerFragment(), BluetoothMVP.View {
 
-    private val TAG = "mtg.BlueTActivity"
+    private val TAG = "mtg.BlueTFrag"
 
     // Intent request codes
     companion object {
         private const val REQUEST_COURSE_PERMISSION = 3
         private const val REQUEST_BLUETOOTH_ON = 2
         const val DEVICE_SELECTED_RESULT = 1
+
+        fun newInstance() : BluetoothFragment = BluetoothFragment()
     }
 
     private lateinit var mOpponentHealthTextView: CustomFontTextView
@@ -43,22 +46,13 @@ class BluetoothActivity: AppCompatActivity(), BluetoothMVP.View {
 
     @Inject lateinit var mPresenter: BluetoothMVP.Presenter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.bluetooth_view)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        mOpponentHealthTextView = findViewById(R.id.opponent_health)
-        mOpponentNameTextView = findViewById(R.id.opponent_name)
-        window.addFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        mOpponentHealthTextView = view.findViewById(R.id.opponent_health)
+        mOpponentNameTextView = view.findViewById(R.id.opponent_name)
 
-        //Have to request location permission
-        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) !=
-                PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_COARSE_LOCATION),
-                    REQUEST_COURSE_PERMISSION)
-        }
-
-        mNoDeviceSnackBar = Snackbar.make(findViewById<androidx.constraintlayout.widget.ConstraintLayout>(R.id.main_view),
+        mNoDeviceSnackBar = Snackbar.make(view.findViewById(R.id.main_view),
                 getString(R.string.no_device_connected),
                 Snackbar.LENGTH_INDEFINITE)
 
@@ -70,6 +64,32 @@ class BluetoothActivity: AppCompatActivity(), BluetoothMVP.View {
         dice_roll.setOnClickListener {
             mPresenter.dieRollClicked()
         }
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.bluetooth_view, container, false)
+    }
+
+    private fun appContext (lambda: (Context) -> Unit) {
+        activity?.applicationContext?.let {
+            lambda(it)
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        //Have to request location permission
+        appContext { context ->
+            if (ContextCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_COARSE_LOCATION) !=
+                    PackageManager.PERMISSION_GRANTED) {
+                activity?.let {
+                    ActivityCompat.requestPermissions(it, arrayOf(android.Manifest.permission.ACCESS_COARSE_LOCATION),
+                            REQUEST_COURSE_PERMISSION)
+                }
+            }
+        }
+
     }
 
     override fun onResume() {
@@ -103,58 +123,46 @@ class BluetoothActivity: AppCompatActivity(), BluetoothMVP.View {
         return nameList[Random().nextInt(nameListSize)]
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        super.onCreateOptionsMenu(menu)
-
-        menuInflater.inflate(R.menu.bluetooth_menu, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        super.onOptionsItemSelected(item)
-
-        when (item?.itemId) {
-            R.id.menu_new_game -> {
-                mPresenter.menuNewGame()
-                return true
-            }
-            R.id.menu_connect -> {
-                launchConnectActivity()
-                return true
-            }
-        }
-
-        return false
-    }
-
     private fun launchConnectActivity() {
-        val intent = Intent(this, ConnectDeviceActivity::class.java)
-        startActivityForResult(intent, DEVICE_SELECTED_RESULT)
+        appContext {
+            val intent = Intent(it, ConnectDeviceActivity::class.java)
+            startActivityForResult(intent, DEVICE_SELECTED_RESULT)
+        }
     }
 
     fun upClicked(view: View) {
-        animateView(applicationContext, view, R.animator.chevron_animation)
+        appContext {
+            animateView(it, view, R.animator.chevron_animation)
+        }
         val health = player_health.text.toString()
         mPresenter.upClicked(health) { newHealth ->
-            animateView(applicationContext, player_health, R.animator.health_animation)
+            appContext {
+                animateView(it, player_health, R.animator.health_animation)
+            }
             player_health.text = newHealth
         }
     }
 
     fun downClicked(view: View) {
         val health = player_health.text.toString()
-        animateView(this, view, R.animator.chevron_animation)
+        appContext {
+            animateView(it, view, R.animator.chevron_animation)
+        }
         mPresenter.downClicked(health) { newHealth ->
             player_health.text = newHealth
-            animateView(applicationContext, player_health, R.animator.health_animation)
+            appContext {
+                animateView(it, player_health, R.animator.health_animation)
+            }
         }
     }
 
     fun nameClicked(view: View) {
 
-        changeNameDialog(this) { name ->
-            mPresenter.nameClicked(name) {
-                player_name.text = name
+        appContext {
+            changeNameDialog(it) { name ->
+                mPresenter.nameClicked(name) {
+                    player_name.text = name
+                }
             }
         }
     }
@@ -174,14 +182,15 @@ class BluetoothActivity: AppCompatActivity(), BluetoothMVP.View {
     }
 
     override fun showNoBluetoothDialog() {
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle(getString(R.string.bluetooth_dialog_title))
-                .setMessage(getString(R.string.no_bluetooth_on_device))
-                .setIcon(android.R.drawable.stat_sys_data_bluetooth)
-                .setPositiveButton("Ok") { dialog, which ->
-                    val intent = Intent(this, TwoPlayerFragment::class.java)
-                    startActivity(intent)
-                }.show()
+        appContext {
+            val builder = AlertDialog.Builder(it)
+            builder.setTitle(getString(R.string.bluetooth_dialog_title))
+                    .setMessage(getString(R.string.no_bluetooth_on_device))
+                    .setIcon(android.R.drawable.stat_sys_data_bluetooth)
+                    .setPositiveButton("Ok") { dialog, which ->
+                        activity?.onBackPressed()
+                    }.show()
+        }
     }
 
     override fun requestBluetoothOn() {
@@ -209,15 +218,17 @@ class BluetoothActivity: AppCompatActivity(), BluetoothMVP.View {
     }
 
     override fun updateOpponent(player: Player) {
-        runOnUiThread {
+        activity?.runOnUiThread {
             mOpponentNameTextView.text = player.name
             mOpponentHealthTextView.text = player.health.toString()
-            animateView(applicationContext, mOpponentHealthTextView, R.animator.health_animation)
+            appContext {
+                animateView(it, mOpponentHealthTextView, R.animator.health_animation)
+            }
         }
     }
 
     override fun setPlayerHealth(health: String) {
-        runOnUiThread {
+        activity?.runOnUiThread {
             player_health.text = health
         }
     }
@@ -249,9 +260,11 @@ class BluetoothActivity: AppCompatActivity(), BluetoothMVP.View {
             for (permission in permissions) {
                 if (android.Manifest.permission.ACCESS_COARSE_LOCATION == permission) {
                     if (grantResults[0] == PERMISSION_DENIED) {
-                        Toast.makeText(applicationContext, getString(R.string.coarse_access_refused),
-                                Toast.LENGTH_LONG).show()
-                        finish()
+                        appContext {
+                            Toast.makeText(it, getString(R.string.coarse_access_refused),
+                                    Toast.LENGTH_LONG).show()
+                        }
+                        activity?.onBackPressed()
                     }
                 }
             }

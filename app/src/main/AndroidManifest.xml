@@ -28,13 +28,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".counter.players.TwoPlayerFragment"
-            android:screenOrientation="landscape"/>
-        <activity
             android:name=".bluetooth.ConnectDeviceActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".bluetooth.BluetoothActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".search.ui.CardSearchActivity"

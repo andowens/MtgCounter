@@ -7,18 +7,29 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".main.MtgCounterActivity">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bottom_nav_bar"
         android:id="@+id/frame_container"/>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/bottom_nav_bar"
-        android:layout_gravity="bottom"
         app:menu="@menu/bottom_navigation_menu"
         style="@style/Widget.MaterialComponents.BottomNavigationView.Colored"
-        app:layout_behavior="Bottom"/>
+        app:layout_behavior="com.firerocks.mtgcounter.views.BottomNavigationBehavior"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

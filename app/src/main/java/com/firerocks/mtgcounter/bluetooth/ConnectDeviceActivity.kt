@@ -49,7 +49,7 @@ class ConnectDeviceActivity : AppCompatActivity() {
         val intent = Intent()
         intent.putExtra(ADDRESS, address)
 
-        setResult(BluetoothActivity.DEVICE_SELECTED_RESULT, intent)
+        setResult(BluetoothFragment.DEVICE_SELECTED_RESULT, intent)
         finish()
     }
 

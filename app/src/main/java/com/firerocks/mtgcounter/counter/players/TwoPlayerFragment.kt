@@ -191,7 +191,7 @@ class TwoPlayerFragment : DaggerFragment(), CounterMVP.View {
 //                return true
 //            }
 //            R.id.menu_bluetooth -> {
-//                val intent = Intent(this, BluetoothActivity::class.java)
+//                val intent = Intent(this, BluetoothFragment::class.java)
 //                startActivity(intent)
 //                return true
 //            }
