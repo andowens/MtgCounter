@@ -2,6 +2,7 @@ package com.firerocks.mtgcounter.views
 
 import android.content.Context
 import android.util.AttributeSet
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -32,10 +33,11 @@ class BottomNavigationBehavior<V : View>(context: Context, attrs: AttributeSet) 
                                    type: Int) {
         super.onNestedPreScroll(coordinatorLayout, child, target, dx, dy, consumed, type)
 
-        child.translationY = max(0f, min(child.height.toFloat(), child.translationY + dy))
+        child.translationY = Math.max(0f, Math.min(child.height.toFloat(), child.translationY + dy))
     }
 
     override fun layoutDependsOn(parent: CoordinatorLayout, child: V, dependency: View): Boolean {
+        Log.i("Snackbar", "UpdatedSnackbar")
 
         if (dependency is Snackbar.SnackbarLayout) {
             updateSnackbar(child, dependency)
@@ -45,6 +47,7 @@ class BottomNavigationBehavior<V : View>(context: Context, attrs: AttributeSet) 
     }
 
     private fun updateSnackbar(child: View, snackbarLayout: Snackbar.SnackbarLayout) {
+        Log.i("Snackbar", "UpdatedSnackbar")
         if (snackbarLayout.layoutParams is CoordinatorLayout.LayoutParams) {
             val params = snackbarLayout.layoutParams as CoordinatorLayout.LayoutParams
 

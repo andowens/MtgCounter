@@ -23,6 +23,7 @@ import com.firerocks.mtgcounter.helpers.changeNameDialog
 import com.firerocks.mtgcounter.root.App
 import com.firerocks.mtgcounter.views.CustomFontTextView
 import dagger.android.support.DaggerFragment
+import kotlinx.android.synthetic.main.activity_mtg_counter.*
 import kotlinx.android.synthetic.main.bluetooth_view.*
 import java.util.*
 import javax.inject.Inject
@@ -52,7 +53,7 @@ class BluetoothFragment: DaggerFragment(), BluetoothMVP.View {
         mOpponentHealthTextView = view.findViewById(R.id.opponent_health)
         mOpponentNameTextView = view.findViewById(R.id.opponent_name)
 
-        mNoDeviceSnackBar = Snackbar.make(view.findViewById(R.id.main_view),
+        mNoDeviceSnackBar = Snackbar.make(main_view,
                 getString(R.string.no_device_connected),
                 Snackbar.LENGTH_INDEFINITE)
 
@@ -63,6 +64,18 @@ class BluetoothFragment: DaggerFragment(), BluetoothMVP.View {
 
         dice_roll.setOnClickListener {
             mPresenter.dieRollClicked()
+        }
+
+        player_up_arrow.setOnClickListener {
+            upClicked(it)
+        }
+
+        player_down_arrow.setOnClickListener {
+            downClicked(it)
+        }
+
+        player_name.setOnClickListener {
+            nameClicked(it)
         }
     }
 
@@ -158,7 +171,7 @@ class BluetoothFragment: DaggerFragment(), BluetoothMVP.View {
 
     fun nameClicked(view: View) {
 
-        appContext {
+        activity?.let {
             changeNameDialog(it) { name ->
                 mPresenter.nameClicked(name) {
                     player_name.text = name
@@ -168,17 +181,21 @@ class BluetoothFragment: DaggerFragment(), BluetoothMVP.View {
     }
 
     override fun showDieRollResult(result: String) {
-        roll_result.text = result
+        activity?.runOnUiThread {
+            roll_result.text = result
+        }
     }
 
     override fun errorSnackbar(error: String) {
-        val snackbar = Snackbar.make(main_view, error, Snackbar.LENGTH_LONG)
-        snackbar.addCallback(object : Snackbar.Callback() {
-            override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
-                super.onDismissed(transientBottomBar, event)
-                showNoDeviceConnectedSnackBar()
-            }
-        }).show()
+        if (isVisible) {
+            val snackbar = Snackbar.make(main_view, error, Snackbar.LENGTH_LONG)
+            snackbar.addCallback(object : Snackbar.Callback() {
+                override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+                    super.onDismissed(transientBottomBar, event)
+                    showNoDeviceConnectedSnackBar()
+                }
+            }).show()
+        }
     }
 
     override fun showNoBluetoothDialog() {

@@ -40,6 +40,7 @@ class BluetoothPresenter @Inject constructor(private val mModel: BluetoothMVP.Mo
     }
 
     override fun onPause() {
+        Log.i(TAG, "Stop service")
         mModel.stopService()
     }
 
@@ -77,7 +78,6 @@ class BluetoothPresenter @Inject constructor(private val mModel: BluetoothMVP.Mo
                         mView.errorSnackbar("Failed connecting to device")
                     }
                     BluetoothModel.CONNECTION_LOST -> {
-                        //mView.showNoDeviceConnectedSnackBar()
                         mView.errorSnackbar("Device disconnected")
                     }
 
