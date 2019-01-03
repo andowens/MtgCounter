@@ -5,6 +5,7 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.Gravity
 import android.view.View
+import android.widget.FrameLayout
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.ViewCompat
 import com.google.android.material.snackbar.Snackbar
@@ -37,8 +38,6 @@ class BottomNavigationBehavior<V : View>(context: Context, attrs: AttributeSet) 
     }
 
     override fun layoutDependsOn(parent: CoordinatorLayout, child: V, dependency: View): Boolean {
-        Log.i("Snackbar", "UpdatedSnackbar")
-
         if (dependency is Snackbar.SnackbarLayout) {
             updateSnackbar(child, dependency)
         }
@@ -47,7 +46,6 @@ class BottomNavigationBehavior<V : View>(context: Context, attrs: AttributeSet) 
     }
 
     private fun updateSnackbar(child: View, snackbarLayout: Snackbar.SnackbarLayout) {
-        Log.i("Snackbar", "UpdatedSnackbar")
         if (snackbarLayout.layoutParams is CoordinatorLayout.LayoutParams) {
             val params = snackbarLayout.layoutParams as CoordinatorLayout.LayoutParams
 

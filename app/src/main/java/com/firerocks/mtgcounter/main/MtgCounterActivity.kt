@@ -1,7 +1,12 @@
 package com.firerocks.mtgcounter.main
 
+import android.content.Context
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.util.AttributeSet
+import android.util.Log
+import android.view.View
+import android.widget.FrameLayout
 import com.firerocks.mtgcounter.R
 import com.firerocks.mtgcounter.bluetooth.BluetoothFragment
 import com.firerocks.mtgcounter.counter.players.TwoPlayerFragment
