@@ -7,6 +7,8 @@
         android:title="@string/new_game" />
     <item
         android:id="@+id/menu_connect"
-        android:title="@string/connect_device" />
+        android:title="@string/connect_device"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_bluetooth_connect"/>
 
 </menu>

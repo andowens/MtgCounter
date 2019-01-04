@@ -1,9 +1,8 @@
 package com.firerocks.mtgcounter.counter.counter_di
 
-import com.firerocks.mtgcounter.counter.players.TwoPlayerFragment
+import com.firerocks.mtgcounter.counter.TwoPlayerFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
-import javax.inject.Singleton
 
 @Module
 abstract class FragmentProvider {

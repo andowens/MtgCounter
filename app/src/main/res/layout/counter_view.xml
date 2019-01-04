@@ -1,127 +1,16 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="match_parent"
-    android:id="@+id/main_view"
-    tools:context=".counter.players.TwoPlayerFragment"
-    android:background="?attr/colorPrimaryDark">
+    android:layout_width="match_parent">
 
-    <com.firerocks.mtgcounter.views.CustomFontTextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/player_one_name"
-        android:text="@string/player_one_default_name"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/player_one_up_arrow"
-        app:layout_constraintVertical_chainStyle="packed"
-        app:layout_constraintEnd_toStartOf="@id/player_two_name"
-        android:textSize="@dimen/default_player_text_size"
-        android:textColor="@color/antiqueWhite"
-        android:tag="ONE"
-        android:layout_margin="@dimen/main_margins"/>
+    <include layout="@layout/counter_view_two_player"
+        android:id="@+id/two_main"/>
 
-    <androidx.appcompat.widget.AppCompatImageButton
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:id="@+id/player_one_up_arrow"
-        android:src="@drawable/ic_mtg_chevron_up"
-        android:scaleType="fitCenter"
-        android:adjustViewBounds="true"
-        app:layout_constraintTop_toBottomOf="@+id/player_one_name"
-        app:layout_constraintStart_toStartOf="@id/player_one_name"
-        app:layout_constraintEnd_toEndOf="@id/player_one_name"
-        app:layout_constraintBottom_toTopOf="@id/player_one_health"
-        android:tag="ONE_ADD"
-        android:foreground="@drawable/button_ripple_up"
-        android:background="@android:color/transparent"/>
+    <include layout="@layout/counter_view_three_player"
+        android:visibility="gone"
+        android:id="@+id/three_main"/>
 
-    <com.firerocks.mtgcounter.views.CustomFontTextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/player_one_health"
-        android:text="@string/default_player_health"
-        android:textSize="@dimen/default_player_text_size"
-        android:textColor="@color/antiqueWhite"
-        app:layout_constraintTop_toBottomOf="@+id/player_one_up_arrow"
-        app:layout_constraintStart_toStartOf="@id/player_one_name"
-        app:layout_constraintEnd_toEndOf="@id/player_one_name"
-        app:layout_constraintBottom_toTopOf="@id/player_one_down_arrow"
-        android:layout_margin="@dimen/main_margins"/>
-
-    <androidx.appcompat.widget.AppCompatImageButton
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:id="@+id/player_one_down_arrow"
-        android:src="@drawable/ic_mtg_chevron_down"
-        app:layout_constraintTop_toBottomOf="@+id/player_one_health"
-        app:layout_constraintStart_toStartOf="@id/player_one_name"
-        app:layout_constraintEnd_toEndOf="@id/player_one_name"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:tag="ONE_SUBTRACT"
-        android:scaleType="fitCenter"
-        android:adjustViewBounds="true"
-        android:foreground="@drawable/button_ripple_down"
-        android:background="@android:color/transparent"/>
-
-    <com.firerocks.mtgcounter.views.CustomFontTextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/player_two_name"
-        android:text="@string/player_two_default_name"
-        android:textColor="@color/antiqueWhite"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/player_two_up_arrow"
-        app:layout_constraintStart_toEndOf="@id/player_one_name"
-        app:layout_constraintVertical_chainStyle="packed"
-        android:textSize="@dimen/default_player_text_size"
-        android:tag="TWO"
-        android:layout_margin="@dimen/main_margins"/>
-
-    <androidx.appcompat.widget.AppCompatImageButton
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:id="@+id/player_two_up_arrow"
-        android:src="@drawable/ic_mtg_chevron_up"
-        android:scaleType="fitCenter"
-        android:adjustViewBounds="true"
-        app:layout_constraintTop_toBottomOf="@+id/player_two_name"
-        app:layout_constraintStart_toStartOf="@id/player_two_name"
-        app:layout_constraintEnd_toEndOf="@id/player_two_name"
-        app:layout_constraintBottom_toTopOf="@id/player_two_health"
-        android:tag="TWO_ADD"
-        android:foreground="@drawable/button_ripple_up"
-        android:background="@android:color/transparent"/>
-
-    <com.firerocks.mtgcounter.views.CustomFontTextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/player_two_health"
-        android:text="@string/default_player_health"
-        android:textColor="@color/antiqueWhite"
-        android:textSize="@dimen/default_player_text_size"
-        app:layout_constraintTop_toBottomOf="@+id/player_two_up_arrow"
-        app:layout_constraintStart_toStartOf="@id/player_two_name"
-        app:layout_constraintEnd_toEndOf="@id/player_two_name"
-        app:layout_constraintBottom_toTopOf="@id/player_two_down_arrow"
-        android:layout_margin="@dimen/main_margins"/>
-
-    <androidx.appcompat.widget.AppCompatImageButton
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:scaleType="fitCenter"
-        android:adjustViewBounds="true"
-        android:id="@+id/player_two_down_arrow"
-        android:src="@drawable/ic_mtg_chevron_down"
-        app:layout_constraintTop_toBottomOf="@+id/player_two_health"
-        app:layout_constraintStart_toStartOf="@id/player_two_name"
-        app:layout_constraintEnd_toEndOf="@id/player_two_name"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:tag="TWO_SUBTRACT"
-        android:foreground="@drawable/button_ripple_down"
-        android:background="@android:color/transparent"/>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <include layout="@layout/counter_view_four_player"
+        android:visibility="gone"
+        android:id="@+id/four_main"/>
+</FrameLayout>

@@ -39,14 +39,14 @@ class CounterPresenter: CounterMVP.Presenter {
                 mPlayerList[1].health += add
                 mPlayerList[1]
             }
-//            PlayerID.THREE -> {
-//                mPlayerList[2].health += add
-//                mPlayerList[2]
-//            }
-//            PlayerID.FOUR -> {
-//                mPlayerList[3].health += add
-//                mPlayerList[3]
-//            }
+            PlayerID.THREE -> {
+                mPlayerList[2].health += add
+                mPlayerList[2]
+            }
+            PlayerID.FOUR -> {
+                mPlayerList[3].health += add
+                mPlayerList[3]
+            }
         }
 
         if (player.isDead()) {

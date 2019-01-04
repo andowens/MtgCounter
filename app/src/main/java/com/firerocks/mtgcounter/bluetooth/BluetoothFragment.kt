@@ -6,24 +6,19 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import com.google.android.material.snackbar.Snackbar
 import androidx.core.app.ActivityCompat
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.content.PermissionChecker.PERMISSION_DENIED
 import com.firerocks.mtgcounter.R
-import com.firerocks.mtgcounter.counter.players.TwoPlayerFragment
 import com.firerocks.mtgcounter.data.Player
 import com.firerocks.mtgcounter.helpers.animateView
 import com.firerocks.mtgcounter.helpers.changeNameDialog
-import com.firerocks.mtgcounter.root.App
 import com.firerocks.mtgcounter.views.CustomFontTextView
 import dagger.android.support.DaggerFragment
-import kotlinx.android.synthetic.main.activity_mtg_counter.*
 import kotlinx.android.synthetic.main.bluetooth_view.*
 import java.util.*
 import javax.inject.Inject
@@ -79,6 +74,12 @@ class BluetoothFragment: DaggerFragment(), BluetoothMVP.View {
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        inflater?.inflate(R.menu.bluetooth_menu, menu)
+
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.bluetooth_view, container, false)
     }
@@ -91,6 +92,7 @@ class BluetoothFragment: DaggerFragment(), BluetoothMVP.View {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
 
         //Have to request location permission
         appContext { context ->
