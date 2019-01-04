@@ -2,7 +2,9 @@ package com.firerocks.mtgcounter.search.ui
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.cardview.widget.CardView
@@ -13,6 +15,7 @@ import com.firerocks.mtgcounter.search.model.toParcelableMtgCard
 import com.firerocks.mtgcounter.utils.adapters.CardAdapter
 import com.lapism.searchview.Search
 import com.lapism.searchview.widget.SearchAdapter
+import dagger.android.support.DaggerFragment
 import io.magicthegathering.kotlinsdk.api.MtgCardApiClient
 import io.magicthegathering.kotlinsdk.model.card.MtgCard
 import kotlinx.android.synthetic.main.activity_card_search.*
@@ -21,48 +24,54 @@ import kotlinx.coroutines.*
 import retrofit2.Response
 import androidx.core.util.Pair as UtilPair
 
-class CardSearchActivity : AppCompatActivity() {
+class CardSearchFragment : DaggerFragment() {
 
     lateinit var searchResultAdapter: CardAdapter
     private val mViewModelJob = Job()
     private val mUiScope = CoroutineScope(Dispatchers.Main + mViewModelJob)
+
+    companion object {
+        fun newInstance() : CardSearchFragment = CardSearchFragment()
+    }
 
     private val searchResult: ArrayList<MtgCard> by lazy {
         ArrayList<MtgCard>()
     }
 
     private val searchAdapter: SearchAdapter by lazy {
-        SearchAdapter(this)
+        SearchAdapter(activity)
     }
 
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.activity_card_search, container, false)
+    }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_card_search)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        val cardView = findViewById<CardView>(R.id.search_cardView)
-        val imageView = findViewById<AppCompatImageView>(R.id.card_image)
+        //        val cardView = findViewById<CardView>(R.id.search_cardView)
+//        val imageView = findViewById<AppCompatImageView>(R.id.card_image)
 
         searchResultAdapter = CardAdapter(searchResult) { card ->
 
-            val intent = Intent(this, CardDetailActivity::class.java)
-            val transitionName = getString(R.string.cardview_transition)
-            val transName = "test"
-            val pair1 = UtilPair.create(cardView as View, transitionName)
-            val pair2 = UtilPair.create(card_image as View, transName)
-            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this,
-                    pair1,
-                    pair2)
-
-            intent.putExtra("card", card.toParcelableMtgCard())
-            startActivity(intent, options.toBundle())
+            //            val intent = Intent(this, CardDetailActivity::class.java)
+//            val transitionName = getString(R.string.cardview_transition)
+//            val transName = "test"
+//            val pair1 = UtilPair.create(cardView as View, transitionName)
+//            val pair2 = UtilPair.create(card_image as View, transName)
+//            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this,
+//                    pair1,
+//                    pair2)
+//
+//            intent.putExtra("card", card.toParcelableMtgCard())
+//            startActivity(intent, options.toBundle())
         }
 
         search_list.adapter = searchResultAdapter
-        search_list.layoutManager = LinearLayoutManager(this)
+        search_list.layoutManager = LinearLayoutManager(activity)
 
         search_bar.setOnLogoClickListener {
-            onBackPressed()
+            activity?.onBackPressed()
         }
 
         search_bar.setOnQueryTextListener(object : Search.OnQueryTextListener {
@@ -92,6 +101,10 @@ class CardSearchActivity : AppCompatActivity() {
             }
 
         })
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
     }
 

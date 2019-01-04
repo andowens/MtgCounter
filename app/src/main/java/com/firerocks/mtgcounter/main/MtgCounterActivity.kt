@@ -10,6 +10,7 @@ import android.widget.FrameLayout
 import com.firerocks.mtgcounter.R
 import com.firerocks.mtgcounter.bluetooth.BluetoothFragment
 import com.firerocks.mtgcounter.counter.players.TwoPlayerFragment
+import com.firerocks.mtgcounter.search.ui.CardSearchFragment
 import dagger.android.support.DaggerAppCompatActivity
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.activity_mtg_counter.*
@@ -41,6 +42,8 @@ class MtgCounterActivity : DaggerAppCompatActivity() {
                     ret = true
                 }
                 R.id.menu_search -> {
+                    requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+                    replaceFragment(CardSearchFragment.newInstance())
                     ret = true
                 }
             }
