@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_new_game"
+        android:title="@string/new_game"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/two_player_game"
+        android:title="@string/two_players" />
+
+    <item
+        android:id="@+id/three_player_game"
+        android:title="@string/three_players" />
+
+    <item
+        android:id="@+id/four_player_game"
+        android:title="@string/four_players" />
+
+    <item
+        android:id="@+id/two_headed_giant_game"
+        android:title="@string/two_headed_giant" />
+</menu>
