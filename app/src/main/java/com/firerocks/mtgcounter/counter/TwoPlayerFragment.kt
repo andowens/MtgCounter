@@ -28,8 +28,13 @@ class TwoPlayerFragment : DaggerFragment(), CounterMVP.View {
 
     private val mPlayerLifeIDs = listOf(R.id.player_one_health,
             R.id.player_two_health,
-            R.id.player_three_health,
-            R.id.player_four_health)
+            R.id.three_player_one_health,
+            R.id.three_player_two_health,
+            R.id.three_player_three_health,
+            R.id.four_player_one_health,
+            R.id.four_player_two_health,
+            R.id.four_player_three_health,
+            R.id.four_player_four_health)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the vew
@@ -57,6 +62,7 @@ class TwoPlayerFragment : DaggerFragment(), CounterMVP.View {
     private fun setupTwoPlayerGame() {
         view?.let { act ->
             mMainView = act.findViewById(R.id.two_main)
+
             mMainView.visibility = View.VISIBLE
 
             mMainView.findViewById<AppCompatImageButton>(R.id.player_one_up_arrow).setOnClickListener {
@@ -91,39 +97,39 @@ class TwoPlayerFragment : DaggerFragment(), CounterMVP.View {
             mMainView = act.findViewById(R.id.three_main)
             mMainView.visibility = View.VISIBLE
 
-            mMainView.findViewById<AppCompatImageButton>(R.id.player_one_up_arrow).setOnClickListener {
+            mMainView.findViewById<AppCompatImageButton>(R.id.three_player_one_up_arrow).setOnClickListener {
                 updatePlayerHealth(it)
             }
 
-            mMainView.findViewById<AppCompatImageButton>(R.id.player_one_down_arrow).setOnClickListener {
+            mMainView.findViewById<AppCompatImageButton>(R.id.three_player_one_down_arrow).setOnClickListener {
                 updatePlayerHealth(it)
             }
 
-            mMainView.findViewById<AppCompatImageButton>(R.id.player_two_down_arrow).setOnClickListener {
+            mMainView.findViewById<AppCompatImageButton>(R.id.three_player_two_down_arrow).setOnClickListener {
                 updatePlayerHealth(it)
             }
 
-            mMainView.findViewById<AppCompatImageButton>(R.id.player_two_up_arrow).setOnClickListener {
+            mMainView.findViewById<AppCompatImageButton>(R.id.three_player_two_up_arrow).setOnClickListener {
                 updatePlayerHealth(it)
             }
 
-            mMainView.findViewById<AppCompatImageButton>(R.id.player_three_down_arrow).setOnClickListener {
+            mMainView.findViewById<AppCompatImageButton>(R.id.three_player_three_down_arrow).setOnClickListener {
                 updatePlayerHealth(it)
             }
 
-            mMainView.findViewById<AppCompatImageButton>(R.id.player_three_up_arrow).setOnClickListener {
+            mMainView.findViewById<AppCompatImageButton>(R.id.three_player_three_up_arrow).setOnClickListener {
                 updatePlayerHealth(it)
             }
 
-            mMainView.findViewById<CustomFontTextView>(R.id.player_one_name).setOnClickListener {
+            mMainView.findViewById<CustomFontTextView>(R.id.three_player_one_name).setOnClickListener {
                 changeName(it)
             }
 
-            mMainView.findViewById<CustomFontTextView>(R.id.player_two_name).setOnClickListener {
+            mMainView.findViewById<CustomFontTextView>(R.id.three_player_two_name).setOnClickListener {
                 changeName(it)
             }
 
-            mMainView.findViewById<CustomFontTextView>(R.id.player_three_name).setOnClickListener {
+            mMainView.findViewById<CustomFontTextView>(R.id.three_player_three_name).setOnClickListener {
                 changeName(it)
             }
         }
@@ -135,51 +141,51 @@ class TwoPlayerFragment : DaggerFragment(), CounterMVP.View {
             mMainView = act.findViewById(R.id.four_main)
             mMainView.visibility = View.VISIBLE
 
-            mMainView.findViewById<AppCompatImageButton>(R.id.player_one_up_arrow).setOnClickListener {
+            mMainView.findViewById<AppCompatImageButton>(R.id.four_player_one_up_arrow).setOnClickListener {
                 updatePlayerHealth(it)
             }
 
-            mMainView.findViewById<AppCompatImageButton>(R.id.player_one_down_arrow).setOnClickListener {
+            mMainView.findViewById<AppCompatImageButton>(R.id.four_player_one_down_arrow).setOnClickListener {
                 updatePlayerHealth(it)
             }
 
-            mMainView.findViewById<AppCompatImageButton>(R.id.player_two_down_arrow).setOnClickListener {
+            mMainView.findViewById<AppCompatImageButton>(R.id.four_player_two_down_arrow).setOnClickListener {
                 updatePlayerHealth(it)
             }
 
-            mMainView.findViewById<AppCompatImageButton>(R.id.player_two_up_arrow).setOnClickListener {
+            mMainView.findViewById<AppCompatImageButton>(R.id.four_player_two_up_arrow).setOnClickListener {
                 updatePlayerHealth(it)
             }
 
-            mMainView.findViewById<AppCompatImageButton>(R.id.player_three_down_arrow).setOnClickListener {
+            mMainView.findViewById<AppCompatImageButton>(R.id.four_player_three_down_arrow).setOnClickListener {
                 updatePlayerHealth(it)
             }
 
-            mMainView.findViewById<AppCompatImageButton>(R.id.player_three_up_arrow).setOnClickListener {
+            mMainView.findViewById<AppCompatImageButton>(R.id.four_player_three_up_arrow).setOnClickListener {
                 updatePlayerHealth(it)
             }
 
-            mMainView.findViewById<AppCompatImageButton>(R.id.player_four_down_arrow).setOnClickListener {
+            mMainView.findViewById<AppCompatImageButton>(R.id.four_player_four_down_arrow).setOnClickListener {
                 updatePlayerHealth(it)
             }
 
-            mMainView.findViewById<AppCompatImageButton>(R.id.player_four_up_arrow).setOnClickListener {
+            mMainView.findViewById<AppCompatImageButton>(R.id.four_player_four_up_arrow).setOnClickListener {
                 updatePlayerHealth(it)
             }
 
-            mMainView.findViewById<CustomFontTextView>(R.id.player_one_name).setOnClickListener {
+            mMainView.findViewById<CustomFontTextView>(R.id.four_player_one_name).setOnClickListener {
                 changeName(it)
             }
 
-            mMainView.findViewById<CustomFontTextView>(R.id.player_two_name).setOnClickListener {
+            mMainView.findViewById<CustomFontTextView>(R.id.four_player_two_name).setOnClickListener {
                 changeName(it)
             }
 
-            mMainView.findViewById<CustomFontTextView>(R.id.player_three_name).setOnClickListener {
+            mMainView.findViewById<CustomFontTextView>(R.id.four_player_three_name).setOnClickListener {
                 changeName(it)
             }
 
-            mMainView.findViewById<CustomFontTextView>(R.id.player_four_name).setOnClickListener {
+            mMainView.findViewById<CustomFontTextView>(R.id.four_player_four_name).setOnClickListener {
                 changeName(it)
             }
         }

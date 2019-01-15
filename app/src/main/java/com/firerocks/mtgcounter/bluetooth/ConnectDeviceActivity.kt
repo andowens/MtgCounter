@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.firerocks.mtgcounter.R
@@ -53,8 +54,22 @@ class ConnectDeviceActivity : AppCompatActivity() {
         finish()
     }
 
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        super.onOptionsItemSelected(item)
+
+        when (item?.itemId) {
+            android.R.id.home -> {
+                this.finish()
+                return true
+            }
+        }
+
+        return false
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         setContentView(R.layout.activity_device_list)
 

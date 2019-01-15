@@ -80,6 +80,22 @@ class BluetoothFragment: DaggerFragment(), BluetoothMVP.View {
         super.onCreateOptionsMenu(menu, inflater)
     }
 
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        super.onOptionsItemSelected(item)
+
+        when (item?.itemId) {
+            R.id.menu_new_game -> {
+                mPresenter.menuNewGame()
+                return true
+            }
+            R.id.menu_connect -> {
+                launchConnectActivity()
+            }
+        }
+
+        return false
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.bluetooth_view, container, false)
     }
