@@ -29,6 +29,8 @@ interface CounterMVP {
         fun twoHeadedGiantGame()
 
         fun rollDieClicked()
+
+        fun getGameType() : GameType
     }
 
     interface View {

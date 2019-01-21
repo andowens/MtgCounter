@@ -226,23 +226,52 @@ class TwoPlayerFragment : DaggerFragment(), CounterMVP.View {
         val playerId: PlayerID = PlayerID.valueOf(splitTag[0])
         val operator: Operator = Operator.valueOf(splitTag[1])
         presenter.updatePlayerHealth(playerId, operator) { playerID, health ->
-            val healthView: CustomFontTextView?
-            when (playerID) {
-                PlayerID.ONE -> {
+            var healthView: CustomFontTextView? = null
+            val gameType = presenter.getGameType()
+            if (gameType == GameType.FOUR_PLAYER) {
+                when (playerID) {
+                    PlayerID.ONE -> {
+                        healthView = activity?.findViewById(R.id.four_player_one_health)
+                        healthView?.text = health.toString()
+                    }
+                    PlayerID.TWO -> {
+                        healthView = activity?.findViewById(R.id.four_player_two_health)
+                        healthView?.text = health.toString()
+                    }
+                    PlayerID.THREE -> {
+                        healthView = activity?.findViewById(R.id.four_player_three_health)
+                        healthView?.text = health.toString()
+                    }
+                    PlayerID.FOUR -> {
+                        healthView = activity?.findViewById(R.id.four_player_four_health)
+                        healthView?.text = health.toString()
+                    }
+                }
+            } else if (gameType == GameType.TWO_PLAYER || gameType == GameType.TWO_HEADED_GIANT) {
+                when (playerID) {
+                    PlayerID.ONE -> {
                         healthView = activity?.findViewById(R.id.player_one_health)
                         healthView?.text = health.toString()
+                    }
+                    PlayerID.TWO -> {
+                        healthView = activity?.findViewById(R.id.player_two_health)
+                        healthView?.text = health.toString()
+                    }
                 }
-                PlayerID.TWO -> {
-                    healthView = activity?.findViewById(R.id.player_two_health)
-                    healthView?.text = health.toString()
-                }
-                PlayerID.THREE -> {
-                    healthView = activity?.findViewById(R.id.player_three_health)
-                    healthView?.text = health.toString()
-                }
-                PlayerID.FOUR -> {
-                    healthView = activity?.findViewById(R.id.player_four_health)
-                    healthView?.text = health.toString()
+            } else if (gameType == GameType.THREE_PLAYER) {
+                when (playerID) {
+                    PlayerID.ONE -> {
+                        healthView = activity?.findViewById(R.id.three_player_one_health)
+                        healthView?.text = health.toString()
+                    }
+                    PlayerID.TWO -> {
+                        healthView = activity?.findViewById(R.id.three_player_two_health)
+                        healthView?.text = health.toString()
+                    }
+                    PlayerID.THREE -> {
+                        healthView = activity?.findViewById(R.id.three_player_three_health)
+                        healthView?.text = health.toString()
+                    }
                 }
             }
             appContext { context ->
@@ -260,10 +289,10 @@ class TwoPlayerFragment : DaggerFragment(), CounterMVP.View {
     }
 
     override fun getDefaultHealth(gameType: GameType) : Int {
-        return if (gameType == GameType.NORMAL) {
-            resources.getInteger(R.integer.default_player_health)
-        } else {
+        return if (gameType == GameType.TWO_HEADED_GIANT) {
             resources.getInteger(R.integer.two_headed_giant)
+        } else {
+            resources.getInteger(R.integer.default_player_health)
         }
     }
 
@@ -283,7 +312,7 @@ class TwoPlayerFragment : DaggerFragment(), CounterMVP.View {
                 , Snackbar.LENGTH_LONG)
                 .setAction(resources.getString(R.string.new_game)) {
                     presenter.resetAllPlayersHealth { health, size ->
-                        //resetAllPlayersHealth(health, size)
+                         resetAllPlayersHealth(health)
                     }
                 }.show()
     }
@@ -294,7 +323,7 @@ class TwoPlayerFragment : DaggerFragment(), CounterMVP.View {
         when (item?.itemId) {
             R.id.menu_new_game -> {
                 presenter.resetAllPlayersHealth { health, size ->
-                    resetAllPlayersHealth(health, size)
+                    resetAllPlayersHealth(health)
                 }
                 return true
             }
@@ -335,15 +364,15 @@ class TwoPlayerFragment : DaggerFragment(), CounterMVP.View {
         setupTwoPlayerGame()
     }
 
-    private fun resetAllPlayersHealth(healthValue: Int, numPlayers: Int) {
-//        for (i in 0..(numPlayers -1)) {
-//            findViewById<CustomFontTextView>(mPlayerLifeIDs[i]).text = healthValue.toString()
-//        }
+    private fun resetAllPlayersHealth(healthValue: Int) {
+        for (i in 0..(mPlayerLifeIDs.size - 1)) {
+            activity?.findViewById<CustomFontTextView>(mPlayerLifeIDs[i])?.text = healthValue.toString()
+        }
     }
 
     override fun twoHeadedGiantGame(health: Int) {
         setupTwoPlayerGame()
-//        resetAllPlayersHealth(health, 2)
+        resetAllPlayersHealth(health)
     }
 
     override fun showDieRolled(roll: String) {

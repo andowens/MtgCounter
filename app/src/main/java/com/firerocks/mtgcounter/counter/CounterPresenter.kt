@@ -16,7 +16,7 @@ class CounterPresenter: CounterMVP.Presenter {
     private lateinit var mCounterView: CounterMVP.View
     private var mPlayerList: MutableList<Player> = ArrayList()
 
-    private var mGameType = GameType.NORMAL
+    private var mGameType = GameType.TWO_PLAYER
 
     override fun setView(counterView: CounterMVP.View) {
         mCounterView = counterView
@@ -60,8 +60,8 @@ class CounterPresenter: CounterMVP.Presenter {
         when (playerID) {
             PlayerID.ONE -> mPlayerList[0].name = name
             PlayerID.TWO -> mPlayerList[1].name = name
-//            PlayerID.THREE -> mPlayerList[2].name = name
-//            PlayerID.FOUR -> mPlayerList[3].name = name
+            PlayerID.THREE -> mPlayerList[2].name = name
+            PlayerID.FOUR -> mPlayerList[3].name = name
         }
         onResult(name)
     }
@@ -90,12 +90,12 @@ class CounterPresenter: CounterMVP.Presenter {
             PlayerID.TWO -> {
                 mPlayerList[1].health = health
             }
-//            PlayerID.THREE -> {
-//                mPlayerList[2].health = health
-//            }
-//            PlayerID.FOUR -> {
-//                mPlayerList[3].health = health
-//            }
+            PlayerID.THREE -> {
+                mPlayerList[2].health = health
+            }
+            PlayerID.FOUR -> {
+                mPlayerList[3].health = health
+            }
         }
 
         onResult(playerID, health)
@@ -125,7 +125,7 @@ class CounterPresenter: CounterMVP.Presenter {
     }
 
     override fun threePlayerGame() {
-        mGameType = GameType.NORMAL
+        mGameType = GameType.THREE_PLAYER
 
         mPlayerList.clear()
         addPlayer()
@@ -135,7 +135,7 @@ class CounterPresenter: CounterMVP.Presenter {
     }
 
     override fun fourPlayerGame() {
-        mGameType = GameType.NORMAL
+        mGameType = GameType.FOUR_PLAYER
         mPlayerList.clear()
         addPlayer()
         addPlayer()
@@ -145,7 +145,7 @@ class CounterPresenter: CounterMVP.Presenter {
     }
 
     override fun twoPlayerGame() {
-        mGameType = GameType.NORMAL
+        mGameType = GameType.TWO_PLAYER
         mPlayerList.clear()
         addPlayer()
         addPlayer()
@@ -163,5 +163,9 @@ class CounterPresenter: CounterMVP.Presenter {
     override fun rollDieClicked() {
         val roll = (Random().nextInt(20 - 1) + 1).toString()
         mCounterView.showDieRolled(roll)
+    }
+
+    override fun getGameType(): GameType {
+        return mGameType
     }
 }
