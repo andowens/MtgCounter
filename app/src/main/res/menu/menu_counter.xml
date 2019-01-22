@@ -7,6 +7,12 @@
         app:showAsAction="always"/>
 
     <item
+        android:id="@+id/roll_die"
+        android:title="@string/roll_die"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_dice_solid" />
+
+    <item
         android:id="@+id/two_player_game"
         android:title="@string/two_players" />
 

@@ -27,7 +27,7 @@
     <string name="title_paired_devices">Paired Devices</string>
     <string name="title_other_devices">Nearby Available Devices</string>
     <string name="button_scan">Scan for devices</string>
-    <string name="roll_dice">Roll Dice</string>
+    <string name="roll_die">Roll Die</string>
     <string name="roll">Roll</string>
     <string name="opponent">Opponent</string>
     <string name="no_device_connected">No device connected</string>

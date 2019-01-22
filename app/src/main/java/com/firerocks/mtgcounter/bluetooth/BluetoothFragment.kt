@@ -217,7 +217,7 @@ class BluetoothFragment: DaggerFragment(), BluetoothMVP.View {
     }
 
     override fun showNoBluetoothDialog() {
-        appContext {
+        activity?.let {
             val builder = AlertDialog.Builder(it)
             builder.setTitle(getString(R.string.bluetooth_dialog_title))
                     .setMessage(getString(R.string.no_bluetooth_on_device))

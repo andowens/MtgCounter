@@ -7,23 +7,21 @@ import androidx.appcompat.widget.AppCompatImageButton
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.transition.Visibility
 import com.firerocks.mtgcounter.R
 import com.firerocks.mtgcounter.helpers.*
 import com.firerocks.mtgcounter.views.CustomFontTextView
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 
-class TwoPlayerFragment : DaggerFragment(), CounterMVP.View {
+class CounterFragment : DaggerFragment(), CounterMVP.View {
 
-    private val TAG = "TwoPlayerFragment"
+    private val TAG = "CounterFragment"
 
     @Inject lateinit var presenter: CounterMVP.Presenter
     private lateinit var mMainView: ConstraintLayout
 
     companion object {
-
-        fun newInstance() : TwoPlayerFragment = TwoPlayerFragment()
+        fun newInstance() : CounterFragment = CounterFragment()
     }
 
     private val mPlayerLifeIDs = listOf(R.id.player_one_health,
@@ -51,6 +49,9 @@ class TwoPlayerFragment : DaggerFragment(), CounterMVP.View {
         setupTwoPlayerGame()
     }
 
+    /**
+     * Helper function used to set all the main views that are part of this fragment invisible
+     */
     private fun hideAllViews() {
         view?.let {
             it.findViewById<View>(R.id.two_main).visibility = View.GONE
@@ -59,6 +60,11 @@ class TwoPlayerFragment : DaggerFragment(), CounterMVP.View {
         }
     }
 
+    /**
+     * Long helper function used to setup the two player game sets all the callbacks for
+     * all the views and sets the two player view to visible. (Could maybe be done better
+     * some how... but I'm not sure how maybe by iterating through the list of views or something)
+     */
     private fun setupTwoPlayerGame() {
         view?.let { act ->
             mMainView = act.findViewById(R.id.two_main)
@@ -91,6 +97,11 @@ class TwoPlayerFragment : DaggerFragment(), CounterMVP.View {
         }
     }
 
+    /**
+     * Long helper function used to setup the three player game sets all the callbacks for
+     * all the views and sets the three player view to visible. (Could maybe be done better
+     * some how... but I'm not sure how maybe by iterating through the list of views or something)
+     */
     private fun setupThreePlayerGame() {
         activity?.let { act ->
 
@@ -135,6 +146,11 @@ class TwoPlayerFragment : DaggerFragment(), CounterMVP.View {
         }
     }
 
+    /**
+     * Long helper function used to setup the Four player game sets all the callbacks for
+     * all the views and sets the four player view to visible. (Could maybe be done better
+     * some how... but I'm not sure how maybe by iterating through the list of views or something)
+     */
     private fun setupFourPlayerGame() {
         activity?.let { act ->
 
@@ -200,7 +216,12 @@ class TwoPlayerFragment : DaggerFragment(), CounterMVP.View {
         presenter.twoPlayerGame()
     }
 
-    fun changeName(view: View) {
+    /**
+     * Callback used when a players name is clicked so that the user can change their name.
+     *
+     * @param view The view that is clicked.
+     */
+    private fun changeName(view: View) {
 
         activity?.let { activity ->
             changeNameDialog(activity) { name ->
@@ -217,14 +238,28 @@ class TwoPlayerFragment : DaggerFragment(), CounterMVP.View {
         super.onCreateOptionsMenu(menu, inflater)
     }
 
-    fun updatePlayerHealth(view: View) {
+    /**
+     * Callback for the life up and life down arrows. This could probably be handled in a more
+     * elegant way but I as of yet haven't thought of anything.
+     *
+     * @param view The view that was clicked in this case an up or down arrow.
+     */
+    private fun updatePlayerHealth(view: View) {
+
+        // Since the arrow was clicked animate it
         appContext { context ->
             animateView(context, view, R.animator.chevron_animation)
         }
+
+        // We need to get the tag and then use it to figure out which arrow corresponds to which
+        // life total.
         val tag = view.tag.toString()
         val splitTag = tag.split("_")
         val playerId: PlayerID = PlayerID.valueOf(splitTag[0])
         val operator: Operator = Operator.valueOf(splitTag[1])
+
+        // Since this is "MVP lite" we need to tell the presenter that the button was clicked
+        // so it can update it's model and then take actions accordingly.
         presenter.updatePlayerHealth(playerId, operator) { playerID, health ->
             var healthView: CustomFontTextView? = null
             val gameType = presenter.getGameType()
@@ -274,6 +309,8 @@ class TwoPlayerFragment : DaggerFragment(), CounterMVP.View {
                     }
                 }
             }
+
+            // Now that the life is updated animate it.
             appContext { context ->
                 healthView?.let {
                     animateView(context, healthView, R.animator.health_animation)
@@ -282,6 +319,12 @@ class TwoPlayerFragment : DaggerFragment(), CounterMVP.View {
         }
     }
 
+    /**
+     * Helper function that is used to check if the app context is null and if it isn't then
+     * call the lambda function and pass it in.
+     *
+     * @param lambda Function that uses the non-null app context.
+     */
     private fun appContext (lambda: (Context) -> Unit) {
         activity?.applicationContext?.let {
             lambda(it)
@@ -327,6 +370,10 @@ class TwoPlayerFragment : DaggerFragment(), CounterMVP.View {
                 }
                 return true
             }
+            R.id.roll_die -> {
+                presenter.rollDieClicked()
+                return true
+            }
             R.id.two_player_game -> {
                 hideAllViews()
                 presenter.twoPlayerGame()
@@ -353,20 +400,38 @@ class TwoPlayerFragment : DaggerFragment(), CounterMVP.View {
     }
 
     override fun threePlayerGame() {
+        resetAllPlayersHealth()
         setupThreePlayerGame()
     }
 
     override fun fourPlayerGame() {
+        resetAllPlayersHealth()
         setupFourPlayerGame()
     }
 
     override fun twoPlayerGame() {
+        resetAllPlayersHealth()
         setupTwoPlayerGame()
     }
 
-    private fun resetAllPlayersHealth(healthValue: Int) {
-        for (i in 0..(mPlayerLifeIDs.size - 1)) {
-            activity?.findViewById<CustomFontTextView>(mPlayerLifeIDs[i])?.text = healthValue.toString()
+    /**
+     * Used to reset all players health across all views inside of the counter fragments
+     * Note: This will reset all views.
+     *
+     * @param healthValue The value to set all players health to.
+     */
+    private fun resetAllPlayersHealth(healthValue: Int = 20) {
+
+        if (presenter.getGameType() == GameType.TWO_HEADED_GIANT) {
+            activity?.findViewById<CustomFontTextView>(R.id.player_one_health)
+                    ?.text = healthValue.toString()
+            activity?.findViewById<CustomFontTextView>(R.id.player_two_health)
+                    ?.text = healthValue.toString()
+        } else {
+            for (i in 0..(mPlayerLifeIDs.size - 1)) {
+                activity?.findViewById<CustomFontTextView>(mPlayerLifeIDs[i])
+                        ?.text = healthValue.toString()
+            }
         }
     }
 

@@ -4,7 +4,7 @@ import android.content.pm.ActivityInfo
 import android.os.Bundle
 import com.firerocks.mtgcounter.R
 import com.firerocks.mtgcounter.bluetooth.BluetoothFragment
-import com.firerocks.mtgcounter.counter.TwoPlayerFragment
+import com.firerocks.mtgcounter.counter.CounterFragment
 import com.firerocks.mtgcounter.search.ui.CardSearchFragment
 import dagger.android.support.DaggerAppCompatActivity
 import dagger.android.support.DaggerFragment
@@ -20,7 +20,7 @@ class MtgCounterActivity : DaggerAppCompatActivity() {
 
         if (savedInstanceState == null) {
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-            replaceFragment(TwoPlayerFragment.newInstance())
+            replaceFragment(CounterFragment.newInstance())
         }
 
         bottom_nav_bar.setOnNavigationItemSelectedListener { menuItem ->
@@ -28,7 +28,7 @@ class MtgCounterActivity : DaggerAppCompatActivity() {
             when (menuItem.itemId) {
                 R.id.normal_counter -> {
                     requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-                    replaceFragment(TwoPlayerFragment.newInstance())
+                    replaceFragment(CounterFragment.newInstance())
                     ret = true
                 }
                 R.id.bluetooth_menu_item -> {

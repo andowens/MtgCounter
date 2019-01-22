@@ -2,7 +2,7 @@ package com.firerocks.mtgcounter.counter.counter_di
 
 import com.firerocks.mtgcounter.counter.CounterMVP
 import com.firerocks.mtgcounter.counter.CounterPresenter
-import com.firerocks.mtgcounter.counter.TwoPlayerFragment
+import com.firerocks.mtgcounter.counter.CounterFragment
 import dagger.Module
 import dagger.Provides
 
@@ -13,7 +13,7 @@ class CounterModule {
     fun provideCounterPresenter(): CounterMVP.Presenter = CounterPresenter()
 
     @Provides
-    fun provideTwoPlayerFragment(fragment: TwoPlayerFragment): TwoPlayerFragment {
+    fun provideTwoPlayerFragment(fragment: CounterFragment): CounterFragment {
         return fragment
     }
 }
