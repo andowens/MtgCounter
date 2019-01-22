@@ -38,8 +38,6 @@ class CounterFragment : DaggerFragment(), CounterMVP.View {
         // Inflate the vew
         val view = inflater.inflate(R.layout.counter_view, container, false)
 
-
-
         return view
     }
 

@@ -1,15 +1,11 @@
 package com.firerocks.mtgcounter.counter
 
-import android.util.Log
-import android.view.View
-import com.firerocks.mtgcounter.R
 import com.firerocks.mtgcounter.data.Player
 import com.firerocks.mtgcounter.data.isDead
 import com.firerocks.mtgcounter.helpers.GameType
 import com.firerocks.mtgcounter.helpers.Operator
 import com.firerocks.mtgcounter.helpers.PlayerID
 import java.util.*
-import javax.inject.Inject
 
 class CounterPresenter: CounterMVP.Presenter {
     private val TAG = "mtg.CounterPresenter"

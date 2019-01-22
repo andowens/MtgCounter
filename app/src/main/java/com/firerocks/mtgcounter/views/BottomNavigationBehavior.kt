@@ -12,6 +12,9 @@ import com.google.android.material.snackbar.Snackbar
 import java.lang.Float.max
 import java.lang.Float.min
 
+/**
+ * Custom behavior used to tell the snackbar to appear above the bottom nav bar.
+ */
 class BottomNavigationBehavior<V : View>(context: Context, attrs: AttributeSet) :
     CoordinatorLayout.Behavior<V>(context, attrs) {
 
