@@ -100,6 +100,11 @@ class BluetoothFragment: DaggerFragment(), BluetoothMVP.View {
         return inflater.inflate(R.layout.bluetooth_view, container, false)
     }
 
+    /**
+     * Helper function that helps get the application context if it can
+     *
+     * @param lambda Passed in function that lets you use the context.
+     */
     private fun appContext (lambda: (Context) -> Unit) {
         activity?.applicationContext?.let {
             lambda(it)

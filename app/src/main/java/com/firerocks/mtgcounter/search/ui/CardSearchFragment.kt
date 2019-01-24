@@ -1,7 +1,9 @@
 package com.firerocks.mtgcounter.search.ui
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatImageView
@@ -44,25 +46,43 @@ class CardSearchFragment : DaggerFragment() {
         return inflater.inflate(R.layout.activity_card_search, container, false)
     }
 
+    /**
+     * Helper function that helps get the application context if it can
+     *
+     * @param lambda Passed in function that lets you use the context.
+     */
+    private fun appContext (lambda: (Context) -> Unit) {
+        activity?.applicationContext?.let {
+            lambda(it)
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //        val cardView = findViewById<CardView>(R.id.search_cardView)
-//        val imageView = findViewById<AppCompatImageView>(R.id.card_image)
-
         searchResultAdapter = CardAdapter(searchResult) { card ->
 
-            //            val intent = Intent(this, CardDetailFragment::class.java)
-//            val transitionName = getString(R.string.cardview_transition)
-//            val transName = "test"
-//            val pair1 = UtilPair.create(cardView as View, transitionName)
-//            val pair2 = UtilPair.create(card_image as View, transName)
-//            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this,
-//                    pair1,
-//                    pair2)
-//
-//            intent.putExtra("card", card.toParcelableMtgCard())
-//            startActivity(intent, options.toBundle())
+            activity?.let { activity ->
+
+                val cardView = activity.findViewById<CardView>(R.id.search_cardView)
+                val imageView = activity.findViewById<AppCompatImageView>(R.id.card_image)
+
+//                val intent = Intent(context, CardDetailFragment::class.java)
+//                val transitionName = getString(R.string.cardview_transition)
+//                val transName = "test"
+//                val pair1 = UtilPair.create(cardView as View, transitionName)
+//                val pair2 = UtilPair.create(card_image as View, transName)
+//                val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity,
+//                        pair1,
+//                        pair2)
+
+
+//                    intent.putExtra("card", card.toParcelableMtgCard())
+                Log.i("TAG", "Card Clicked")
+                val fragTrans = activity.supportFragmentManager.beginTransaction()
+                fragTrans.add(R.id.frame_container, CardDetailFragment.newInstance())
+                fragTrans.commitAllowingStateLoss()
+            }
         }
 
         search_list.adapter = searchResultAdapter

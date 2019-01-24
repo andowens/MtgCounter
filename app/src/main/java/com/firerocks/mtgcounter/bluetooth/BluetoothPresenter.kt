@@ -1,7 +1,6 @@
 package com.firerocks.mtgcounter.bluetooth
 
 import android.bluetooth.BluetoothAdapter
-import android.util.Log
 import com.firerocks.mtgcounter.data.Player
 import com.firerocks.mtgcounter.helpers.Operator
 import java.util.*
@@ -40,7 +39,6 @@ class BluetoothPresenter @Inject constructor(private val mModel: BluetoothMVP.Mo
     }
 
     override fun onPause() {
-        Log.i(TAG, "Stop service")
         mModel.stopService()
     }
 
