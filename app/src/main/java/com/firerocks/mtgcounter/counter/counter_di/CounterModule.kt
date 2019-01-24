@@ -13,7 +13,7 @@ class CounterModule {
     fun provideCounterPresenter(): CounterMVP.Presenter = CounterPresenter()
 
     @Provides
-    fun provideTwoPlayerFragment(fragment: CounterFragment): CounterFragment {
+    fun provideCounterFragment(fragment: CounterFragment): CounterFragment {
         return fragment
     }
 }

@@ -8,5 +8,5 @@ import dagger.android.ContributesAndroidInjector
 abstract class FragmentProvider {
 
     @ContributesAndroidInjector(modules = [CounterModule::class])
-    abstract fun provideTwoPlayerFragment() : CounterFragment
+    abstract fun provideCounterFragment() : CounterFragment
 }

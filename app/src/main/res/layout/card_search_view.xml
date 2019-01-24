@@ -9,7 +9,8 @@
     android:elevation="@dimen/card_resting_height"
     android:padding="0dp"
     android:transitionName="@string/cardview_transition"
-    android:id="@+id/search_cardView">
+    android:id="@+id/search_cardView"
+    android:backgroundTint="@color/cardColor">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

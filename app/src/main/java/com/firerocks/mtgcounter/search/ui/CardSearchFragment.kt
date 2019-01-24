@@ -52,7 +52,7 @@ class CardSearchFragment : DaggerFragment() {
 
         searchResultAdapter = CardAdapter(searchResult) { card ->
 
-            //            val intent = Intent(this, CardDetailActivity::class.java)
+            //            val intent = Intent(this, CardDetailFragment::class.java)
 //            val transitionName = getString(R.string.cardview_transition)
 //            val transName = "test"
 //            val pair1 = UtilPair.create(cardView as View, transitionName)

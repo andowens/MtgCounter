@@ -34,7 +34,7 @@
             android:name=".search.ui.CardSearchActivity"
             android:theme="@style/SearchTheme" />
         <activity
-            android:name=".search.ui.CardDetailActivity"
+            android:name=".search.ui.CardDetailFragment"
             android:theme="@style/SearchTheme" />
     </application>
 
