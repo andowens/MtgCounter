@@ -81,6 +81,7 @@ class CardSearchFragment : DaggerFragment() {
                 Log.i("TAG", "Card Clicked")
                 val fragTrans = activity.supportFragmentManager.beginTransaction()
                 fragTrans.add(R.id.frame_container, CardDetailFragment.newInstance())
+                fragTrans.addToBackStack(null)
                 fragTrans.commitAllowingStateLoss()
             }
         }
