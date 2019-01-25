@@ -2,6 +2,8 @@ package com.firerocks.mtgcounter.main
 
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.util.Log
+import android.view.MenuItem
 import com.firerocks.mtgcounter.R
 import com.firerocks.mtgcounter.bluetooth.BluetoothFragment
 import com.firerocks.mtgcounter.counter.CounterFragment
@@ -44,6 +46,17 @@ class MtgCounterActivity : DaggerAppCompatActivity() {
             }
             return@setOnNavigationItemSelectedListener ret
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        super.onOptionsItemSelected(item)
+        when (item?.itemId) {
+            android.R.id.home -> {
+                supportFragmentManager?.popBackStack()
+                return true
+            }
+        }
+        return false
     }
 
     /**

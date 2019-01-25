@@ -289,12 +289,14 @@ class BluetoothFragment: DaggerFragment(), BluetoothMVP.View {
                 }
             }
             DEVICE_SELECTED_RESULT -> {
+                if (data != null) {
 
-                data?.let {
-                    val address: String? = it.getStringExtra(ConnectDeviceActivity.ADDRESS)
+                    val address: String? = data.getStringExtra(ConnectDeviceActivity.ADDRESS)
                     if (address != null) {
                         mPresenter.bluetoothDeviceSelected(address)
                     }
+                } else {
+                    showNoDeviceConnectedSnackBar()
                 }
             }
         }
