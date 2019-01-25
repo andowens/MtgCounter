@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.card_search_view.view.*
 import java.io.Closeable
 import kotlin.coroutines.experimental.suspendCoroutine
 
-class CardAdapter(private val cards: ArrayList<MtgCard>, private val listener: (MtgCard) -> Unit )
+class CardAdapter(private val cards: ArrayList<MtgCard>, private val listener: (MtgCard, View) -> Unit )
     : RecyclerView.Adapter<CardAdapter.CardViewHolder>() {
 
     lateinit var mContext: Context
@@ -35,14 +35,14 @@ class CardAdapter(private val cards: ArrayList<MtgCard>, private val listener: (
 
     class CardViewHolder(val iv: View) : RecyclerView.ViewHolder(iv) {
 
-        fun bind(card: MtgCard, listener: (MtgCard) -> Unit) {
+        fun bind(card: MtgCard, listener: (MtgCard, View) -> Unit) {
             val cardView = (iv as CardView).also { view ->
                 Picasso.get().load(card.imageUrl).into(view.card_image)
                 view.card_name_title.text = card.name
                 view.card_flavor_text.text = card.setName
             }
 
-            cardView.setOnClickListener { listener(card) }
+            cardView.setOnClickListener { listener(card, iv) }
         }
     }
 

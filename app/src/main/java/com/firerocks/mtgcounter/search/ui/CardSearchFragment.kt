@@ -10,6 +10,9 @@ import androidx.appcompat.widget.AppCompatImageView
 import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityOptionsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.transition.Fade
+import androidx.transition.TransitionInflater
+import androidx.transition.TransitionSet
 import com.firerocks.mtgcounter.R
 import com.firerocks.mtgcounter.search.model.toParcelableMtgCard
 import com.firerocks.mtgcounter.utils.adapters.CardAdapter
@@ -22,6 +25,7 @@ import kotlinx.android.synthetic.main.activity_card_search.*
 import kotlinx.android.synthetic.main.card_search_view.*
 import kotlinx.coroutines.*
 import retrofit2.Response
+import javax.inject.Inject
 import androidx.core.util.Pair as UtilPair
 
 class CardSearchFragment : DaggerFragment() {
@@ -60,7 +64,7 @@ class CardSearchFragment : DaggerFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        searchResultAdapter = CardAdapter(searchResult) { card ->
+        searchResultAdapter = CardAdapter(searchResult) { card, view ->
 
             activity?.let { activity ->
 
@@ -78,13 +82,10 @@ class CardSearchFragment : DaggerFragment() {
 
 
 //                    intent.putExtra("card", card.toParcelableMtgCard())
-                Log.i("TAG", "Card Clicked")
-                val fragTrans = activity.supportFragmentManager.beginTransaction()
-                fragTrans.add(R.id.frame_container, CardDetailFragment.newInstance())
-                fragTrans.addToBackStack(null)
-                fragTrans.commitAllowingStateLoss()
+                performTransition(view)
             }
         }
+
 
         search_list.adapter = searchResultAdapter
         search_list.layoutManager = LinearLayoutManager(activity)
@@ -120,6 +121,38 @@ class CardSearchFragment : DaggerFragment() {
             }
 
         })
+    }
+
+    private fun performTransition(view: View) {
+        if (isDetached) {
+            return
+        }
+
+        val detailFrag = CardDetailFragment.newInstance()
+
+        val exitFade = Fade()
+        exitFade.duration = 300
+        this.exitTransition = exitFade
+
+        val enterTransitionSet = TransitionSet()
+        enterTransitionSet.addTransition(TransitionInflater
+                .from(context).inflateTransition(android.R.transition.move))
+        enterTransitionSet.startDelay = 1000
+        enterTransitionSet.duration = 300
+        detailFrag.sharedElementEnterTransition = enterTransitionSet
+
+        val enterFade = Fade()
+        enterFade.startDelay = 1300
+        enterFade.duration = 300
+        detailFrag.enterTransition = enterFade
+
+        val fragTrans = activity?.supportFragmentManager?.beginTransaction()
+        fragTrans?.add(R.id.frame_container, CardDetailFragment.newInstance())
+        fragTrans?.addSharedElement(card_image, card_image.transitionName)
+        fragTrans?.addSharedElement(view, search_cardView.transitionName)
+        fragTrans?.replace(R.id.frame_container, detailFrag)
+        fragTrans?.addToBackStack(null)
+        fragTrans?.commitAllowingStateLoss()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
