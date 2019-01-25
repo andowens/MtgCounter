@@ -1,31 +1,27 @@
 package com.firerocks.mtgcounter.search.ui
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.AppCompatImageView
-import androidx.cardview.widget.CardView
-import androidx.core.app.ActivityOptionsCompat
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.transition.Fade
 import androidx.transition.TransitionInflater
 import androidx.transition.TransitionSet
 import com.firerocks.mtgcounter.R
-import com.firerocks.mtgcounter.search.model.toParcelableMtgCard
+import com.firerocks.mtgcounter.search.view_model.SearchViewModel
 import com.firerocks.mtgcounter.utils.adapters.CardAdapter
 import com.lapism.searchview.Search
 import com.lapism.searchview.widget.SearchAdapter
 import dagger.android.support.DaggerFragment
 import io.magicthegathering.kotlinsdk.api.MtgCardApiClient
 import io.magicthegathering.kotlinsdk.model.card.MtgCard
-import kotlinx.android.synthetic.main.activity_card_search.*
+import kotlinx.android.synthetic.main.fragment_card_search.*
 import kotlinx.android.synthetic.main.card_search_view.*
 import kotlinx.coroutines.*
 import retrofit2.Response
-import javax.inject.Inject
+import java.lang.Exception
 import androidx.core.util.Pair as UtilPair
 
 class CardSearchFragment : DaggerFragment() {
@@ -33,6 +29,7 @@ class CardSearchFragment : DaggerFragment() {
     lateinit var searchResultAdapter: CardAdapter
     private val mViewModelJob = Job()
     private val mUiScope = CoroutineScope(Dispatchers.Main + mViewModelJob)
+    private lateinit var model : SearchViewModel
 
     companion object {
         fun newInstance() : CardSearchFragment = CardSearchFragment()
@@ -47,7 +44,7 @@ class CardSearchFragment : DaggerFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.activity_card_search, container, false)
+        return inflater.inflate(R.layout.fragment_card_search, container, false)
     }
 
     /**
@@ -64,26 +61,14 @@ class CardSearchFragment : DaggerFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        searchResultAdapter = CardAdapter(searchResult) { card, view ->
+        model = activity?.run {
+            ViewModelProviders.of(this).get(SearchViewModel::class.java)
+        } ?: throw Exception("Invalid Activity")
 
-            activity?.let { activity ->
+        searchResultAdapter = CardAdapter(searchResult) { card, cardView ->
 
-                val cardView = activity.findViewById<CardView>(R.id.search_cardView)
-                val imageView = activity.findViewById<AppCompatImageView>(R.id.card_image)
-
-//                val intent = Intent(context, CardDetailFragment::class.java)
-//                val transitionName = getString(R.string.cardview_transition)
-//                val transName = "test"
-//                val pair1 = UtilPair.create(cardView as View, transitionName)
-//                val pair2 = UtilPair.create(card_image as View, transName)
-//                val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity,
-//                        pair1,
-//                        pair2)
-
-
-//                    intent.putExtra("card", card.toParcelableMtgCard())
-                performTransition(view)
-            }
+            performTransition(cardView)
+            model.setCard(card)
         }
 
 

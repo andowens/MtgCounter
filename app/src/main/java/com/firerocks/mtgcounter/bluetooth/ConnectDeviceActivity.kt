@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.firerocks.mtgcounter.R
 import com.firerocks.mtgcounter.counter.CounterFragment
 import com.firerocks.mtgcounter.utils.adapters.DeviceAdapter
-import kotlinx.android.synthetic.main.activity_device_list.*
+import kotlinx.android.synthetic.main.fragment_device_list.*
 
 /**
  * Created by Andrew on 7/29/2018.
@@ -71,7 +71,7 @@ class ConnectDeviceActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        setContentView(R.layout.activity_device_list)
+        setContentView(R.layout.fragment_device_list)
 
         mPairedDevicesAdapter = DeviceAdapter(mPairedDeviceList) {
             deviceClickListener(it)

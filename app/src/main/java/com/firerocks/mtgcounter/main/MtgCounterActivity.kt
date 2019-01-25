@@ -8,13 +8,13 @@ import com.firerocks.mtgcounter.counter.CounterFragment
 import com.firerocks.mtgcounter.search.ui.CardSearchFragment
 import dagger.android.support.DaggerAppCompatActivity
 import dagger.android.support.DaggerFragment
-import kotlinx.android.synthetic.main.activity_mtg_counter.*
+import kotlinx.android.synthetic.main.fragment_mtg_counter.*
 
 class MtgCounterActivity : DaggerAppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_mtg_counter)
+        setContentView(R.layout.fragment_mtg_counter)
 
         window.addFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
