@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import com.google.android.material.snackbar.Snackbar
 import androidx.core.app.ActivityCompat
@@ -164,6 +165,11 @@ class BluetoothFragment: DaggerFragment(), BluetoothMVP.View {
             val intent = Intent(it, ConnectDeviceActivity::class.java)
             startActivityForResult(intent, DEVICE_SELECTED_RESULT)
         }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        mNoDeviceSnackBar.dismiss()
     }
 
     fun upClicked(view: View) {
