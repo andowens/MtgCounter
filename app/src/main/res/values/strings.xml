@@ -40,5 +40,10 @@
     <string name="cardview_transition">cardview transition string</string>
     <string name="game_title">Game</string>
     <string name="card_search">Card Search</string>
+    <string name="power">Power:</string>
+    <string name="toughness">Toughness:</string>
+    <string name="card_text">Card Text</string>
+    <string name="card_rulings">Card Rulings</string>
 
+    <string name="rulings_text">%1$s\n\n</string>
 </resources>

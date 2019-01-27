@@ -17,4 +17,8 @@
     <dimen name="card_title_text_size">20sp</dimen>
     <dimen name="touch_raise">8dp</dimen>
     <dimen name="card_resting_height">1dp</dimen>
+    <dimen name="tendp_margin">10dp</dimen>
+    <dimen name="margin_20dp">20dp</dimen>
+    <dimen name="title_30sp">30sp</dimen>
+    <dimen name="subtitle_20sp">20sp</dimen>
 </resources>

@@ -44,20 +44,36 @@ class CardDetailFragment : DaggerFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-
+        // Need to get the activity scope so that this fragment and the Search fragment share the
+        // same viewmodel
         model = activity?.run {
             ViewModelProviders.of(this).get(SearchViewModel::class.java)
         } ?: throw Exception("Invalid Activity")
 
-        model.mtgCard.observe(this, Observer<MtgCard> {
+        // Observe the only thing in the view model for changes if there update the ui
+        model.mtgCard.observe(this, Observer<MtgCard> { card ->
 
-            Picasso.get().load(it.imageUrl).into(card_picture, object : Callback {
+            Picasso.get().load(card.imageUrl).into(card_picture, object : Callback {
                 override fun onSuccess() {
                     card_picture.doOnPreDraw {
                         activity?.startPostponedEnterTransition()
+                        detail_title.text = card.name
+
+                        card_text_details.text = card.text
+
+                        card.rulings?.let { rulings ->
+                            card_rulings_title.visibility = View.VISIBLE
+                            card_rulings_details.visibility = View.VISIBLE
+                            var rulingsBuilder = ""
+                            for (ruling in rulings) {
+                                Log.i("TAG", "Ruling: ${ruling.text}")
+                                rulingsBuilder +=
+                                        String.format(getString(R.string.rulings_text), ruling.text)
+                            }
+                            card_rulings_details.text = rulingsBuilder
+                        }
                     }
                 }
-
                 override fun onError(e: Exception?) {
                 }
             })

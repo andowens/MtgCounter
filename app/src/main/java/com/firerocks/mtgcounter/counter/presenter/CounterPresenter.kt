@@ -1,7 +1,8 @@
-package com.firerocks.mtgcounter.counter
+package com.firerocks.mtgcounter.counter.presenter
 
-import com.firerocks.mtgcounter.data.Player
-import com.firerocks.mtgcounter.data.isDead
+import com.firerocks.mtgcounter.counter.CounterMVP
+import com.firerocks.mtgcounter.counter.model.Player
+import com.firerocks.mtgcounter.counter.model.isDead
 import com.firerocks.mtgcounter.helpers.GameType
 import com.firerocks.mtgcounter.helpers.Operator
 import com.firerocks.mtgcounter.helpers.PlayerID

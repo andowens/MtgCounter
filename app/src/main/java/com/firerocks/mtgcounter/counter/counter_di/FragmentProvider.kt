@@ -1,6 +1,6 @@
 package com.firerocks.mtgcounter.counter.counter_di
 
-import com.firerocks.mtgcounter.counter.CounterFragment
+import com.firerocks.mtgcounter.counter.view.CounterFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 

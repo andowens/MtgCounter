@@ -1,16 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:transitionName="@string/cardview_transition">
+    android:background="@color/antiqueWhite">
 
-    <androidx.appcompat.widget.AppCompatImageView
-        app:layout_constraintTop_toTopOf="parent"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="500dp"
-        android:transitionName="test"
-        android:id="@+id/card_picture"/>
+        android:layout_height="wrap_content"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:transitionName="@string/cardview_transition">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <com.firerocks.mtgcounter.views.CustomFontTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/title_30sp"
+            android:text="@string/lorum_epsum"
+            android:layout_marginTop="@dimen/tendp_margin"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/card_picture"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:id="@+id/detail_title" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            app:layout_constraintTop_toBottomOf="@id/detail_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="0dp"
+            android:layout_height="300dp"
+            android:transitionName="test"
+            android:id="@+id/card_picture"
+            android:scaleType="fitXY"
+            android:adjustViewBounds="true"
+            android:layout_marginTop="@dimen/tendp_margin"
+            android:layout_marginBottom="@dimen/tendp_margin"
+            android:layout_marginEnd="100dp"
+            android:layout_marginStart="100dp"/>
+
+        <com.firerocks.mtgcounter.views.CustomFontTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/card_picture"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:text="@string/card_text"
+            android:textSize="@dimen/subtitle_20sp"
+            android:layout_margin="@dimen/margin_20dp"
+            android:id="@+id/card_text"/>
+
+        <com.firerocks.mtgcounter.views.CustomFontTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/card_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:paddingEnd="@dimen/margin_20dp"
+            android:paddingStart="@dimen/margin_20dp"
+            android:layout_marginTop="@dimen/tendp_margin"
+            android:id="@+id/card_text_details"
+            android:text="@string/lorum_epsum"/>
+
+        <com.firerocks.mtgcounter.views.CustomFontTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/card_text_details"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:textSize="@dimen/subtitle_20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="@dimen/margin_20dp"
+            android:id="@+id/card_rulings_title"
+            android:text="@string/card_rulings"
+            android:visibility="gone"/>
+
+        <com.firerocks.mtgcounter.views.CustomFontTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/card_rulings_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:paddingEnd="@dimen/margin_20dp"
+            android:paddingStart="@dimen/margin_20dp"
+            android:layout_marginTop="@dimen/tendp_margin"
+            android:id="@+id/card_rulings_details"
+            android:text="@string/lorum_epsum"
+            android:visibility="gone"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

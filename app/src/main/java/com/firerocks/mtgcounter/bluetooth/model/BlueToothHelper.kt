@@ -1,16 +1,12 @@
-package com.firerocks.mtgcounter.bluetooth
+package com.firerocks.mtgcounter.bluetooth.model
 
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothServerSocket
 import android.bluetooth.BluetoothSocket
-import android.os.Bundle
 import android.util.Log
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import io.reactivex.Observable
 import io.reactivex.Observer
-import io.reactivex.Scheduler
 import io.reactivex.schedulers.Schedulers
 import java.io.IOException
 import java.io.InputStream

@@ -1,4 +1,4 @@
-package com.firerocks.mtgcounter.di
+package com.firerocks.mtgcounter.root.di
 
 import android.app.Application
 import com.firerocks.mtgcounter.root.App

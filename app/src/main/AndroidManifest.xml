@@ -28,7 +28,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".bluetooth.ConnectDeviceActivity"
+            android:name=".bluetooth.view.ConnectDeviceActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".search.ui.CardSearchActivity"

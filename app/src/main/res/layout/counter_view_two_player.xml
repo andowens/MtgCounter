@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/two_main"
-    tools:context=".counter.CounterFragment"
+    tools:context=".counter.view.CounterFragment"
     android:background="?attr/colorPrimaryDark">
 
     <com.firerocks.mtgcounter.views.CustomFontTextView

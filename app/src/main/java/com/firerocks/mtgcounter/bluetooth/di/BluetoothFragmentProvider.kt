@@ -1,6 +1,6 @@
 package com.firerocks.mtgcounter.bluetooth.di
 
-import com.firerocks.mtgcounter.bluetooth.BluetoothFragment
+import com.firerocks.mtgcounter.bluetooth.view.BluetoothFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 

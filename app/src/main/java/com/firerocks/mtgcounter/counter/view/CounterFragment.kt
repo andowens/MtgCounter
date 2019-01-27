@@ -1,4 +1,4 @@
-package com.firerocks.mtgcounter.counter
+package com.firerocks.mtgcounter.counter.view
 
 import android.content.Context
 import android.os.Bundle
@@ -8,6 +8,7 @@ import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.firerocks.mtgcounter.R
+import com.firerocks.mtgcounter.counter.CounterMVP
 import com.firerocks.mtgcounter.helpers.*
 import com.firerocks.mtgcounter.views.CustomFontTextView
 import dagger.android.support.DaggerFragment

@@ -1,4 +1,4 @@
-package com.firerocks.mtgcounter.bluetooth
+package com.firerocks.mtgcounter.bluetooth.view
 
 import android.app.Activity
 import android.bluetooth.BluetoothAdapter
@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import com.google.android.material.snackbar.Snackbar
 import androidx.core.app.ActivityCompat
@@ -15,7 +14,8 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.content.PermissionChecker.PERMISSION_DENIED
 import com.firerocks.mtgcounter.R
-import com.firerocks.mtgcounter.data.Player
+import com.firerocks.mtgcounter.bluetooth.BluetoothMVP
+import com.firerocks.mtgcounter.counter.model.Player
 import com.firerocks.mtgcounter.helpers.animateView
 import com.firerocks.mtgcounter.helpers.changeNameDialog
 import com.firerocks.mtgcounter.views.CustomFontTextView

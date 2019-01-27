@@ -1,14 +1,10 @@
 package com.firerocks.mtgcounter.search.ui
 
-import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.transition.Fade
-import androidx.transition.TransitionInflater
-import androidx.transition.TransitionSet
+import androidx.transition.Slide
 import com.firerocks.mtgcounter.R
 import com.firerocks.mtgcounter.search.view_model.SearchViewModel
 import com.firerocks.mtgcounter.utils.adapters.CardAdapter
@@ -18,7 +14,6 @@ import dagger.android.support.DaggerFragment
 import io.magicthegathering.kotlinsdk.api.MtgCardApiClient
 import io.magicthegathering.kotlinsdk.model.card.MtgCard
 import kotlinx.android.synthetic.main.fragment_card_search.*
-import kotlinx.android.synthetic.main.card_search_view.*
 import kotlinx.coroutines.*
 import retrofit2.Response
 import java.lang.Exception
@@ -47,27 +42,18 @@ class CardSearchFragment : DaggerFragment() {
         return inflater.inflate(R.layout.fragment_card_search, container, false)
     }
 
-    /**
-     * Helper function that helps get the application context if it can
-     *
-     * @param lambda Passed in function that lets you use the context.
-     */
-    private fun appContext (lambda: (Context) -> Unit) {
-        activity?.applicationContext?.let {
-            lambda(it)
-        }
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Need to get the activity scope so that this fragment and the detail fragment share the
+        // same viewmodel
         model = activity?.run {
             ViewModelProviders.of(this).get(SearchViewModel::class.java)
         } ?: throw Exception("Invalid Activity")
 
         searchResultAdapter = CardAdapter(searchResult) { card, cardView ->
 
-            performTransition(cardView)
+            performTransition()
             model.setCard(card)
         }
 
@@ -84,15 +70,18 @@ class CardSearchFragment : DaggerFragment() {
 
                 searchResult.clear()
 
+                // Coroutine to get the cards from the interwebs
                 mUiScope.launch {
                     val exactName = getCardByExactName(query.toString())
                     val partialName = getCardByPartialName(query.toString())
 
+                    // So depending on if exactName has a value we display either the list of partials
+                    // or the exact card
                     if (exactName != null && !exactName.isEmpty()) {
-                        updateUI(exactName)
+                        updateRecyclerView(exactName)
                     } else {
                         partialName?.let {
-                            updateUI(partialName)
+                            updateRecyclerView(partialName)
                         }
                     }
                 }
@@ -101,56 +90,52 @@ class CardSearchFragment : DaggerFragment() {
                 return true
             }
 
-
             override fun onQueryTextChange(newText: CharSequence?) {
             }
 
         })
     }
 
-    private fun performTransition(view: View) {
+    /**
+     * Helper funciton that sets up the transition to the detail fragment.
+     *
+     */
+    private fun performTransition() {
         if (isDetached) {
             return
         }
 
         val detailFrag = CardDetailFragment.newInstance()
 
-        val exitFade = Fade()
-        exitFade.duration = 300
-        this.exitTransition = exitFade
+        // Create transition animation
+        val exitSlide = Slide(Gravity.BOTTOM)
+        exitSlide.duration = 300
 
-        val enterTransitionSet = TransitionSet()
-        enterTransitionSet.addTransition(TransitionInflater
-                .from(context).inflateTransition(android.R.transition.move))
-        enterTransitionSet.startDelay = 1000
-        enterTransitionSet.duration = 300
-        detailFrag.sharedElementEnterTransition = enterTransitionSet
-
-        val enterFade = Fade()
-        enterFade.startDelay = 1300
-        enterFade.duration = 300
-        detailFrag.enterTransition = enterFade
+        this.exitTransition = exitSlide
 
         val fragTrans = activity?.supportFragmentManager?.beginTransaction()
-        fragTrans?.add(R.id.frame_container, CardDetailFragment.newInstance())
-        fragTrans?.addSharedElement(card_image, card_image.transitionName)
-        fragTrans?.addSharedElement(view, search_cardView.transitionName)
         fragTrans?.replace(R.id.frame_container, detailFrag)
         fragTrans?.addToBackStack(null)
         fragTrans?.commitAllowingStateLoss()
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
-
-    private fun updateUI(cards: List<MtgCard>) {
+    /**
+     * Helper function to update the recycler view with the new data
+     *
+     * @param cards The new list of cards to display
+     */
+    private fun updateRecyclerView(cards: List<MtgCard>) {
         searchResult.addAll(cards)
         searchResultAdapter.notifyDataSetChanged()
     }
 
-
+    /**
+     * Suspending function used to asynchronously get the card by it's exact name
+     *
+     * @param name The name of the card to look up
+     * @return A list of cards if there are any should be just one since it is a get card by exact
+     *         name.
+     */
     private suspend fun getCardByExactName(name: String) : List<MtgCard>? = coroutineScope {
 
         val suspend = async(Dispatchers.Default) {
@@ -164,6 +149,13 @@ class CardSearchFragment : DaggerFragment() {
         suspend.await()
     }
 
+    /**
+     * Suspending function used to asynchronously get the cards based on the string of text
+     * passed in.
+     *
+     * @param partial The partial name to look up
+     * @return A list of cards of there are any.
+     */
     private suspend fun getCardByPartialName(partial: String) : List<MtgCard>? = coroutineScope {
 
         val suspend = async(Dispatchers.Default) {

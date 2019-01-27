@@ -6,14 +6,9 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.Animation
-import android.view.animation.AnimationSet
-import android.view.animation.AnimationUtils
 import androidx.cardview.widget.CardView
 import com.firerocks.mtgcounter.R
 import androidx.recyclerview.widget.RecyclerView
-import com.firerocks.mtgcounter.data.BTDevice
-import com.google.android.material.card.MaterialCardView
 import kotlinx.android.synthetic.main.device_layout.view.*
 
 class DeviceAdapter(private val devices: ArrayList<BluetoothDevice>, private val listener: (BluetoothDevice) -> Unit)

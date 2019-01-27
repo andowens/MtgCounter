@@ -1,4 +1,4 @@
-package com.firerocks.mtgcounter.bluetooth
+package com.firerocks.mtgcounter.bluetooth.view
 
 import android.app.Activity
 import android.bluetooth.BluetoothAdapter
@@ -12,7 +12,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.firerocks.mtgcounter.R
-import com.firerocks.mtgcounter.counter.CounterFragment
+import com.firerocks.mtgcounter.counter.view.CounterFragment
 import com.firerocks.mtgcounter.utils.adapters.DeviceAdapter
 import kotlinx.android.synthetic.main.fragment_device_list.*
 

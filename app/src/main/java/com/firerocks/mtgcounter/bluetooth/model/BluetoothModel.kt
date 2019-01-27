@@ -1,10 +1,10 @@
-package com.firerocks.mtgcounter.bluetooth
+package com.firerocks.mtgcounter.bluetooth.model
 
-import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.util.Log
-import com.firerocks.mtgcounter.data.Player
-import com.firerocks.mtgcounter.data.isDead
+import com.firerocks.mtgcounter.bluetooth.BluetoothMVP
+import com.firerocks.mtgcounter.counter.model.Player
+import com.firerocks.mtgcounter.counter.model.isDead
 import com.firerocks.mtgcounter.helpers.Operator
 import com.google.gson.Gson
 import io.reactivex.disposables.Disposable

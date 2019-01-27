@@ -1,7 +1,7 @@
 package com.firerocks.mtgcounter.bluetooth
 
 import android.bluetooth.BluetoothDevice
-import com.firerocks.mtgcounter.data.Player
+import com.firerocks.mtgcounter.counter.model.Player
 import com.firerocks.mtgcounter.helpers.Operator
 import java.util.*
 

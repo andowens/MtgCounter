@@ -1,14 +1,13 @@
 package com.firerocks.mtgcounter.bluetooth.di
 
 import android.bluetooth.BluetoothAdapter
-import com.firerocks.mtgcounter.bluetooth.BluetoothFragment
+import com.firerocks.mtgcounter.bluetooth.view.BluetoothFragment
 import com.firerocks.mtgcounter.bluetooth.BluetoothMVP
-import com.firerocks.mtgcounter.bluetooth.BluetoothModel
-import com.firerocks.mtgcounter.bluetooth.BluetoothPresenter
-import com.firerocks.mtgcounter.data.Player
+import com.firerocks.mtgcounter.bluetooth.model.BluetoothModel
+import com.firerocks.mtgcounter.bluetooth.presenter.BluetoothPresenter
+import com.firerocks.mtgcounter.counter.model.Player
 import dagger.Module
 import dagger.Provides
-import javax.inject.Singleton
 
 @Module
 class BluetoothModule {
