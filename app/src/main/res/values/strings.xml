@@ -46,4 +46,5 @@
     <string name="card_rulings">Card Rulings</string>
 
     <string name="rulings_text">%1$s\n\n</string>
+    <string name="pair_device">Pair Device</string>
 </resources>
