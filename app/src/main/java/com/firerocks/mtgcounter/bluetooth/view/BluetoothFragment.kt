@@ -16,6 +16,7 @@ import androidx.core.content.PermissionChecker.PERMISSION_DENIED
 import com.firerocks.mtgcounter.R
 import com.firerocks.mtgcounter.bluetooth.BluetoothMVP
 import com.firerocks.mtgcounter.counter.model.Player
+import com.firerocks.mtgcounter.counter.model.isDead
 import com.firerocks.mtgcounter.helpers.animateView
 import com.firerocks.mtgcounter.helpers.changeNameDialog
 import com.firerocks.mtgcounter.views.CustomFontTextView
@@ -267,6 +268,9 @@ class BluetoothFragment: DaggerFragment(), BluetoothMVP.View {
         activity?.runOnUiThread {
             mOpponentNameTextView.text = player.name
             mOpponentHealthTextView.text = player.health.toString()
+            if (player.isDead()) {
+                launchPlayerDeadSnackBar(player.name)
+            }
             appContext {
                 animateView(it, mOpponentHealthTextView, R.animator.health_animation)
             }

@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
+import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -62,9 +63,21 @@ class ConnectDeviceActivity : AppCompatActivity() {
                 this.finish()
                 return true
             }
+            R.id.pair_device -> {
+                val intent = Intent()
+                intent.action = android.provider.Settings.ACTION_BLUETOOTH_SETTINGS
+                startActivity(intent)
+            }
         }
 
         return false
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        super.onCreateOptionsMenu(menu)
+        menuInflater.inflate(R.menu.connect_device_menu, menu)
+
+        return true
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -84,15 +97,6 @@ class ConnectDeviceActivity : AppCompatActivity() {
         paired_devices.adapter = mPairedDevicesAdapter
 
         paired_devices.layoutManager = LinearLayoutManager(this)
-
-        // Register for broadcasts when discovery is finished
-        val filter = IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)
-        registerReceiver(mReceiver, filter)
-
-        // Register for broadcasts when a device is discovered
-        val filter2 = IntentFilter(BluetoothDevice.ACTION_FOUND)
-        registerReceiver(mReceiver, filter2)
-
 
         val pairedDevices = mBluetoothAdapter.bondedDevices
 
@@ -121,6 +125,17 @@ class ConnectDeviceActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // Register for broadcasts when discovery is finished
+        val filter = IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)
+        registerReceiver(mReceiver, filter)
+
+        // Register for broadcasts when a device is discovered
+        val filter2 = IntentFilter(BluetoothDevice.ACTION_FOUND)
+        registerReceiver(mReceiver, filter2)
     }
 
     override fun onStop() {
