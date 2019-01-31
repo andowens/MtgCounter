@@ -74,7 +74,7 @@ class BluetoothModel @Inject constructor(private val mPlayer: Player):
                         val playerJson = gson.toJson(mPlayer)
                         mBlueToothHelper.write(playerJson.toByteArray())
                     } else if (second == NEW_GAME) {
-                        notifyObservers(Pair(START_NEW_GAME, ""))
+                        notifyObservers(Pair(START_NEW_GAME, mEnemyPlayer))
                     } else if (second.split(" ")[0] == "$ROLL_DIE") {
                         Log.e(TAG, "Second: $second")
                         if (second.split(" ").size == 2) {
@@ -104,8 +104,9 @@ class BluetoothModel @Inject constructor(private val mPlayer: Player):
         mObserver = observer
     }
 
-    override fun sendNewGame() {
+    override fun sendNewGame(onResult: (Player) -> Unit) {
         mBlueToothHelper.write(NEW_GAME.toByteArray())
+        onResult(mEnemyPlayer)
     }
 
     private fun notifyObservers(data: Pair<Int, Any>) {

@@ -260,7 +260,7 @@ class BluetoothFragment: DaggerFragment(), BluetoothMVP.View {
         Snackbar.make(main_view,
                 resources.getString(R.string.player_dead, player), Snackbar.LENGTH_LONG)
                 .setAction(resources.getString(R.string.new_game)) {
-
+                    mPresenter.menuNewGame()
                 }.show()
     }
 

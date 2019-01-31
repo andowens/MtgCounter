@@ -46,7 +46,10 @@ class BluetoothPresenter @Inject constructor(private val mModel: BluetoothMVP.Mo
     }
 
     override fun menuNewGame() {
-        mModel.sendNewGame()
+        mModel.sendNewGame {
+            it.health = mView.getDefaultHealth()
+            mView.updateOpponent(it)
+        }
         mModel.setStartPlayerHealth(mView.getDefaultHealth())
         mView.setPlayerHealth(mView.getDefaultHealth().toString())
     }
@@ -91,8 +94,13 @@ class BluetoothPresenter @Inject constructor(private val mModel: BluetoothMVP.Mo
                 }
             }
             BluetoothModel.START_NEW_GAME -> {
-                mModel.setStartPlayerHealth(mView.getDefaultHealth())
-                mView.setPlayerHealth(mModel.getPlayersHealth().toString())
+                val player = data.second as? Player
+                player?.let {
+                    it.health = mView.getDefaultHealth()
+                    mModel.setStartPlayerHealth(mView.getDefaultHealth())
+                    mView.setPlayerHealth(mModel.getPlayersHealth().toString())
+                    mView.updateOpponent(it)
+                }
             }
             BluetoothModel.MESSAGE_CONNECTED -> {
                 mView.dismissNoDeviceConnectedSnackBar()
