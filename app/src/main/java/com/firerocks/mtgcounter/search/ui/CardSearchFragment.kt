@@ -1,5 +1,7 @@
 package com.firerocks.mtgcounter.search.ui
 
+import android.content.Context.CONNECTIVITY_SERVICE
+import android.net.ConnectivityManager
 import android.os.Bundle
 import android.view.*
 import androidx.lifecycle.ViewModelProviders
@@ -70,18 +72,20 @@ class CardSearchFragment : DaggerFragment() {
 
                 searchResult.clear()
 
-                // Coroutine to get the cards from the interwebs
-                mUiScope.launch {
-                    val exactName = getCardByExactName(query.toString())
-                    val partialName = getCardByPartialName(query.toString())
+                if (checkInternetStatus()) {
+                    // Coroutine to get the cards from the interwebs
+                    mUiScope.launch {
+                        val exactName = getCardByExactName(query.toString())
+                        val partialName = getCardByPartialName(query.toString())
 
-                    // So depending on if exactName has a value we display either the list of partials
-                    // or the exact card
-                    if (exactName != null && !exactName.isEmpty()) {
-                        updateRecyclerView(exactName)
-                    } else {
-                        partialName?.let {
-                            updateRecyclerView(partialName)
+                        // So depending on if exactName has a value we display either the list of partials
+                        // or the exact card
+                        if (exactName != null && !exactName.isEmpty()) {
+                            updateRecyclerView(exactName)
+                        } else {
+                            partialName?.let {
+                                updateRecyclerView(partialName)
+                            }
                         }
                     }
                 }
@@ -168,5 +172,21 @@ class CardSearchFragment : DaggerFragment() {
         }
 
         suspend.await()
+    }
+
+    /**
+     * Helper function that checks if we are connected to the internet
+     */
+    private fun checkInternetStatus() : Boolean {
+
+        var connected = false
+        val connectivityManager =
+                (context?.getSystemService(CONNECTIVITY_SERVICE) as? ConnectivityManager)
+                        ?: return connected
+
+        val networkInfo = connectivityManager.activeNetworkInfo
+        connected = networkInfo != null && networkInfo.isConnected
+
+        return connected
     }
 }

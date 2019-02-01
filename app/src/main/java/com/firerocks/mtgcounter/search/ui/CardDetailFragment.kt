@@ -57,26 +57,27 @@ class CardDetailFragment : DaggerFragment() {
                 override fun onSuccess() {
                     card_picture.doOnPreDraw {
                         activity?.startPostponedEnterTransition()
-                        detail_title.text = card.name
-
-                        card_text_details.text = card.text
-
-                        card.rulings?.let { rulings ->
-                            card_rulings_title.visibility = View.VISIBLE
-                            card_rulings_details.visibility = View.VISIBLE
-                            var rulingsBuilder = ""
-                            for (ruling in rulings) {
-                                Log.i("TAG", "Ruling: ${ruling.text}")
-                                rulingsBuilder +=
-                                        String.format(getString(R.string.rulings_text), ruling.text)
-                            }
-                            card_rulings_details.text = rulingsBuilder
-                        }
                     }
                 }
                 override fun onError(e: Exception?) {
                 }
             })
+
+            detail_title.text = card.name
+
+            card_text_details.text = card.text
+
+            card.rulings?.let { rulings ->
+                card_rulings_title.visibility = View.VISIBLE
+                card_rulings_details.visibility = View.VISIBLE
+                var rulingsBuilder = ""
+                for (ruling in rulings) {
+                    Log.i("TAG", "Ruling: ${ruling.text}")
+                    rulingsBuilder +=
+                            String.format(getString(R.string.rulings_text), ruling.text)
+                }
+                card_rulings_details.text = rulingsBuilder
+            }
         })
     }
 }
